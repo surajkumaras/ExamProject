@@ -24,6 +24,6 @@
     @endif
 
     @if (Session::has('success'))
-        <p style="color: rgb(42, 159, 21)">{{ Session::get('error')}}</p>
+        <p style="color: rgb(42, 159, 21)">{{ Session::get('success')}}</p>
     @endif
 @endsection
