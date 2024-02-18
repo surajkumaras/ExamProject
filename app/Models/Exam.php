@@ -16,6 +16,7 @@ class Exam extends Model
         'time',
         'created_at',
         'updated_at',
+        'attempt',
     ];
 
     public function subjects()

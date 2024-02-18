@@ -17,6 +17,7 @@
                 <th>Subject</th>
                 <th>Data</th>
                 <th>Time</th>
+                <th>Attempts</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -30,6 +31,7 @@
                         <td>{{ $exam->subjects[0]['name'] }}</td>
                         <td>{{ $exam->date }}</td>
                         <td>{{ $exam->time }} Hrs</td>
+                        <td>{{ $exam->attempt }}</td>
                         <td>
                             <button class="btn btn-info editButton" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#editExamModel">Edit</button>
                         </td>
@@ -70,6 +72,8 @@
                       <input type="date" name="date" class="w-100" required min="@php echo date('Y-m-d');  @endphp">
                       <br><br>
                       <input type="time" name="time" class="w-100" required>
+                      <br><br>
+                      <input type="number" name="attempt" class="w-100" required placeholder="Enter number of attempts">
                       <br><br>
                   </div>
                   <div class="modal-footer">
@@ -113,6 +117,8 @@
                       <input type="date" name="date" id="date" class="w-100" required min="@php echo date('Y-m-d');  @endphp">
                       <br><br>
                       <input type="time" name="time" id="time" class="w-100" required>
+                      <br><br>
+                      <input type="number" name="attempt" id="attempt" class="w-100" required placeholder="Enter number of attempts">
                       <br><br>
                   </div>
                   <div class="modal-footer">
@@ -201,6 +207,7 @@
                         
                         $('#date').val(data.data[0].date);
                         $('#time').val(data.data[0].time);
+                        $('#attempt').val(data.data[0].attempt);
                     }
                     else
                     {

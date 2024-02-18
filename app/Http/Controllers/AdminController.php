@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Subject;
 use App\Models\Exam;
+use App\Models\Question;
+use App\Models\Answer;
 
 class AdminController extends Controller
 {
@@ -71,6 +73,7 @@ class AdminController extends Controller
                 'subject_id' => $request->subject_id,
                 'date' => $request->date,
                 'time' => $request->time,
+                'attempt' => $request->attempt,
             ]);
             return response()->json(['success'=>true, 'msg'=>'Exam added successfully!']);
         }
@@ -104,6 +107,7 @@ class AdminController extends Controller
             $exam->subject_id = $request->subject_id;
             $exam->date = $request->date;
             $exam->time = $request->time;
+            $exam->attempt = $request->attempt;
             $exam->save();
             return response()->json(['success'=>true, 'msg'=>'Exam updated successfully!']);
         }
@@ -122,6 +126,36 @@ class AdminController extends Controller
             $exam->delete();
             return response()->json(['success'=>true, 'msg'=>'Exam deleted successfully!']);
         }catch(\Exception $e)
+        {
+            return response()->json(['success'=>false, 'msg'=>$e->getMessage()]);
+        }
+     }
+
+     //question dashboard
+     public function qnaDashboard()
+     {
+        return view('admin.qnaDashboard');
+     }
+
+     //add question
+     public function addQna(Request $request)
+     {
+        try{
+           $questionId =  Question::insertGetId([
+                'question'=>$request->question,
+            ]);
+
+            foreach($request->answers as $answer)
+            {
+                Answer::insert([
+                    'question_id'=>$questionId,
+                    'answer'=>$answer,
+                    'is_correct'=>$request->is_correct == $answer ? 1 : 0,
+                ]);
+            }
+            return response()->json(['success'=>true, 'msg'=>'Question added successfully!']);
+        }
+        catch(\Exception $e)
         {
             return response()->json(['success'=>false, 'msg'=>$e->getMessage()]);
         }
