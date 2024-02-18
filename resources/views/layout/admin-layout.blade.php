@@ -27,13 +27,13 @@
             <a href="{{ route('admin.dashboard')}}"><span class="fa fa-home mr-3"></span> Homepage</a>
           </li>
           <li>
-              <a href="#"><span class="fa fa-user mr-3"></span> Dashboard</a>
+              <a href="/admin/dashboard"><span class="fa fa-user mr-3"></span> Dashboard</a>
           </li>
           <li>
-            <a href="#"><span class="fa fa-book mr-3"></span> Subjects</a>
+            <a href="/admin/dashboard"><span class="fa fa-book mr-3"></span> Subjects</a>
           </li>
           <li>
-            <a href="#"><span class="fa fa-sticky-note mr-3"></span> Subcription</a>
+            <a href="/admin/exams"><span class="fa fa-tasks mr-3"></span> Exams</a>
           </li>
           <li>
             <a href="#"><span class="fa fa-paper-plane mr-3"></span> Settings</a>
