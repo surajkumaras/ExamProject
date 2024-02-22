@@ -134,7 +134,8 @@ class AdminController extends Controller
      //question dashboard
      public function qnaDashboard()
      {
-        return view('admin.qnaDashboard');
+       $questions =  Question::with('answers')->get();
+        return view('admin.qnaDashboard',compact('questions'));
      }
 
      //add question

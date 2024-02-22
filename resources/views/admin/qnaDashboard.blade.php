@@ -7,7 +7,40 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addExamModel">
         Add Q&A
     </button>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Questione</th>
+                <th>Answer</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            @if (count($questions) > 0)
+                @foreach ($questions as $question)
+                    <tr>
+                        <td>{{ $question->id}}</td>
+                        <td>{{ $question->question }}</td>
+                        {{-- <td>{{ $question->subjects[0]['name'] }}</td> --}}
+                        
+                        <td>
+                            <a href="#" class="showAnsButton" data-id="{{ $question->id}}" data-toggle="modal" data-target="#showAnsModel">See answer</a>
+                        </td>
+                        {{-- <td>
+                            <button class="btn btn-danger deleteButton" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#deleteExamModel">Delete</button>
+                        </td> --}}
+                    </tr>
+                @endforeach
+            @else
+                    <tr>
+                        <td colspan="3">Data not found</td>
+                    </tr>
+            @endif
+        </tbody>
+    </table>
 
+    {{-- modal --}}
   <div class="modal fade" id="addExamModel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         
@@ -39,6 +72,45 @@
         
     </div>
   </div>
+
+  {{-- Show Answer Modal --}}
+  <div class="modal fade" id="showAnsModel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Show Answer</h5>
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                  <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Answer</th>
+                                <th>Is_correct</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody class="showAnswers">
+                            
+                        </tbody>
+                    </table>
+                  </div>
+                  <div class="modal-footer">
+                    <span class="error" style="color:red;"></span>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    
+                  </div>
+                
+            </div>
+        
+    </div>
+  </div>
+  {{-- End model --}}
 <script>
   $(document).ready(function(){
      $('#addQna').submit(function(e){
@@ -125,6 +197,40 @@
      {
         $(this).parent().remove();
      })
+
+     //Show answers code 
+     $('.showAnsButton').click(function()
+     {
+        var questions = @json($questions);
+        //  console.log(questions);
+        let qid = $(this).attr('data-id');
+        // console.log(qid);
+        var html = '';
+// console.log(questions.length)
+        for(let i = 0;i < questions.length;i++)
+        {   console.log(questions[i]['id']);
+            if(questions[i]['id'] == qid)
+            {
+                var answerLength = questions[i]['answers'].length;
+console.log(answerLength)
+                for(j= 0;j<answerLength;j++)
+                {
+                    let is_correct = 'No';
+                    if(questions[i]['answers'][j]['is_correct'] == 1)
+                    {
+                        is_correct = 'Yes';
+                    }
+                    html += `<tr>
+                        <td>`+(j+1)+`</td>
+                            <td>`+questions[i]['answers'][j]['answer']+`</td>
+                            <td>`+is_correct+`</td>
+                        </tr>`
+                }
+                break;
+            }
+        }
+        $('.showAnswers').html(html);
+     });
   });
 </script>
   
