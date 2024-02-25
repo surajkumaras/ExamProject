@@ -31,7 +31,7 @@
                         <td>
                             <button class="btn btn-info editButton" data-id="{{ $question->id}}" data-toggle="modal" data-target="#editAnsModel">Edit</button>
                         
-                            <button class="btn btn-danger deleteButton" data-id="{{ $question->id}}" data-toggle="modal" data-target="#deleteAnsModel">Delete</button>
+                            <button class="btn btn-danger deleteButton" data-id="{{ $question->id}}" data-toggle="modal" data-target="#deleteExamModel">Delete</button>
                         </td>
                     </tr>
                 @endforeach
@@ -143,6 +143,33 @@
     </div>
   </div>
   {{-- End model --}}
+
+  {{-- delete model --}}
+<div class="modal fade" id="deleteExamModel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delete Question</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <form id="deleteQna" method="POST">
+                  @csrf
+                  <div class="modal-body">
+                      <p>Are you sure you want to delete this ?</p>
+                      <input type="hidden" name="id" id="delete_qna_id">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                  </div>
+                </form>
+            </div>
+        
+    </div>
+  </div>
 <script>
   $(document).ready(function()
   {
@@ -385,18 +412,25 @@
      });
 
      //remove answers
-     $(document).on('click','.removeAnswer',function(){
-       var ansId = $(this).attr('data-id');
+    $('.deleteButton').click(function()
+    {
+        var id = $(this).attr('data-id');
+        $('#delete_qna_id').val(id);
+    })
 
-       $.ajax({
-        url:"{{ route('deleteAns')}}",
-        type:"GET",
-        data:{ansId:ansId},
+    $('#deleteQna').submit(function(e)
+    {
+        e.preventDefault();
+        var formData = $(this).serialize();
+        $.ajax({
+        url:"{{ route('deleteQna')}}",
+        type:"POST",
+        data:formData,
         success:function(data)
         {
             if(data.success == true)
             {
-                console.log(data.msg)
+                location.reload();
             }
             else 
             {
@@ -404,7 +438,9 @@
             }
         }
        })
-     });
+    })
+      
+    
   });
 </script>
   
