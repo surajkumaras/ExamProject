@@ -64,6 +64,11 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
     Route::post('/update-qna-ans',[AdminController::class,'updateQna'])->name('updateQna');
     Route::post('/delete-qna-ans',[AdminController::class,'deleteQna'])->name('deleteQna');
 
+    //student routes
+    Route::get('/admin/students',[AdminController::class,'studentDashboard']);
+    Route::post('/add-students',[AdminController::class,'addStudent'])->name('addStudent');
+    Route::post('/edit-students',[AdminController::class,'editStudent'])->name('editStudent');
+    Route::post('/delete-students',[AdminController::class,'deleteStudent'])->name('deleteStudent');
 
 
 });

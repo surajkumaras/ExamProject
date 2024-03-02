@@ -18,6 +18,7 @@
                 <th>Data</th>
                 <th>Time</th>
                 <th>Attempts</th>
+                <th>Add Questions</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -32,6 +33,9 @@
                         <td>{{ $exam->date }}</td>
                         <td>{{ $exam->time }} Hrs</td>
                         <td>{{ $exam->attempt }}</td>
+                        <td>
+                            <a href="" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#addQnaModel">Add Question</a>
+                        </td>
                         <td>
                             <button class="btn btn-info editButton" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#editExamModel">Edit</button>
                         </td>
@@ -150,6 +154,38 @@
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-danger">Delete</button>
+                  </div>
+                </form>
+            </div>
+        
+    </div>
+  </div>
+
+  {{-- add question mode--}}
+  <div class="modal fade" id="addQnaModel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Add Question and Answer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <form id="addQna" method="POST">
+                  @csrf
+                  <div class="modal-body">
+                      <input type="hidden" name="exam_id" id="addExamId">
+                      <br><br>
+                      <select name="questions" id="" multiple multiselect-select="true" multiselect-select-all="true">
+                        
+                        <option value="">Hi</option>
+                        <option value="">Good option</option>v
+                      </select>
+                  </div>
+                  <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-primary">Add Q&A</button>
                   </div>
                 </form>
             </div>
