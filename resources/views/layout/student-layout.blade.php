@@ -27,15 +27,15 @@
 	          <span class="sr-only">Toggle Menu</span>
 	        </button>
         </div>
-	  		<h1><a href="index.html" class="logo">Project Name</a></h1>
+	  		<h1><a href="index.html" class="logo">HII ,{{ Auth::user()->name}}</a></h1>
         <ul class="list-unstyled components mb-5">
           <li class="active">
             <a href="{{ route('admin.dashboard')}}"><span class="fa fa-home mr-3"></span> Homepage</a>
           </li>
           <li>
-              <a href="/admin/dashboard"><span class="fa fa-user mr-3"></span> Dashboard</a>
+              <a href="/dashboard"><span class="fa fa-user mr-3"></span> Dashboard</a>
           </li>
-          <li>
+          {{-- <li>
             <a href="/admin/dashboard"><span class="fa fa-book mr-3"></span> Subjects</a>
           </li>
           <li>
@@ -46,7 +46,7 @@
           </li>
           <li>
             <a href="/admin/students"><span class="fa fa-graduation-cap mr-3"></span> Students</a>
-          </li>
+          </li> --}}
           <li>
             <a href="/logout"><span class="fa fa-sign-out mr-3"></span> Logout</a>
           </li>

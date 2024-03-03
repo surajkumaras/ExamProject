@@ -30,7 +30,7 @@ Route::get('login', function()
 Route::get('/',[AuthController::class,'loadLogin']);
 Route::post('/login',[AuthController::class,'userLogin'])->name('userLogin');
 
-Route::get('logout',[AuthController::class,'logout']);
+Route::get('/logout',[AuthController::class,'logout']);
 
 Route::get('/forget-password',[AuthController::class,'forgetPasswordLoad']);
 Route::post('/forget-password',[AuthController::class,'forgetPassword'])->name('forgetPassword');
@@ -69,6 +69,13 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
     Route::post('/add-students',[AdminController::class,'addStudent'])->name('addStudent');
     Route::post('/edit-students',[AdminController::class,'editStudent'])->name('editStudent');
     Route::post('/delete-students',[AdminController::class,'deleteStudent'])->name('deleteStudent');
+
+
+    //qna 
+    Route::get('/get-questions',[AdminController::class,'getQuestions'])->name('getQuestions');
+    Route::post('/add-questions',[AdminController::class,'addQuestions'])->name('addQuestions');
+    Route::get('/get-exam-questions',[AdminController::class,'getExamQuestions'])->name('getExamQuestions');
+    Route::get('/delete-exam-questions',[AdminController::class,'deleteExamQuestions'])->name('deleteExamQuestions');
 
 
 });

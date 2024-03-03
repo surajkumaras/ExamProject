@@ -19,6 +19,7 @@
                 <th>Time</th>
                 <th>Attempts</th>
                 <th>Add Questions</th>
+                <th>Show Questions</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -34,11 +35,15 @@
                         <td>{{ $exam->time }} Hrs</td>
                         <td>{{ $exam->attempt }}</td>
                         <td>
-                            <a href="" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#addQnaModel">Add Question</a>
+                            <a href="" class="addQuestion" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#addQnaModel">Add Question</a>
+                        </td>
+                        <td>
+                            <a href="" class="seeQuestion" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#seeQnaModel">Show Question</a>
                         </td>
                         <td>
                             <button class="btn btn-info editButton" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#editExamModel">Edit</button>
                         </td>
+                        
                         <td>
                             <button class="btn btn-danger deleteButton" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#deleteExamModel">Delete</button>
                         </td>
@@ -176,18 +181,57 @@
                   @csrf
                   <div class="modal-body">
                       <input type="hidden" name="exam_id" id="addExamId">
+                      <input type="search" name="search" class="w-100" id="search" onkeyup="searchTable()" placeholder="Search here">
                       <br><br>
-                      <select name="questions" id="" multiple multiselect-select="true" multiselect-select-all="true">
-                        
-                        <option value="">Hi</option>
-                        <option value="">Good option</option>v
-                      </select>
+                      <table class="table" id="questionsTable">
+                        <thead >
+                            <th>Select</th>
+                            <th>Question</th>
+                        </thead>
+                        <tbody class="addBody">
+
+                        </tbody>
+                      </table>
+                      
                   </div>
                   <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   <button type="submit" class="btn btn-primary">Add Q&A</button>
                   </div>
                 </form>
+            </div>
+        
+    </div>
+  </div>
+
+  {{-- see question mode--}}
+  <div class="modal fade" id="seeQnaModel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Questions</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                  <div class="modal-body">
+                      
+                      <table class="table" >
+                        <thead >
+                            <th>#</th>
+                            <th>Question</th>
+                        </thead>
+                        <tbody class="seeQuestionTable">
+
+                        </tbody>
+                      </table>
+                      
+                  </div>
+                  <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  
+                  </div>
             </div>
         
     </div>
@@ -319,6 +363,181 @@
             
             });
         });
+
+        //add questions
+
+        $('.addQuestion').click(function()
+        {
+            var id = $(this).attr('data-id');
+            $('#addExamId').val(id);
+
+            $.ajax({
+                url:"{{ route('getQuestions') }}",
+                type:"GET",
+                data:{exam_id:id},
+                success:function(data)
+                {
+                    if(data.success == true)
+                    {
+                        var questions = data.data;
+                        var html = '';
+                        if(questions.length > 0)
+                        {
+                            for(let i =0;i<questions.length;i++)
+                            {
+                                html +=`
+                                <tr>
+                                    <td><input type="checkbox" value="`+questions[i]['id']+`" name="question_ids[]"</td>  
+                                    <td>`+questions[i]['question']+`</td>  
+                                </tr>`;
+                            }
+
+                            
+                        }
+                        else 
+                        {
+                            html +=`<tr>
+                                    <td colspan="2">Question not Available!</td>
+                                <tr>`
+                            
+                        }
+                        $('.addBody').html(html);
+                    }
+                    else
+                    {
+                        alert(data.msg);
+                    }
+                },
+                error:function(err)
+                {
+                    alert(err)
+                }
+            })
+        })
+
+        $('#addQna').submit(function(e)
+        {
+        e.preventDefault();
+        var formData = $(this).serialize();
+        console.log(formData);
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('addQuestions') }}",
+                data: formData,
+                success: function(data)
+                {
+                    if(data.success == true)
+                    {
+                        location.reload();
+                    }
+                    else 
+                    {
+                        alert(data.msg);
+                    }
+                },
+                error:function(err)
+                {
+                    alert(err)
+                }
+            
+            });
+        });
+
+        //see questions 
+        $('.seeQuestion').click(function()
+        {
+            var id = $(this).attr('data-id');
+            $.ajax({
+                url:"{{ route('getExamQuestions')}}",
+                type:"GET",
+                data:{exam_id:id},
+                success:function(data)
+                {   console.log(data);
+                    var html ="";
+                    var questions = data.data;
+                    if(questions.length > 0)
+                    {
+                        for(let i=0; i<questions.length;i++)
+                        {
+                            html += `
+                                <tr>
+                                    <td>`+ (i+1) +`</td>
+                                    <td>`+questions[i]['question'][0]['question']+`</td>
+                                    <td>
+                                        <button class="btn btn-danger deleteQuestion" data-id="`+questions[i]['id']+`">Delete</button>    
+                                    </td>
+                                </tr>
+                            `;
+                        }
+                    }
+                    else 
+                    {
+                        html +=`  <tr>
+                            <td colspan="1" class="text-center">No Questions</td>
+                            </tr> `;
+                    }
+                    $('.seeQuestionTable').html(html);
+                },
+                error:function(err)
+                {
+                    alert(err);
+                }
+            });
+        })
+
+        //delete questions
+        $(document).on('click','.deleteQuestion',function()
+        {
+            var id = $(this).attr('data-id');
+            var obj = $(this);
+            $.ajax({
+                url:"{{ route('deleteExamQuestions')}}",
+                type:"GET",
+                data:{id:id},
+                success:function(data)
+                {
+                    if(data.success == true)
+                    {
+                        obj.parent().parent().remove();
+                    }
+                    else 
+                    {
+                        alert(data.msg);
+                    }
+                },
+                error:function(err)
+                {
+                    alert(err.msg);
+                }
+            })
+        });
+
     });
+  </script>
+  <script>
+    function searchTable()
+        {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("search");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("questionsTable");
+            tr = table.getElementsByTagName("tr");
+            for (i = 0; i < tr.length; i++) 
+            {
+                td = tr[i].getElementsByTagName("td")[1];
+                if (td)
+                {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1)
+                    {
+                        tr[i].style.display = "";
+                    }
+                    else 
+                    {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
   </script>
 @endsection
