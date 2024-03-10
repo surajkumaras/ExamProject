@@ -74,12 +74,14 @@ class AdminController extends Controller
     public function addExam(Request $request)
     {
         try{
+            $unique_id = uniqid('exam');
             Exam::insert([
                 'exam_name' => $request->exam_name,
                 'subject_id' => $request->subject_id,
                 'date' => $request->date,
                 'time' => $request->time,
                 'attempt' => $request->attempt,
+                'enterance_id'=> $unique_id,
             ]);
             return response()->json(['success'=>true, 'msg'=>'Exam added successfully!']);
         }
@@ -419,6 +421,30 @@ class AdminController extends Controller
         try{
             QnaExam::where('id',$request->id)->delete();
             return response()->json(['success'=>true,'msg'=>'Question deleted']);
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+     }
+
+     //load makrs
+
+     public function loadMarks()
+     {
+        $exams = Exam::with('getQnaExam')->get();
+        return view('admin.marksDashboard',compact('exams'));
+     }
+
+     //update marks
+
+     public function updateMarks(Request $request)
+     {
+        try{
+            $exam = Exam::find($request->exam_id);
+            $exam->marks = $request->marks;
+            $exam->save();
+            return response()->json(['success'=>true,'msg'=>'Marks updated']);
         }
         catch(\Exception $e)
         {
