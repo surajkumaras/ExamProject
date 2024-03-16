@@ -82,4 +82,11 @@ class ExamController extends Controller
 
         return view('thank-you');
     }
+
+    //result 
+    public function resultDashboard()
+    {
+        $attempts = examsAttempt::where('user_id',Auth::user()->id)->with('exam')->orderBy('updated_at')->get();
+        return view('student.results',compact('attempts'));
+    }
 }

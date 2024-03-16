@@ -35,10 +35,10 @@
           <li>
               <a href="/dashboard"><span class="fa fa-user mr-3"></span> Dashboard</a>
           </li>
-          {{-- <li>
-            <a href="/admin/dashboard"><span class="fa fa-book mr-3"></span> Subjects</a>
-          </li>
           <li>
+            <a href="{{ route('resultDashboard')}}"><span class="fa fa-list-alt mr-3"></span> Results</a>
+          </li>
+          {{--<li>
             <a href="/admin/exams"><span class="fa fa-tasks mr-3"></span> Exams</a>
           </li>
           <li>
