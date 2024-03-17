@@ -58,10 +58,15 @@
                 </div>
                 <form id="addQna" method="POST">
                     @csrf
-                  <div class="modal-body">
+                  <div class="modal-body modal1">
                       <div class="row ">
                         <div class="col">
                             <input type="text" class="w-100" name="question"  placeholder="Enter Question" required>
+                        </div>
+                      </div>
+                      <div class="row  mt-2">
+                        <div class="col">
+                            <textarea name="explaination" class="w-100" placeholder="Enter your explaination(optional)"></textarea>
                         </div>
                       </div>
                   </div>
@@ -97,6 +102,11 @@
                             <input type="text" class="w-100" name="question" id="question" placeholder="Enter Question" required>
                         </div>
                       </div>
+                      <div class="row  mt-2">
+                        <div class="col">
+                            <textarea name="explaination" id="explaination" class="w-100" placeholder="Enter your explaination(optional)"></textarea>
+                        </div>
+                      </div>
                   </div>
                   <div class="modal-footer">
                     <span class="editError" style="color:red;"></span>
@@ -121,7 +131,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                 </div>
-                  <div class="modal-body2">
+                  <div class="modal-body">
                     <table class="table">
                         <thead>
                             <tr>
@@ -175,7 +185,7 @@
   {
      $('#addQna').submit(function(e){
         e.preventDefault(); 
-        console.log($('.modal-body .answers').length);
+        console.log("Add Qna:"+ $('.answers').length)
         if( $('.answers').length < 2)
         {
             $('.error').text('Please add minimum two answers.');
@@ -231,7 +241,7 @@
 
      //add answers
      $('#addAnswer').click(function()
-      {  console.log($('.answers').length);
+      {  
         if($('.answers').length >= 6)
         {
             $('.error').text('You can add maximum six answers.');
@@ -250,9 +260,9 @@
                 <button class="btn btn-danger removeButton">Remove</button>
             </div>`;
 
-            $('.modal-body').append(html);
+            $('.modal1').append(html);
         }
-
+        console.log("Add Ans:"+$('.answers').length);
      });
 
      $(document).on('click','.removeButton',function()
@@ -294,7 +304,7 @@
      //Edit questions
 
      $('#addEditAnswer').click(function()
-      {  console.log($('.answers').length);
+      { 
         if($('.editAnswers').length >= 6)
         {
             $('.editError').text('You can add maximum six answers.');
@@ -327,10 +337,10 @@
             data:{qid:qid},
             success:function(data)
             {
-               // console.log(data);
                var qna = data.data[0];
                $('#question_id').val(qna['id']);
                $('#question').val(qna['question']);
+               $('#explaination').val(qna['explaination']);
                $('.editAnswers').remove();
                var html = '';
 
@@ -357,7 +367,7 @@
      //update question
      $('#editQna').submit(function(e){
         e.preventDefault(); 
-        console.log($('.modal-body .answers').length);
+        
         if( $('.editAnswers').length < 2)
         {
             $('.editError').text('Please add minimum two answers.');
@@ -382,7 +392,7 @@
             if(checkIsCorrect)
             {
                 var formData = $(this).serialize();
-
+                // console.log(formData);
                 $.ajax({
                    url:"{{ route('updateQna')}}",
                    type:"POST",

@@ -154,6 +154,7 @@ class AdminController extends Controller
         try{
            $questionId =  Question::insertGetId([
                 'question'=>$request->question,
+                'explaination'=>$request->explaination??null,
             ]);
 
             foreach($request->answers as $answer)
@@ -193,10 +194,10 @@ class AdminController extends Controller
      public function updateQna(Request $request)
      {
          try{
-            ;
-            Question::where('id',$request->questionId)
+            Question::where('id',$request->question_id)
             ->update([
                 'question'=>$request->question,
+                'explaination' =>$request->explaination ?? null,
             ]);
 
             //old answer 
