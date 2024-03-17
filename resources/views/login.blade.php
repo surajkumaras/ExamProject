@@ -19,7 +19,8 @@
         
         <input type="submit" value="Login">
     </form>
-    <a href="/forget-password">forget password</a>
+    <a href="/forget-password" class="btn btn-success">forget password</a>
+    <a href="{{ route('register')}}" class="btn btn-info">Create a new account</a>
     @if (Session::has('error'))
         <p style="color: red">{{ Session::get('error')}}</p>
     @endif

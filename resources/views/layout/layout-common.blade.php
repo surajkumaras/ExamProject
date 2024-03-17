@@ -12,9 +12,17 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
+  <div class="container">
     @yield('space-work')
 
-
+  </div>
     <script src="{{ asset('js/bootstrap.min.js')}}"></script>
 </body>
 </html>
+<style>
+  .container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%; /* Adjust the width as needed */
+}
+</style>

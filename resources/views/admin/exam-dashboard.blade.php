@@ -333,7 +333,7 @@
         $('.deleteButton').click(function()
         {
             var id = $(this).attr('data-id');
-            alert(id);
+           
             $('#deleteExamId').val(id);
         })
 
