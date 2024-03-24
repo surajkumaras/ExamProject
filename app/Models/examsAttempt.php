@@ -23,4 +23,9 @@ class examsAttempt extends Model
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
+
+    public function examAnswer()
+    {
+        return $this->hasOne(examsAnswer::class,'attempt_id','id');
+    }
 }

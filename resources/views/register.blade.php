@@ -24,5 +24,10 @@
 
     @if (Session::has('success'))
         <p style="color: green">{{ Session::get('success')}}</p>
+        <script>
+            setTimeout(() => {
+                window.location.href = "{{ route('login')}}";
+            }, 2000);
+        </script>
     @endif
 @endsection

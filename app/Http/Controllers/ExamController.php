@@ -87,7 +87,7 @@ class ExamController extends Controller
     public function resultDashboard()
     {
         $attempts = examsAttempt::where('user_id',Auth::user()->id)->with('exam')->orderBy('updated_at')->get();
-        // return $attempts;
+        //  return $attempts;
         return view('student.results',compact('attempts'));
     }
 

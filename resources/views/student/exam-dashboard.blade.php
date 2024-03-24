@@ -53,42 +53,47 @@
             })
 
             var time = @json($time);
-           $('.time').text(time[0]+':'+time[1]+':00 left time');
+        var hours = parseInt(time[0]);
+        var minutes = parseInt(time[1]);
+        var seconds = 0;
 
-           var seconds = 00;
-           var hours = parseInt(time[0]);
-           var minutes = parseInt(time[1]);
+        // Update the timer display
+        function updateTimerDisplay() {
+            let tempHours = hours.toString().padStart(2, '0');
+            let tempMinutes = minutes.toString().padStart(2, '0');
+            let tempSeconds = seconds.toString().padStart(2, '0');
+            $('.time').text(tempHours + ':' + tempMinutes + ':' + tempSeconds + ' left time');
+        }
 
-           var timer = setInterval(() => {
+        // Update the timer values
+        function updateTimer() {
+            if (hours === 0 && minutes === 0 && seconds === 0) {
+                clearInterval(timer);
+                $('#exam_form').submit();
+                return;
+            }
 
-                if(hours == 0 && minutes == 0 && seconds == 0)
-                {
-                    clearInterval(timer);
-                    $('#exam_form').submit();
-                }
-                
-
-                if(seconds <=0)
-                {
+            if (seconds <= 0) {
+                if (minutes > 0) {
                     minutes--;
                     seconds = 59;
-                }
-
-                if(minutes <=0 && hours != 0)
-                {
+                } else if (hours > 0) {
                     hours--;
                     minutes = 59;
                     seconds = 59;
                 }
-
-                let tempHours = hours.toString().length >1 ? hours : "0"+hours;
-                let tempMinutes = minutes.toString().length >1 ? minutes : "0"+minutes;
-                let tempSeconds = seconds.toString().length >1 ? seconds : "0"+seconds;
-
-                $('.time').text(tempHours+':'+tempMinutes+':'+tempSeconds+' left time');
-
+            } else {
                 seconds--;
-           }, 1000);
+            }
+
+            updateTimerDisplay();
+        }
+
+        // Initial timer display
+        updateTimerDisplay();
+
+        // Start the timer interval
+        var timer = setInterval(updateTimer, 1000);
         })
 
         function isValid()
@@ -111,4 +116,26 @@
             return result;
         }
     </script>
+    <style>
+        .time {
+            font-size: 24px;
+            color: #fff;
+            background-color: #007bff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+            animation: pulse 1s infinite alternate;
+        }
+    
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+    
+            100% {
+                transform: scale(1.1);
+            }
+        }
+    </style>
+    
 @endsection

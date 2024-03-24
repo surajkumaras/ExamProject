@@ -500,14 +500,26 @@ class AdminController extends Controller
             }
             examsAttempt::where('id',$request->attempt_id)->update(['status'=>1,'marks'=>$totalMarks]);
 
+            //============ SEND MAIL STOP ==============//
             $url = URL::to('/');
             $data['url'] = $url.'/results';
             $data['name'] = $examData[0]['user']['name'];
+            $data['user_id'] = $examData[0]['user']['id'];
             $data['email'] = $examData[0]['user']['email'];
             $data['title'] = $examData[0]['exam']['exam_name'].'Result';
             $data['exam_name'] = $examData[0]['exam']['exam_name'];
-
-            Mail::send('result-mail',['data'=>$data], function($message) use($data){
+            $data['obt_marks'] = $examData[0]['marks'];
+            $data['max_marks'] = $examData[0]['marks'];
+            $data['pass_marks'] = $examData[0]['exam']['pass_marks'];
+            $data['per_qna_marks'] = $examData[0]['exam']['marks'];
+            $data['date'] = $examData[0]['created_at'];
+            $data['exam_id'] = $examData[0]['exam']['id'];
+// return $data;
+            // Mail::send('result-mail',['data'=>$data], function($message) use($data){
+            //     $message->to($data['email'])->subject($data['title']);
+            // });
+            //=========== NEW SEND MAIL VIEW FILE ==========//
+            Mail::send('mail.result',['data'=>$data], function($message) use($data){
                 $message->to($data['email'])->subject($data['title']);
             });
             return response()->json(['success'=>true,'msg'=>'Approved Successfully']);

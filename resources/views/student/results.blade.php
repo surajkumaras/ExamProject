@@ -8,6 +8,8 @@
                 <th>#</th>
                 <th>Exam</th>
                 <th>Result</th>
+                <th>Marks/Out of</th>
+                <th>Passing Marks</th>
                 <th>Status</th>
             </tr>
         </thead>
@@ -28,6 +30,17 @@
                                     <span style="color:red">Failed</span>
                                 @endif
                             @endif
+                        </td>
+                        <td>
+                            @if ($attempt->marks > 0)
+                                {{ $attempt->marks}}/{{ $attempt->exam->total_marks}}
+                            @else
+                                -- / --
+                            @endif
+                            
+                        </td>
+                        <td>
+                            {{ $attempt['exam']->pass_marks}}
                         </td>
                         <td>
                             @if ($attempt->status == 0)

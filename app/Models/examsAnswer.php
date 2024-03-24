@@ -24,4 +24,9 @@ class examsAnswer extends Model
     {
         return $this->hasOne(Answer::class, 'id', 'answer_id');
     }
+
+    public function examsAttempt()
+    {
+        return $this->belongsTo(examsAttempt::class);
+    }
 }
