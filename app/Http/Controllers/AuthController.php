@@ -44,7 +44,13 @@ class AuthController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->save();
-
+        $data['title'] = 'Successful Registration';
+        $data['name'] = $user->name;
+        $data['email'] = $user->email;
+        $data['body'] = 'Thank you for registering with us. We are happy to have you on board <b>Online Examination System<b/>.';
+        Mail::send('mail.register',['data'=>$data], function($message) use($data){
+            $message->to($data['email'])->subject($data['title']);
+        });
         return back()->with('success', 'You have successfully registered! Please login.');
     }
 
@@ -90,6 +96,7 @@ class AuthController extends Controller
     public function loadDashboard()
     {
        $exams =  Exam::with('subjects')->orderBy('date')->get();
+        // return $exams;
         return view('student.dashboard',['exams'=>$exams]);
     }
 

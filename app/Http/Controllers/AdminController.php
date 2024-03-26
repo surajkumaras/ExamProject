@@ -483,8 +483,9 @@ class AdminController extends Controller
         try{
             $examData = examsAttempt::where('id',$request->attempt_id)->with(['user','exam'])->get();
             $marks = $examData[0]['exam']['marks'];
-// return $marks;
+//   return $examData;
             $attemptData = examsAnswer::where('attempt_id',$request->attempt_id)->with('answers')->get();
+            $totalQue = 0;
             $totalMarks = 0;
             if(count($attemptData) > 0)
             {
@@ -497,6 +498,7 @@ class AdminController extends Controller
 
 
                 }
+                $totalQue = count($attemptData);
             }
             examsAttempt::where('id',$request->attempt_id)->update(['status'=>1,'marks'=>$totalMarks]);
 
@@ -508,13 +510,13 @@ class AdminController extends Controller
             $data['email'] = $examData[0]['user']['email'];
             $data['title'] = $examData[0]['exam']['exam_name'].'Result';
             $data['exam_name'] = $examData[0]['exam']['exam_name'];
-            $data['obt_marks'] = $examData[0]['marks'];
-            $data['max_marks'] = $examData[0]['marks'];
+            $data['obt_marks'] = $totalMarks;
+            $data['max_marks'] = $totalQue * $examData[0]['exam']['marks'];;
             $data['pass_marks'] = $examData[0]['exam']['pass_marks'];
             $data['per_qna_marks'] = $examData[0]['exam']['marks'];
-            $data['date'] = $examData[0]['created_at'];
+            $data['date'] = $examData[0]['updated_at'];
             $data['exam_id'] = $examData[0]['exam']['id'];
-// return $data;
+//  return $data;
             // Mail::send('result-mail',['data'=>$data], function($message) use($data){
             //     $message->to($data['email'])->subject($data['title']);
             // });
@@ -524,6 +526,32 @@ class AdminController extends Controller
             });
             return response()->json(['success'=>true,'msg'=>'Approved Successfully']);
         }catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+     }
+
+     //import qna
+
+     public function importQna(Request $request)
+     {
+        try{
+            
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+     }
+
+     //export qna
+
+     public function exportQna(Request $request)
+     {
+        try{
+            return Excel::download(new QnaExport, 'qna.xlsx');
+        }
+        catch(\Exception $e)
         {
             return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
         }

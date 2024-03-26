@@ -14,35 +14,42 @@
         
             <table border=2>
             <tr>
-                <td colspan="4">Student ID No :<b>{{ $data['user_id']}}</b><br>Name:<b>{{$data['name']}}</b><br>Class:<b>----</b></td>
+                <td colspan="7">Student ID No :<b>{{ $data['user_id']}}</b><br>Name:<b>{{$data['name']}}</b><br>Class:<b>----</b></td>
             </tr>
             
             <tr> 
                 <td><b>Exam ID:</b></td>
                 <td><b>Exam Name</b></td>
+                <td><b>Marks per Question</b></td>
                 <td><b>Max. Marks</b></td>
                 <td><b>Obtain Marks</b></td>
                 <td><b>Passing Marks</b></td>
-                <td><b>Marks per Question</b></td>
+                <td><b>Percentage</b></td>
             </tr>
             
             <tr>
-                <td>{{ $data['exam_id']}}</td>
-                <td>{{ $data['exam_name']}}</td>
-                <td>{{$data['max_marks']}}</td>
-                <td>{{$data['obt_marks']}}</td>
-                <td>{{$data['pass_marks']}}</td>
-                <td>{{$data['per_qna_marks']}}</td>
+                <td>{{ $data['exam_id'] }}</td>
+                <td>{{ $data['exam_name'] }}</td>
+                <td>{{ $data['per_qna_marks'] }}</td>
+                <td>{{ $data['max_marks'] }}</td>
+                <td>{{ $data['obt_marks'] }}</td>
+                <td>{{ $data['pass_marks'] }}</td>
+                <td>
+                    @if ($data['obt_marks'] / $data['max_marks'] * 100 >= $data['pass_marks'])
+                        <b><span style="color:green">{{ number_format($data['obt_marks'] / $data['max_marks'] * 100, 2) }}%</span> </b>
+                    @else
+                        <b><span style="color:red">{{ number_format($data['obt_marks'] / $data['max_marks'] * 100, 2) }}%</span> </b>
+                    @endif
+                </td>
             </tr>
-            
-            <tr><td colspan=4>Result Status:
+            <tr><td colspan="7">Result Status:
                 @if ($data['obt_marks'] >= $data['pass_marks'])
                     <b><span style="color:green">Pass</span> </b>
                 @else
-                    <b><span style="corgb(247, 74, 6)reen">Failed</span> </b>
+                    <b><span style="color:red">Failed</span> </b>
                 @endif </td>
             </tr>
-            <tr><td colspan=4>Result Date:{{ $data['date']}}</td>
+            <tr><td colspan="7">Result Date:{{ $data['date']}}</td>
           <table>
     </div>
 </body>

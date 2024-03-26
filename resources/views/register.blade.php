@@ -11,9 +11,9 @@
 @endif
     <form action="{{route('studentRegister')}}" method="post">
         @csrf
-        <input type="text" name="name" id="name" placeholder="Enter name">
+        <input type="text" name="name" id="name" value="{{ old('name')}}" placeholder="Enter name">
         <br><br>
-        <input type="email" name="email" placeholder="Enter email">
+        <input type="email" name="email" value="{{ old('email')}}" placeholder="Enter email">
         <br><br>
         <input type="password" name="password" placeholder="Enter password">
         <br><br>

@@ -12,6 +12,7 @@
                     <th>Subject Name</th>
                     <th>Date</th>
                     <th>Time</th>
+                    <th>Passing Marks</th>
                     <th>Total Attempt</th>
                     <th>Available Attempt</th>
                     <th>Copy Link</th>
@@ -27,6 +28,7 @@
                             <td>{{ $exam->subjects[0]['name']}}</td>
                             <td>{{ $exam->date }}</td>
                             <td>{{ $exam->time }} hrs</td>
+                            <td>{{ $exam->pass_marks }}</td>
                             <td>{{ $exam->attempt }} Time</td>
                             <td>{{ $exam->attempt_counter }} Time</td>
                             <td>
