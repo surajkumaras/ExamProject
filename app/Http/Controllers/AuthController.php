@@ -65,7 +65,8 @@ class AuthController extends Controller
             return redirect('/dashboard');
         }
 
-        return view('login');
+        // return view('login');
+        return view('loginnew');
     }
 
     public function userLogin(Request $request)
