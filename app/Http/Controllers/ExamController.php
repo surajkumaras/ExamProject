@@ -56,7 +56,7 @@ class ExamController extends Controller
 
     public function examSubmit(Request $request)
     {
-        // return $request->all();
+        //  return $request->all();
 
        $attempt_id = examsAttempt::insertGetId([
             'exam_id'=>$request->exam_id,

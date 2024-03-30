@@ -148,8 +148,10 @@
                         <form action="{{route('userLogin')}}" method="POST" onsubmit="return validateForm()"> 
                             @csrf
                             <div class="form-group py-2">
-                                <div class="input-field"> <span class="far fa-user p-2"></span> <input id="email" type="text" name="email"
-                                    value="{{ old('email')}}"  placeholder="Username or Email" required> </div>
+                                <div class="input-field"> <span class="far fa-user p-2"></span> 
+                                    <input id="email" type="text" name="email"
+                                    value="{{ old('email')}}"  placeholder="Username or Email" required> 
+                                </div>
                             </div>
                             <div class="form-group py-1 pb-2">
                                 <div class="input-field"> <span class="fas fa-lock px-2"></span> <input type="password" id="psw" name="password"
