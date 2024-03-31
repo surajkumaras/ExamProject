@@ -86,8 +86,8 @@ class ExamController extends Controller
     //result 
     public function resultDashboard()
     {
-        $attempts = examsAttempt::where('user_id',Auth::user()->id)->with('exam')->orderBy('updated_at')->get();
-        //  return $attempts;
+        $attempts = examsAttempt::where('user_id',Auth::user()->id)->with('exam.getQnaExam')->orderBy('updated_at')->get();
+        //   return $attempts;
         return view('student.results',compact('attempts'));
     }
 
@@ -96,7 +96,9 @@ class ExamController extends Controller
     {
         try 
         {
-            $examData = examsAnswer::where('attempt_id',$request->attempt_id)->with(['question','answers'])->get();
+            $examData = examsAnswer::where('attempt_id', $request->attempt_id)
+                        ->with(['question.answers', 'answers'])
+                        ->get();
             return response()->json(['success'=>true,'msg'=>'data found','data'=>$examData]);
         }
         catch(\Exception $e)

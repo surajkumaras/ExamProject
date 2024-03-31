@@ -436,6 +436,7 @@ class AdminController extends Controller
      public function loadMarks()
      {
         $exams = Exam::with('getQnaExam')->get();
+        // return $exams;
         return view('admin.marksDashboard',compact('exams'));
      }
 

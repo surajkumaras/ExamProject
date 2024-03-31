@@ -33,7 +33,7 @@
                         </td>
                         <td>
                             @if ($attempt->marks > 0)
-                                {{ $attempt->marks}}/{{ $attempt->exam->total_marks}}
+                                {{ $attempt->marks}}/{{ count($attempt->exam->getQnaExam) * $attempt->exam->marks}}
                             @else
                                 -- / --
                             @endif
@@ -74,6 +74,7 @@
                 </div>
 
                 <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" >Print</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
         </div>
@@ -116,32 +117,44 @@
                     {
                         console.log(data);
                         var html = '';
-                        if(data.success == true)
+                        if(data.success == true) 
                         {
                             var data = data.data;
-                            if(data.length > 0)
+                            if(data.length > 0) 
                             {
-                                for(var i = 0; i < data.length; i++)
+                                for(var i = 0; i < data.length; i++) 
                                 {
                                     var is_correct = `<span style="color:red;" class="fa fa-close"></span>`;
-                                    if(data[i]['answers']['is_correct'] == 1)
-                                    {
+                                    if(data[i]['answers']['is_correct'] == 1) {
                                         is_correct = `<span style="color:green;" class="fa fa-check"></span>`;
                                     }
+                                    var answers_html = '';
+                                   
+                                    for(var j = 0; j < data[i]['question']['answers'].length; j++) 
+                                    {
+                                        if(data[i]['question']['answers'][j]['is_correct'] == 1)
+                                        {
+                                             answers_html += `<p style="color:green">` + data[i]['question']['answers'][j]['answer'] + `</p>`;
+                                        }
+                                        else 
+                                        {
+                                            answers_html += `<p style="color:red">` + data[i]['question']['answers'][j]['answer'] + `</p>`;
+                                        }
+                                        
+                                    }
                                     html += `<div class="row">
-                                            <div class="col-sm-12">
-                                                <h6>Q.`+(i+1)+`:`+data[i]['question']['question']+`</h6>
-                                                <p>Ans:`+data[i]['answers']['answer']+``+is_correct+`</p>`;
-
-                                                if(data[i]['question']['explaination'] != null)
-                                                {
-                                                    html += `<p><a href="#" data-explaination="`+data[i]['question']['explaination']+`" class="explaination" data-toggle="modal" data-target="#explainationModal">Explaination</a></p>`
-                                                }
-                                                html +=`
-                                            </div>
-                                        </div>`;
+                                                <div class="col-sm-12">
+                                                    <h6><b>Q.` + (i+1) + `:` + data[i]['question']['question'] + `</b></h6>
+                                                    ` + answers_html + `
+                                                    <p><b>Your Ans:&nbsp</b>` + data[i]['answers']['answer'] + `` + is_correct + `</p>`;
+                                    if(data[i]['question']['explaination'] != null) {
+                                        html += `<p><a href="#" data-explaination="` + data[i]['question']['explaination'] + `" class="explaination" data-toggle="modal" data-target="#explainationModal">Explaination</a></p>`
+                                    }
+                                    html +=`
+                                                </div>
+                                            </div>`;
                                 }
-                            }
+                            } 
                             else 
                             {
                                 html += '<p>You do not attempt any questions.</p>';
