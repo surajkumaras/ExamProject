@@ -484,7 +484,6 @@ class AdminController extends Controller
         try{
             $examData = examsAttempt::where('id',$request->attempt_id)->with(['user','exam'])->get();
             $marks = $examData[0]['exam']['marks'];
-//   return $examData;
             $attemptData = examsAnswer::where('attempt_id',$request->attempt_id)->with('answers')->get();
             $totalQue = 0;
             $totalMarks = 0;

@@ -74,7 +74,7 @@
                 </div>
 
                 <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" >Print</button>
+                <a id="pdfLink" href="#" target="_blank"><button type="button" class="btn btn-secondary"  attempt-id="">Print</button></a>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
         </div>
@@ -105,17 +105,19 @@
     <script>
         $(document).ready(function()
         {
+            var attempt_id = '';
             $('.reviewExam').click(function()
             {
                 var id = $(this).attr('data-id');
-
+                attempt_id = id;
+                $('#pdfLink').attr('href', '/pdf/answersheet/' + attempt_id);
                 $.ajax({
                     url:"{{ route('resultStudentQna')}}",
                     type:"GET",
                     data:{ attempt_id:id},
                     success:function(data)
                     {
-                        console.log(data);
+                        console.log(data); 
                         var html = '';
                         if(data.success == true) 
                         {
@@ -179,6 +181,25 @@
                 var explaination = $(this).attr('data-explaination');
                 $('#explaination').text(explaination);
            })
+
+           $('#print').click(function()
+           {
+                // window.print();
+                let attemptId = attempt_id;
+                console.log(attemptId);
+                $.ajax({
+                    url:"/pdf/answersheet/" + attemptId,
+                    method:"GET",
+                    success:function(data)
+                    {
+                        console.log(data);
+                    },
+                    error:function(err)
+                    {
+                        alert(err);
+                    }
+                })
+           });
         })
     </script>
 @endsection

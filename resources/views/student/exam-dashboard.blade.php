@@ -14,7 +14,9 @@
         @php $qcount = 1; @endphp
         @if ($success == true)
            @if (count($qna) > 0)
-           <h4 class="text-right time newtime" >{{ $exam[0]['time']}}</h4>
+           <div class="row justify-content-center mt-3">
+                <div class="col-md-12">
+                    <h4 class="text-right time newtime" >{{ $exam[0]['time']}}</h4>
            <form action="{{ route('examSubmit')}}" method="post" class="mb-5" id="exam_form">
             @csrf
             <input type="hidden" name="exam_id" value="{{$exam[0]['id']}}">
@@ -39,7 +41,8 @@
                 <input type="submit" class="btn btn-info btn-submit" value="Submit">
             </div>
         </form>
-        
+    </div>
+</div>
         
            @else 
            
@@ -130,6 +133,13 @@
         }
     </script>
     <style>
+        .container {
+    width: 100%;
+    padding-right: 0px;
+    padding-left: 0px;
+    margin-right: auto;
+    margin-left: auto;
+}
 
         /* Add these styles to your existing CSS file or within a <style> tag in your HTML */
 
@@ -137,7 +147,7 @@
 .question-container {
     background-color: #f9f9f9;
     border-radius: 8px;
-    padding: 20px;
+    padding: 0px;
     margin-bottom: 20px;
 }
 

@@ -97,5 +97,6 @@ Route::group(['middleware'=>['web','checkStudent']],function()
     Route::post('/exam-submit',[ExamController::class,'examSubmit'])->name('examSubmit');
     Route::get('/results',[ExamController::class,'resultDashboard'])->name('resultDashboard');
     Route::get('/review-student-qna',[ExamController::class,'reviewQna'])->name('resultStudentQna');
+    Route::get('/pdf/answersheet/{attempt_id}',[ExamController::class,'answersheet'])->name('answersheet');
     
 });

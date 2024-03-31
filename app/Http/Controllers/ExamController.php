@@ -9,6 +9,8 @@ use App\Models\QnaExam;
 use App\Models\examsAttempt;
 use App\Models\examsAnswer;
 use Illuminate\Support\Facades\Auth;
+use PDF;
+use Illuminate\Support\Facades\View;
 
 class ExamController extends Controller
 {
@@ -99,11 +101,24 @@ class ExamController extends Controller
             $examData = examsAnswer::where('attempt_id', $request->attempt_id)
                         ->with(['question.answers', 'answers'])
                         ->get();
+                        //  return $examData;
             return response()->json(['success'=>true,'msg'=>'data found','data'=>$examData]);
         }
         catch(\Exception $e)
         {
             return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
         }
+    }
+
+    public function answersheet($attempt_id)
+    {
+        $examData = examsAnswer::where('attempt_id', $attempt_id)
+                        ->with(['question.answers', 'answers'])
+                        ->get();
+        $student = examsAttempt::where('id',$attempt_id)->with(['user','exam'])->get();
+        // return $student;
+            view()->share('employee',$examData);
+            $pdf = PDF::loadView('pdf.answersheet', compact('examData','student'));
+            return $pdf->download('pdf_file.pdf');
     }
 }
