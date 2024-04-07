@@ -97,7 +97,7 @@ class AuthController extends Controller
 
     public function loadDashboard()
     {
-       $exams =  Exam::with('subjects')->orderBy('date')->get();
+       $exams =  Exam::where('plan',0)->with('subjects')->orderBy('date','DESC')->get();
         // return $exams;
         return view('student.dashboard',['exams'=>$exams]);
     }

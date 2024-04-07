@@ -82,7 +82,7 @@ class AdminController extends Controller
             {
                 $price = json_encode(['INR'=>$request->inr, 'USD'=>$request->usd]);
             }
-            
+
             $unique_id = uniqid('exam');
             Exam::create([
                 'exam_name' => $request->exam_name,
@@ -121,12 +121,21 @@ class AdminController extends Controller
      public function updateExam(Request $request)
      {
         try{
+            $plan = $request->plan;
+            $price = null;
+            if(isset($request->inr) && isset($request->usd))
+            {
+                $price = json_encode(['INR'=>$request->inr, 'USD'=>$request->usd]);
+            }
+
             $exam = Exam::find($request->exam_id);
             $exam->exam_name = $request->exam_name;
             $exam->subject_id = $request->subject_id;
             $exam->date = $request->date;
             $exam->time = $request->time;
             $exam->attempt = $request->attempt;
+            $exam->plan = $plan;
+            $exam->price = $price;
             $exam->save();
             return response()->json(['success'=>true, 'msg'=>'Exam updated successfully!']);
         }

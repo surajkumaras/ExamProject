@@ -38,10 +38,10 @@
           <li>
             <a href="{{ route('resultDashboard')}}"><span class="fa fa-list-alt mr-3"></span> Results</a>
           </li>
-          {{--<li>
-            <a href="/admin/exams"><span class="fa fa-tasks mr-3"></span> Exams</a>
-          </li>
           <li>
+            <a href="{{ route('examDashboard')}}"><span class="fa fa-tasks mr-3"></span>Paid Exams</a>
+          </li>
+          {{--<li>
             <a href="/admin/qna-ans"><span class="fa fa-question-circle mr-3"></span> Q & A</a>
           </li>
           <li>

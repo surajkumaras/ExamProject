@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\StudentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,5 +99,6 @@ Route::group(['middleware'=>['web','checkStudent']],function()
     Route::get('/results',[ExamController::class,'resultDashboard'])->name('resultDashboard');
     Route::get('/review-student-qna',[ExamController::class,'reviewQna'])->name('resultStudentQna');
     Route::get('/pdf/answersheet/{attempt_id}',[ExamController::class,'answersheet'])->name('answersheet');
+    Route::get('/paid-exam',[StudentController::class,'examDashboard'])->name('examDashboard');
     
 });

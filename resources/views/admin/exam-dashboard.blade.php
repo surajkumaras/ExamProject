@@ -155,6 +155,13 @@
                       <br><br>
                       <input type="number" name="attempt" id="attempt" class="w-100" required placeholder="Enter number of attempts">
                       <br><br>
+                      <select name="plan" required id="plan" class="w-100 mb-4 plan">
+                        <option value="">Select Plan</option>
+                        <option value="0">Free</option>
+                        <option value="1">Paid</option>
+                      </select>
+                      <input type="number" id="inr" placeholder="INR" name="inr" disabled>
+                      <input type="number" id="usd" placeholder="USD" name="usd" disabled>
                   </div>
                   <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -300,6 +307,9 @@
             var url = "{{ route('getExamDetail', 'id') }}";
             url = url.replace('id', id);
             console.log(url);
+
+            $('#inr').val('');
+            $('#usd').val('');
             $.ajax({
                 url:url,
                 type:"GET",
@@ -314,6 +324,29 @@
                         $('#date').val(data.data[0].date);
                         $('#time').val(data.data[0].time);
                         $('#attempt').val(data.data[0].attempt);
+
+                        $('#plan').val(data.data[0].plan);
+
+                        if(data.data[0].plan == 1)
+                        {
+                            let price = JSON.parse(data.data[0].price);
+                            $('#inr').val(price.INR);
+                            $('#usd').val(price.USD);
+
+                            $('#inr').prop('disabled',false);
+                            $('#usd').prop('disabled',false);
+
+                            $('#inr').attr('required','required');
+                            $('#usd').attr('required','required');
+                        }
+                        else 
+                        {
+                            $('#inr').prop('disabled',true);
+                            $('#usd').prop('disabled',true);
+
+                            $('#inr').removeAttr('required');
+                            $('#usd').removeAttr('required');
+                        }
                     }
                     else
                     {
