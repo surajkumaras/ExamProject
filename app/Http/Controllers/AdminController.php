@@ -152,9 +152,12 @@ class AdminController extends Controller
      public function addQna(Request $request)
      {
         try{
-           $questionId =  Question::insertGetId([
-                'question'=>$request->question,
-                'explaination'=>$request->explaination??null,
+            $now = now();
+            $questionId = Question::insertGetId([
+                'question' => $request->question,
+                'explaination' => $request->explaination ?? null,
+                'created_at' => $now,
+                'updated_at' => $now,
             ]);
 
             foreach($request->answers as $answer)
@@ -163,6 +166,8 @@ class AdminController extends Controller
                     'question_id'=>$questionId,
                     'answer'=>$answer,
                     'is_correct'=>$request->is_correct == $answer ? 1 : 0,
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ]);
             }
             return response()->json(['success'=>true, 'msg'=>'Question added successfully!']);

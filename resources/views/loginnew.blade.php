@@ -156,8 +156,8 @@
                             <div class="form-group py-1 pb-2">
                                 <div class="input-field"> <span class="fas fa-lock px-2"></span> <input type="password" id="psw" name="password"
                                         placeholder="Enter your Password" required> 
-                                    <button class="btn bg-white text-muted"> <span class="far fa-eye-slash"></span>
-                                    </button> 
+                                     <span class="far fa-eye-slash"></span>
+                                    
                                 </div>
                             </div>
                             <div class="form-inline"> <input type="checkbox" name="remember" id="remember"> 

@@ -28,11 +28,12 @@ class AuthController extends Controller
             return redirect('/dashboard');
         }
 
-        return view('register');
+        return view('newregister');
     }
 
     public function studentRegister(Request $request)
     {
+        // return $request->all();
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
