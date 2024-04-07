@@ -18,6 +18,8 @@
                 <th>Data</th>
                 <th>Time</th>
                 <th>Attempts</th>
+                <th>Plan</th>
+                <th>Price</th>
                 <th>Add Questions</th>
                 <th>Show Questions</th>
                 <th>Edit</th>
@@ -34,6 +36,23 @@
                         <td>{{ $exam->date }}</td>
                         <td>{{ $exam->time }} Hrs</td>
                         <td>{{ $exam->attempt }}</td>
+                        <td>
+                            @if($exam->plan !== 0)
+                                <span style="color:red">PAID</span>
+                            @else
+                                <span style="color:green">FREE</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($exam->price != null)
+                                @php  $planPrice = json_decode($exam->price); @endphp
+                                @foreach ($planPrice as $key=>$price )
+                                    <span>{{$key}} {{$price}},</span>
+                                @endforeach
+                            @else
+                                <span style="color:green">Not price</span>
+                            @endif
+                        </td>
                         <td>
                             <a href="" class="addQuestion" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#addQnaModel">Add Question</a>
                         </td>
@@ -84,6 +103,13 @@
                       <br><br>
                       <input type="number" name="attempt" class="w-100" required placeholder="Enter number of attempts">
                       <br><br>
+                      <select name="plan" required id="" class="w-100 mb-4 plan">
+                        <option value="">Select Plan</option>
+                        <option value="0">Free</option>
+                        <option value="1">Paid</option>
+                      </select>
+                      <input type="number" placeholder="INR" name="inr" disabled>
+                      <input type="number" placeholder="USD" name="usd" disabled>
                   </div>
                   <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -512,6 +538,27 @@
             })
         });
 
+        //plan
+        $('.plan').change(function()
+        {
+            var plan = $(this).val();
+            if(plan == 1)
+            {
+                $(this).next().attr('required','required');
+                $(this).next().next().attr('required','required');
+                
+                $(this).next().prop('disabled',false);
+                $(this).next().next().prop('disabled',false);
+            }
+            else 
+            {
+                $(this).next().removeAttr('required','required');
+                $(this).next().next().removeAttr('required','required');
+                
+                $(this).next().prop('disabled',true);
+                $(this).next().next().prop('disabled',true);
+            }
+        })
     });
   </script>
   <script>

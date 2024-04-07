@@ -76,14 +76,23 @@ class AdminController extends Controller
     public function addExam(Request $request)
     {
         try{
+            $plan = $request->plan;
+            $price = null;
+            if(isset($request->inr) && isset($request->usd))
+            {
+                $price = json_encode(['INR'=>$request->inr, 'USD'=>$request->usd]);
+            }
+            
             $unique_id = uniqid('exam');
-            Exam::insert([
+            Exam::create([
                 'exam_name' => $request->exam_name,
                 'subject_id' => $request->subject_id,
                 'date' => $request->date,
                 'time' => $request->time,
                 'attempt' => $request->attempt,
                 'enterance_id'=> $unique_id,
+                'plan' => $plan,
+                'price' => $price,
             ]);
             return response()->json(['success'=>true, 'msg'=>'Exam added successfully!']);
         }

@@ -18,6 +18,9 @@ class Exam extends Model
         'created_at',
         'updated_at',
         'attempt',
+        'enterance_id',
+        'plan',
+        'price'
     ];
 
     protected $appends = ['attempt_counter'];
