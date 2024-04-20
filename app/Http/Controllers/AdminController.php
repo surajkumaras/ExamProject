@@ -67,6 +67,7 @@ class AdminController extends Controller
     {
         $subjects = Subject::all();
         $exam = Exam::with('subjects')->get();
+        // return $exam;
         return view('admin.exam-dashboard', ['subjects'=>$subjects, 'exams'=>$exam]);
        
     }

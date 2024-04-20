@@ -156,7 +156,7 @@
                             <div class="form-group py-1 pb-2">
                                 <div class="input-field"> <span class="fas fa-lock px-2"></span> <input type="password" id="psw" name="password"
                                         placeholder="Enter your Password" required> 
-                                     <span class="far fa-eye-slash"></span>
+                                     {{-- <span class="far fa-eye-slash"></span> --}}
                                     
                                 </div>
                             </div>

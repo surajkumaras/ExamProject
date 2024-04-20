@@ -33,7 +33,7 @@
                             <td>{{ $exam->attempt_counter }} Time</td>
                             <td>
                                 {{-- <a href="#" data-code="{{ $exam->enterance_id }}" class="copy"><i class="fa fa-copy"></i></a> --}}
-                                <a href="{{ url('/exam/' . $exam->enterance_id) }}"><i class="fa fa-copy"></i>Click me</a>
+                                <a href="{{ url('/exam/' . $exam->enterance_id) }}"><i class="badge badge-secondary"></i>click me</a>
 
                             </td>
                         </tr>

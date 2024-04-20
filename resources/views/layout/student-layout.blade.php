@@ -11,6 +11,7 @@
 		<link rel="stylesheet" href="{{ asset('css/style.css')}}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('js/multiselect-dropdown.js')}}"></script>
+
     <style>
       .multiselect-dropdown{
         width: 100% ! important;
@@ -18,6 +19,7 @@
     </style>
   </head>
   <body>
+    
 		
 		<div class="wrapper d-flex align-items-stretch">
 			<nav id="sidebar">
@@ -27,26 +29,38 @@
 	          <span class="sr-only">Toggle Menu</span>
 	        </button>
         </div>
+        <div class="custom-theam">
+					<button type="button" id="sidebarCollapse" class="btn btn-primary">
+	          <i class="fa fa-sun-o"></i>
+	          <span class="sr-only"></span>
+	        </button>
+        </div>
 	  		<h1><a href="index.html" class="logo">HII ,{{ Auth::user()->name}}</a></h1>
         <ul class="list-unstyled components mb-5">
           <li class="active">
             <a href="{{ route('admin.dashboard')}}"><span class="fa fa-home mr-3"></span> Homepage</a>
           </li>
           <li>
-              <a href="/dashboard"><span class="fa fa-user mr-3"></span> Dashboard</a>
+              <a href="#"><span class="fa fa-user mr-3"></span> Profile</a>
           </li>
           <li>
             <a href="{{ route('resultDashboard')}}"><span class="fa fa-list-alt mr-3"></span> Results</a>
           </li>
           <li>
-            <a href="{{ route('examDashboard')}}"><span class="fa fa-tasks mr-3"></span>Paid Exams</a>
-          </li>
-          {{--<li>
-            <a href="/admin/qna-ans"><span class="fa fa-question-circle mr-3"></span> Q & A</a>
+            <a href="#"><span class="fa fa-graduation-cap mr-3"></span> Free Exam</a>
           </li>
           <li>
-            <a href="/admin/students"><span class="fa fa-graduation-cap mr-3"></span> Students</a>
-          </li> --}}
+            <a href="{{ route('examDashboard')}}"><span class="fa fa-tasks mr-3"></span> Paid Exams</a>
+          </li>
+          <li>
+            <a href="#"><span class="fa fa-flash mr-3"></span>  Mock Test</a>
+          </li>
+          <li>
+            <a href="#"><span class="fa fa-book mr-3"></span> Question Bank</a>
+          </li>
+          <li>
+            <a href="/logout"><span class="	fa fa-comments-o mr-3"></span> Contact Us</a>
+          </li>
           <li>
             <a href="/logout"><span class="fa fa-sign-out mr-3"></span> Logout</a>
           </li>

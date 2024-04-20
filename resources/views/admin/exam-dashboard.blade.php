@@ -54,7 +54,7 @@
                             @endif
                         </td>
                         <td>
-                            <a href="" class="addQuestion" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#addQnaModel">Add Question</a>
+                            <a href="" class="addQuestion" data-id="{{ $exam->id}}" data-cat-id="{{ $exam->subject_id}}" data-toggle="modal" data-target="#addQnaModel">Add Question</a>
                         </td>
                         <td>
                             <a href="" class="seeQuestion" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#seeQnaModel">Show Question</a>
@@ -428,12 +428,14 @@
         $('.addQuestion').click(function()
         {
             var id = $(this).attr('data-id');
+            var catId = $(this).attr('data-cat-id');
+            
             $('#addExamId').val(id);
 
             $.ajax({
                 url:"{{ route('getQuestions') }}",
                 type:"GET",
-                data:{exam_id:id},
+                data:{exam_id:id,cat_id:catId},
                 success:function(data)
                 {
                     if(data.success == true)
