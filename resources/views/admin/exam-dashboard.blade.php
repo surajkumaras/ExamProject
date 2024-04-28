@@ -435,7 +435,7 @@
             $.ajax({
                 url:"{{ route('getQuestions') }}",
                 type:"GET",
-                data:{exam_id:id,cat_id:catId},
+                data:{exam_id:id,sub_id:catId},
                 success:function(data)
                 {
                     if(data.success == true)

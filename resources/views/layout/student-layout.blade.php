@@ -49,9 +49,9 @@
           <li>
             <a href="#"><span class="fa fa-graduation-cap mr-3"></span> Free Exam</a>
           </li>
-          <li>
+          {{-- <li>
             <a href="{{ route('examDashboard')}}"><span class="fa fa-tasks mr-3"></span> Paid Exams</a>
-          </li>
+          </li> --}}
           <li>
             <a href="#"><span class="fa fa-flash mr-3"></span>  Mock Test</a>
           </li>

@@ -39,6 +39,9 @@
             <a href="/admin/dashboard"><span class="fa fa-book mr-3"></span> Subjects</a>
           </li>
           <li>
+            <a href="/category"><span class="fa fa-book mr-3"></span> Topic</a>
+          </li>
+          <li>
             <a href="/admin/exams"><span class="fa fa-tasks mr-3"></span> Exams</a>
           </li>
           <li>

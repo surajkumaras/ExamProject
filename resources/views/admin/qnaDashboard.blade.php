@@ -4,7 +4,7 @@
     <h2 class="mb-4">Q & A</h2>
 
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addExamModel">
+    <button type="button" class="btn btn-primary" id="addQnaButton" data-toggle="modal" data-target="#addExamModel">
         Add Q&A
     </button>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#importExamModel">
@@ -63,6 +63,22 @@
                 <form id="addQna" method="POST">
                     @csrf
                   <div class="modal-body modal1">
+                    <div class="row ">
+                        <div class="col">
+                            <select class="w-100" name="subject" id="subject_id">
+                                <option value="">Subject</option>
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row " style="display: none" id="category_row">
+                        <div class="col">
+                            <select class="w-100" name="category" id="category_id">
+                                <option value="">Categories</option>
+                                
+                            </select>
+                        </div>
+                    </div>
                       <div class="row ">
                         <div class="col">
                             <input type="text" class="w-100" name="question"  placeholder="Enter Question" required>
@@ -100,6 +116,22 @@
                 <form id="editQna" method="POST">
                     @csrf
                   <div class="modal-body editModalAnswers">
+                        <div class="row editSubjectRow" style="display: none">
+                            <div class="col">
+                                <select class="w-100" name="editSubject" id="editSubject_id">
+                                    <option value="">Subject</option>
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row editCategory_row" style="display: none">
+                            <div class="col">
+                                <select class="w-100" name="category" id="editCategory_id">
+                                    <option value="">Categories</option>
+                                    
+                                </select>
+                            </div>
+                        </div>
                       <div class="row ">
                         <div class="col">
                             <input type="hidden" id="question_id" name="question_id">
@@ -371,6 +403,39 @@
                $('#explaination').val(qna['explaination']);
                $('.editAnswers').remove();
                var html = '';
+                var editHtml = '';
+               var editHtml = '<option value="">Subject</option>';
+                    for(var i = 0;i<data.subjects.length;i++)
+                    {
+                        if(data.subjects[i]['id'] == qna['subject_id'])
+                        {
+                            editHtml += `<option value="`+data.subjects[i]['id']+`" selected>`+data.subjects[i]['name']+`</option>`;
+                        }
+                        else
+                        {
+                            editHtml += `<option value="`+data.subjects[i]['id']+`">`+data.subjects[i]['name']+`</option>`;
+                        }
+                        
+                    }
+                    $('#editSubject_id').html(editHtml);
+                    $('.editSubjectRow').css('display','block');
+
+                    var editHtmlCats = '';
+                    var editHtmlCats = '<option value="">Category</option>';
+                    for(var i = 0;i<data.categories.length;i++)
+                    {
+                        if(data.categories[i]['id'] == qna['category_id'])
+                        {
+                            editHtmlCats += `<option value="`+data.categories[i]['id']+`" selected>`+data.categories[i]['name']+`</option>`;
+                        }
+                        else
+                        {
+                            editHtmlCats += `<option value="`+data.categories[i]['id']+`">`+data.categories[i]['name']+`</option>`;
+                        }
+                        
+                    }
+                    $('#editCategory_id').html(editHtmlCats);
+                    $('.editCategory_row').css('display','block');
 
                for(let i=0; i<qna['answers'].length; i++)
                {
@@ -478,6 +543,64 @@
        })
     })
       
+    $('#addQnaButton').click(function()
+    {
+        $.ajax({
+            url:"{{ route('getSubject')}}",
+            type:"GET",
+            success:function(data)
+            {
+                if(data.success == true)
+                {
+                    var html = '<option value="">Subject</option>';
+                    for(var i = 0;i<data.data.length;i++)
+                    {
+                        html += `<option value="`+data.data[i]['id']+`">`+data.data[i]['name']+`</option>`;
+                    }
+                    $('#subject_id').html(html);
+                }
+            },
+            error:function(err)
+            {
+                alert(err)
+            }
+        })
+    })
+
+    //=============== Category List =================//
+    
+    $('#subject_id').change(function()
+    {
+        var subject_id = $(this).val();
+        
+        
+        $.ajax({
+            url:"/category/list/"+subject_id,
+            type:"GET",
+            success:function(data)
+            {   console.log(data);
+                if(data.success == true)
+                {
+                    var html = '<option value="">Category</option>';
+                    for(var i = 0;i<data.cats.length;i++)
+                    {
+                        html += `<option value="`+data.cats[i]['id']+`">`+data.cats[i]['name']+`</option>`;
+                    }
+                    $('#category_id').html(html);
+                    $('#category_row').css('display','block');
+                }
+                else 
+                {
+                    $('#category_row').css('display','none');
+                }
+                
+            },
+            error:function(err)
+            {
+                alert(err)
+            }
+        })
+    })
     
   });
 </script>

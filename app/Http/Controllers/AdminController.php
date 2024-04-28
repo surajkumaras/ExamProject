@@ -12,6 +12,7 @@ use App\Models\Question;
 use App\Models\Answer;
 use App\Models\QnaExam;
 use App\Models\User;
+use App\Models\Category;
 use Illuminate\Support\Facades\Hash;
 use Mail;
 use Illuminate\Support\Str;
@@ -175,6 +176,8 @@ class AdminController extends Controller
             $questionId = Question::insertGetId([
                 'question' => $request->question,
                 'explaination' => $request->explaination ?? null,
+                'subject_id' => $request->subject,
+                'category_id' => $request->category,
                 'created_at' => $now,
                 'updated_at' => $now,
             ]);
@@ -201,8 +204,11 @@ class AdminController extends Controller
 
      public function getQnaDetails(Request $request)
      {
-        $qna = Question::where('id',$request->qid)->with('answers')->get();
-        return response()->json(['success'=>true, 'data'=>$qna]);
+        $qna = Question::with(['subject','category'])->where('id',$request->qid)->with('answers')->get();
+        $subjects = Subject::all();
+        $categories = Category::all();
+        return response()->json(['success'=>true, 'data'=>$qna, 'subjects'=>$subjects, 'categories'=>$categories]);
+       
      }
 
      //delete ans
@@ -377,7 +383,7 @@ class AdminController extends Controller
      {
         try
         {
-            $questions = Question::all();
+            $questions = Question::where('subject_id','=',$request->sub_id)->get();
 
             if(count($questions) > 0)
             {
@@ -580,4 +586,18 @@ class AdminController extends Controller
             return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
         }
      }
+
+     public function getSubject()
+     {
+        $subjects = Subject::all();
+        return response()->json(['success'=>true,'data'=>$subjects]);
+     }
+
+     public function getCategory($id)
+     {
+        $cats = Category::where('subject_id',$id)->get();
+        return response()->json(['success'=>true,'cats'=>$cats]);
+     }
+
+     
 }

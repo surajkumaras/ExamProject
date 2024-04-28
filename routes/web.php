@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,12 +44,17 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
 {
     Route::get('/admin/dashboard',[AuthController::class,'adminDashboard'])->name('admin.dashboard');
 
-    // Add subjects
+    //subjects
     Route::post('/add-subject',[AdminController::class,'addSubject'])->name('add-subject');
-    // Edit subject
     Route::post('/edit-subject',[AdminController::class,'editSubject'])->name('edit-subject');
-    // Delete subject
     Route::post('/delete-subject',[AdminController::class,'deleteSubject'])->name('delete-subject');
+
+    //subject-category
+    Route::get('/category',[CategoryController::class,'categoryDashboard'])->name('categoryDashboard');
+    Route::post('/add-category',[CategoryController::class,'addCategory'])->name('add-category');
+    Route::get('/category/subject/{id}',[CategoryController::class,'catgorySubject'])->name('catgorySubject');
+    Route::post('/update-category',[CategoryController::class,'updateCategory'])->name('update-category');
+    Route::post('/delete-category',[CategoryController::class,'deleteCategory'])->name('delete-category');
 
     //exam routes
     Route::get('/admin/exams',[AdminController::class,'examDassboard']);
@@ -67,6 +73,8 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
     Route::post('/delete-qna-ans',[AdminController::class,'deleteQna'])->name('deleteQna');
     Route::post('/import-qna-ans',[AdminController::class,'importQna'])->name('importQna');
     Route::get('/export-qna-ans',[AdminController::class,'exportQna'])->name('exportQna');
+    Route::get('/subject/list',[AdminController::class,'getSubject'])->name('getSubject');
+    Route::get('/category/list/{id}',[AdminController::class,'getCategory'])->name('getCategory');
 
     //student routes
     Route::get('/admin/students',[AdminController::class,'studentDashboard']);
