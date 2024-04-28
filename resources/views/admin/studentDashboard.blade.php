@@ -245,7 +245,7 @@
                 error:function(err)
                 {
                     $('.updateButton').prop('disabled',false);
-                    alert(err.msg);
+                    alert(err);
                 }
             })
         }) 

@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Hash;
 use Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
+use App\Jobs\SendMailJob;
+
 
 class AdminController extends Controller
 {
@@ -331,25 +333,28 @@ class AdminController extends Controller
      //update 
 
      public function editStudent(Request $request)
-     {
+     { //return $request->all();
         try
         {
-// return $request->all();
+
             $user = User::find($request->id);
             $user->name = $request->name;
             $user->email = $request->email;
             $user->save();
 
             $url = URL::to('/');
-
             $data['url'] = $url;
             $data['name'] = $request->name;
             $data['email'] = $request->email;
             $data['title'] = "Update Student Profile on Online Examination System";
 
-            Mail::send('updateProfileMail',['data'=>$data],function($message) use($data){
-                $message->to($data['email'])->subject($data['title']);
-            });
+            // Mail::send('updateProfileMail',['data'=>$data],function($message) use($data){
+            //     $message->to($data['email'])->subject($data['title']);
+            // });
+
+            //=========JOB MAIL USE ==========//
+
+            dispatch(new SendMailJob($data));
 
             return response()->json(['success'=>true, 'msg'=>'Student updated successfully!']);
         }
@@ -551,9 +556,11 @@ class AdminController extends Controller
             //     $message->to($data['email'])->subject($data['title']);
             // });
             //=========== NEW SEND MAIL VIEW FILE ==========//
-            Mail::send('mail.result',['data'=>$data], function($message) use($data){
-                $message->to($data['email'])->subject($data['title']);
-            });
+            // Mail::send('mail.result',['data'=>$data], function($message) use($data){
+            //     $message->to($data['email'])->subject($data['title']);
+            // });
+
+            dispatch(new SendMailJob($data));
             return response()->json(['success'=>true,'msg'=>'Approved Successfully']);
         }catch(\Exception $e)
         {
