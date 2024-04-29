@@ -10,7 +10,9 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#importExamModel">
         Import Q&A
     </button>
-    <a href="{{ route('exportQna')}}"  class="btn btn-info">Export Q&A</a>
+    <button type="button"  id="exportQna" class="btn btn-info">
+        Export Q&A
+    </button>
     <table class="table">
         <thead>
             <tr>
@@ -227,7 +229,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-                <form id="importQna" method="POST" enctype="multipart/form-data">
+                <form id="importQna" method="GET" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <input type="file" name="file" id="fileupload"  required accept=".xlsx, .xls, .csv">
@@ -602,6 +604,31 @@
         })
     })
     
+    //=============== Export Qna ===================//
+
+    $('#exportQna').click(function()
+    {
+        $.ajax({
+            url:"{{ route('exportQna')}}",
+            type:"GET",
+            success:function(data)
+            {
+                if(data.success == true)
+                {
+                    location.href = data.download_link;
+                }
+                else 
+                {
+                    alert(data.msg);
+                }
+            },
+            error:function(err)
+            {
+                alert(err)
+            }
+        })
+    });
+
   });
 </script>
   

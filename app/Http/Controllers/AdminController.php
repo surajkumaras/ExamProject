@@ -18,6 +18,8 @@ use Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
 use App\Jobs\SendMailJob;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
 class AdminController extends Controller
@@ -573,7 +575,28 @@ class AdminController extends Controller
      public function importQna(Request $request)
      {
         try{
-            
+            if ($request->hasFile('file')) 
+            {
+                $file = $request->file('file');
+                $filePath = $file->getPathname();
+    
+                $spreadsheet = IOFactory::load($filePath);
+    
+                $worksheet = $spreadsheet->getActiveSheet();
+    
+                foreach ($worksheet->getRowIterator() as $row) 
+                {
+                    $rowData = $row->getValues();
+
+                    \Log::info($rowData);
+                }
+    
+                return response()->json(['success' => true, 'msg' => 'Spreadsheet imported successfully']);
+            } 
+            else 
+            {
+                return response()->json(['success' => false, 'msg' => 'No file uploaded']);
+            }
         }
         catch(\Exception $e)
         {
@@ -586,7 +609,57 @@ class AdminController extends Controller
      public function exportQna(Request $request)
      {
         try{
-            return Excel::download(new QnaExport, 'qna.xlsx');
+            $spreadsheet = new Spreadsheet();
+            $activeWorksheet = $spreadsheet->getActiveSheet();
+            $activeWorksheet->setCellValue('A1', 'question');
+            $activeWorksheet->setCellValue('B1', 'option_1');
+            $activeWorksheet->setCellValue('C1', 'option_2');
+            $activeWorksheet->setCellValue('D1', 'option_3');
+            $activeWorksheet->setCellValue('E1', 'option_4');
+            $activeWorksheet->setCellValue('F1', 'option_5');
+            $activeWorksheet->setCellValue('G1', 'option_6');
+            $activeWorksheet->setCellValue('H1', 'is_correct');
+            $activeWorksheet->setCellValue('I1', 'subject');
+            $activeWorksheet->setCellValue('J1', 'category');
+
+            $questions = Question::with(['answers','subject','category'])->get();
+
+            // return $questions;
+            $row = 2;
+            foreach ($questions as $question) 
+            {
+                $activeWorksheet->setCellValue('A' . $row, $question->question);
+                $r = 'B';
+                for($i = 0;$i <= 5;$i++)
+                {
+                    $activeWorksheet->setCellValue($r . $row, $question->answers[$i]['answer'] ?? 'null');
+
+                    if(!empty($question->answers[$i]))
+                    {
+                        if($question->answers[$i]['is_correct'] == 1)
+                        {
+                            $activeWorksheet->setCellValue('H' . $row, $i+1 ?? 'null');
+                        }
+                    }
+                    $r++;
+                }
+                $activeWorksheet->setCellValue('I' . $row, $question->subject->name ?? 'null');
+                $activeWorksheet->setCellValue('J' . $row, $question->category->name?? 'null');
+               
+                $row++;
+            }
+
+            // Generate a unique file name
+            $fileName = 'qna_export_' . date('Y-m-d_H-i-s') . '.xlsx';
+    
+            // Save the file to the public directory
+             $filePath = public_path($fileName);
+             $writer = new Xlsx($spreadsheet);
+             $writer->save($filePath);
+    
+            // Return a success response with the file download link
+            $downloadLink = url($fileName);
+            return response()->json(['success' => true, 'download_link' => $downloadLink]);
         }
         catch(\Exception $e)
         {

@@ -71,7 +71,7 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
     Route::get('/delete-ans',[AdminController::class,'deleteAns'])->name('deleteAns');
     Route::post('/update-qna-ans',[AdminController::class,'updateQna'])->name('updateQna');
     Route::post('/delete-qna-ans',[AdminController::class,'deleteQna'])->name('deleteQna');
-    Route::post('/import-qna-ans',[AdminController::class,'importQna'])->name('importQna');
+    Route::get('/import-qna-ans',[AdminController::class,'importQna'])->name('importQna');
     Route::get('/export-qna-ans',[AdminController::class,'exportQna'])->name('exportQna');
     Route::get('/subject/list',[AdminController::class,'getSubject'])->name('getSubject');
     Route::get('/category/list/{id}',[AdminController::class,'getCategory'])->name('getCategory');
