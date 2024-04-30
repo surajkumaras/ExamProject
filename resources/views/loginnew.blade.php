@@ -173,7 +173,7 @@
                             <a href="#" target="_blank" class="px-2">
                                 <img src="https://www.dpreview.com/files/p/articles/4698742202/facebook.jpeg" alt="">
                             </a> 
-                            <a href="#" target="_blank" class="px-2"> 
+                            <a href="{{ route('google.login')}}" target="_blank" class="px-2"> 
                                 <img src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png"
                                     alt=""> 
                             </a> 

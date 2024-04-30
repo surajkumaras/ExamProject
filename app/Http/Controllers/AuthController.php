@@ -12,11 +12,64 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
+use Socialite;
 use Illuminate\Support\Str;
 use Mail;
 
 class AuthController extends Controller
 {
+    //============= Google Login ===========//
+
+    public function loginWithGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    //============= Google Login Callback ==========//
+    public function callbackFromGoogle()
+    {
+        try {
+    
+            $user = Socialite::driver('google')->user();
+    //  dd($user);
+            // $finduser = User::where('social_id', $user->id)->first();
+            $finduser = User::where('email', $user->email)->first();
+     
+            if($finduser)
+            {
+     
+                User::where('email',$user->email)->update([
+                    'social_id'=>$user->id,
+                    'social_type'=>'google'
+                ]);
+     
+                Auth::loginUsingId($finduser->id);
+     
+                return redirect('/');
+     
+            }
+            else
+            {
+                $newUser = User::create([
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'social_id'=> $user->id,
+                    'social_type'=> 'google',
+                    'password' => Hash::make('admin123')
+                ]);
+    
+                Auth::login($newUser);
+     
+                return redirect('/');
+            }
+    
+        } 
+        catch (Exception $e) 
+        {
+            dd($e->getMessage());
+        }
+    }
+
     public function loadRegister()
     {
         if(Auth::user() && Auth::user()->is_admin ==1)

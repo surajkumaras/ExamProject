@@ -40,6 +40,11 @@ Route::post('/forget-password',[AuthController::class,'forgetPassword'])->name('
 Route::get('/reset-password',[AuthController::class,'resetPasswordLoad']);
 Route::post('/reset-password',[AuthController::class,'resetPassword'])->name('resetPassword');
 
+//================ SOCIAL LOGIN ============================//
+
+Route::get('auth/google',[AuthController::class,'loginWithGoogle'])->name('google.login');
+Route::any('auth/google/callback',[AuthController::class,'callbackFromGoogle'])->name('google.callback');
+
 Route::group(['middleware'=>['web','checkAdmin']],function()
 {
     Route::get('/admin/dashboard',[AuthController::class,'adminDashboard'])->name('admin.dashboard');
