@@ -50,57 +50,62 @@
     </table>
 
     {{--Add modal --}}
-  <div class="modal fade" id="addExamModel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Add Q&A</h5>
-
+    <div class="modal fade" id="addExamModel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add Q&A</h5>
+    
                     <button id="addAnswer" class="btn btn-info ml-5">Add Answer</button>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <form id="addQna" method="POST" enctype="multipart/form-data">
+                        @csrf
+                      <div class="modal-body modal1">
+                        <div class="row ">
+                            <div class="col">
+                                <select class="w-100" name="subject" id="subject_id">
+                                    <option value="">Subject</option>
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row " style="display: none" id="category_row">
+                            <div class="col">
+                                <select class="w-100" name="category" id="category_id">
+                                    <option value="">Categories</option>
+                                    
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row " >
+                            <div class="col">
+                                <input type="file" placeholder="Please select file" name="que_file" id="que_file" class="w-100">
+                            </div>
+                        </div>
+                          <div class="row ">
+                            <div class="col">
+                                <input type="text" class="w-100" name="question"  placeholder="Enter Question" required>
+                            </div>
+                          </div>
+                          <div class="row  mt-2">
+                            <div class="col">
+                                <textarea name="explaination" class="w-100" placeholder="Enter your explaination(optional)"></textarea>
+                            </div>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                        <span class="error" style="color:red;"></span>
+                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                       <button type="submit" class="btn btn-primary">Add Q&A</button>
+                      </div>
+                    </form>
                 </div>
-                <form id="addQna" method="POST">
-                    @csrf
-                  <div class="modal-body modal1">
-                    <div class="row ">
-                        <div class="col">
-                            <select class="w-100" name="subject" id="subject_id">
-                                <option value="">Subject</option>
-                                
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row " style="display: none" id="category_row">
-                        <div class="col">
-                            <select class="w-100" name="category" id="category_id">
-                                <option value="">Categories</option>
-                                
-                            </select>
-                        </div>
-                    </div>
-                      <div class="row ">
-                        <div class="col">
-                            <input type="text" class="w-100" name="question"  placeholder="Enter Question" required>
-                        </div>
-                      </div>
-                      <div class="row  mt-2">
-                        <div class="col">
-                            <textarea name="explaination" class="w-100" placeholder="Enter your explaination(optional)"></textarea>
-                        </div>
-                      </div>
-                  </div>
-                  <div class="modal-footer">
-                    <span class="error" style="color:red;"></span>
-                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                   <button type="submit" class="btn btn-primary">Add Q&A</button>
-                  </div>
-                </form>
-            </div>
-    </div>
-  </div>
+        </div>
+      </div>
 
   {{-- Edit Modal --}}
   <div class="modal fade" id="editAnsModel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -265,28 +270,31 @@
                 if($(".is_correct:eq("+i+")").prop('checked') == true)
                 {
                     checkIsCorrect = true;
-                    $(".is_correct:eq("+i+")").val( $(".is_correct:eq("+i+")").next().find('input').val());
+                    // $(".is_correct:eq("+i+")").val( $(".is_correct:eq("+i+")").next().find('input').val());
+                    $(".is_correct:eq("+i+")").val( $(".is_correct:eq("+i+")").closest('.answers').find('.option-field input').val());
                 }
             }
 
             if(checkIsCorrect)
             {
-                var formData = $(this).serialize();
+                var formData = new FormData($(this)[0]);
 
                 $.ajax({
                    url:"{{ route('addQna')}}",
                    type:"POST",
                    data:formData,
+                   contentType: false,
+                    processData: false,
                    success:function(data)
                    {
                     console.log(data);
                         if(data.success == true)
                         {
-                            location.reload();
+                             location.reload();
                         }
                         else 
                         {
-                            alert(data.msg);
+                             alert(data.msg);
                         }
                    } 
                 });
@@ -302,30 +310,59 @@
      });
 
      //add answers
-     $('#addAnswer').click(function()
-      {  
-        if($('.answers').length >= 6)
+
+    //------------- New Code ---------------//
+    $('#addAnswer').click(function() 
+    {
+        if ($('.answers').length >= 6) 
         {
             $('.error').text('You can add maximum six answers.');
             setTimeout(() => {
                 $('.error').text('');
             }, 2000);
-        }
-        else
+        } 
+        else 
         {
             var html = `
-            <div class="row mt-2 answers">
-                <input type="radio" name="is_correct" id="" class="is_correct" >
-                <div class="col">
-                    <input type="text" class="w-100" name="answers[]"  placeholder="Enter Question" required>
-                </div>
-                <button class="btn btn-danger removeButton">Remove</button>
-            </div>`;
-
+                <div class="row mt-2 answers">
+                    <input type="radio" name="is_correct" class="is_correct">
+                    <div class="col">
+                        <select class="option-type">
+                            <option value="">Select Answer Type</option>
+                            <option value="text">Text</option>
+                            <option value="file">File</option>
+                        </select>
+                    </div>
+                    <div class="col option-field">
+                        <!-- Dynamic option field will be added here -->
+                    </div>
+                    <button class="btn btn-danger removeButton">Remove</button>
+                </div>`;
             $('.modal1').append(html);
         }
-        console.log("Add Ans:"+$('.answers').length);
-     });
+        console.log("Add Ans:" + $('.answers').length);
+    });
+
+    // Event listener for the change in option type
+    $(document).on('change', '.option-type', function() 
+    {
+        var selectedOption = $(this).val();
+        var optionField = $(this).closest('.answers').find('.option-field');
+        var radio = $(this).closest('.answers').find('.is_correct');
+
+        if (selectedOption === 'text') 
+        {
+            optionField.html('<input type="text" class="w-100" name="answers[]" placeholder="Enter Answer" required>');
+            radio.val('text');
+        } 
+        else if (selectedOption === 'file') 
+        {
+            optionField.html('<input type="file" class="upload-image" name="ans_images[]" accept="image/*">');
+            radio.val('file');
+        }
+    });
+    console.log("Add Ans:"+$('.answers').length);
+
 
      $(document).on('click','.removeButton',function()
      {

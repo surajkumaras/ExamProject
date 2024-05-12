@@ -70,6 +70,45 @@ class AuthController extends Controller
         }
     }
 
+    //=============== FACEBOOK LOGIN =================//
+
+    public function loginWithFacebook()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+
+    //=============== FACEBOOK LOGIN CALLBACK =================//
+
+    public function handleProviderCallback()
+    {
+        try{
+            $user = Socialite::driver('facebook')->user();
+            
+            $provider_id = $user->getId();
+            $name = $user->getName();
+            $email = $user->getEmail();
+            $avatar = $user->getAvatar();
+            //$user->getNickname();
+            
+            $user = User::firstOrCreate([
+                'provider_id' => $provider_id,
+                'name'        => $name,
+                'email'       => $email,
+                'avatar'      => $avatar,
+            ]);
+            
+            Auth::login($user,true);
+           
+            return redirect()->route('home');
+        }
+        catch(\Exception $e)
+        {
+            return redirect()
+                ->back()
+                ->with('status','authentication failed, please try again!');
+        }
+    }
+
     public function loadRegister()
     {
         if(Auth::user() && Auth::user()->is_admin ==1)

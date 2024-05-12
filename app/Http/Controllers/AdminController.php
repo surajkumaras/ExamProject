@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\URL;
 use App\Jobs\SendMailJob;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -174,11 +174,24 @@ class AdminController extends Controller
 
      //add question
      public function addQna(Request $request)
-     {
-        try{
+    {
+        DB::beginTransaction();
+        try {
             $now = now();
+            
+            // Upload question related image if available
+            $questionImageName = null;
+            if ($request->hasFile('que_file')) 
+            {  
+                $uploadedQuestionFile = $request->file('que_file');
+                $questionImagePath = $uploadedQuestionFile->store('public/images/ans_images');
+                $questionImageName = basename($questionImagePath);
+            }
+
+            // Insert the question into the database
             $questionId = Question::insertGetId([
                 'question' => $request->question,
+                'image' => $questionImageName ?? '',
                 'explaination' => $request->explaination ?? null,
                 'subject_id' => $request->subject,
                 'category_id' => $request->category,
@@ -186,23 +199,51 @@ class AdminController extends Controller
                 'updated_at' => $now,
             ]);
 
+
+            //------------------ New Code -----------------//
+           
             foreach($request->answers as $answer)
             {
                 Answer::insert([
-                    'question_id'=>$questionId,
-                    'answer'=>$answer,
-                    'is_correct'=>$request->is_correct == $answer ? 1 : 0,
+                    'question_id' => $questionId,
+                    'answer' => $answer,
+                    'is_correct' => $request->is_correct == $answer ? 1 : 0,
                     'created_at' => $now,
                     'updated_at' => $now,
                 ]);
             }
+
+            if($request->hasFile('ans_images'))
+            {
+                foreach($request->file('ans_images') as $key => $value)
+                {
+                    $path = $request->is_correct;
+                    if (preg_match('/[^\\\\]+$/', $path, $matches)) 
+                    {
+                        $lastWordWithExtension = $matches[0];
+                    } 
+
+                    $uploadedAnswerFile = $value;
+                    $answerFileName = $uploadedAnswerFile->getClientOriginalName();
+                    $answerImagePath = $uploadedAnswerFile->store('public/images/ans_images');
+                    Answer::insert([
+                        'question_id' => $questionId,
+                        'answer' => $answerFileName,
+                        'is_correct' => $lastWordWithExtension == $answerFileName ?1:0, 
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ]);
+                }
+            }
+            DB::commit();
             return response()->json(['success'=>true, 'msg'=>'Question added successfully!']);
         }
         catch(\Exception $e)
         {
+            DB::rollBack();
             return response()->json(['success'=>false, 'msg'=>$e->getMessage()]);
         }
-     }
+    }
 
      //Edit qna-ans
 
