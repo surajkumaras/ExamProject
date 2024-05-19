@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\QuestionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,6 +88,8 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
     Route::get('/subject/list',[AdminController::class,'getSubject'])->name('getSubject');
     Route::get('/category/list/{id}',[AdminController::class,'getCategory'])->name('getCategory');
 
+    
+
     //student routes
     Route::get('/admin/students',[AdminController::class,'studentDashboard']);
     Route::post('/add-students',[AdminController::class,'addStudent'])->name('addStudent');
@@ -119,6 +122,18 @@ Route::group(['middleware'=>['web','checkStudent']],function()
     Route::get('/review-student-qna',[ExamController::class,'reviewQna'])->name('resultStudentQna');
     Route::get('/pdf/answersheet/{attempt_id}',[ExamController::class,'answersheet'])->name('answersheet');
     Route::get('/paid-exam',[StudentController::class,'examDashboard'])->name('examDashboard');
+
+
+    //question bank
+    Route::get('/question/show',[QuestionController::class,'questionBankShow'])->name('questionBankShow');
+
+
+    Route::get('/question/list/{$id}',[QuestionController::class,'questionList'])->name('questionList');
+    Route::get('/question/list',[QuestionController::class,'questionAll'])->name('questionAll');
+    Route::get('/category/{id}',[QuestionController::class,'categoryQue'])->name('categoryQue');
+    Route::get('/questionBank/{category_id}',[QuestionController::class,'categoryQueBank'])->name('categoryQueBank');
+    Route::get('/questionBank/pdf/{id}',[QuestionController::class,'downloadQuePdf'])->name('downloadQuePdf');
+
 
     //payment razorpay
     Route::get('/payment-inr',[StudentController::class,'paymentInr'])->name('paymentInr');

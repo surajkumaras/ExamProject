@@ -56,7 +56,7 @@
             <a href="#"><span class="fa fa-flash mr-3"></span>  Mock Test</a>
           </li>
           <li>
-            <a href="#"><span class="fa fa-book mr-3"></span> Question Bank</a>
+            <a href="/question/show"><span class="fa fa-book mr-3"></span> Question Bank</a>
           </li>
           <li>
             <a href="/logout"><span class="	fa fa-comments-o mr-3"></span> Contact Us</a>

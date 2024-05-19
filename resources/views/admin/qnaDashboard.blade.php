@@ -388,11 +388,37 @@
                     {
                         is_correct = 'Yes';
                     }
-                    html += `<tr>
+
+                    console.log(questions[i]['answers'][j]['answer'])
+
+                    function checkExtension(filename, extensions) 
+                    {
+                        const ext = filename.split('.').pop().toLowerCase();
+                        return extensions.includes(ext);
+                    }
+
+                    const filename = questions[i]['answers'][j]['answer'];
+                    const allowedExtensions = ["jpg", "jpeg", "png"];
+
+                    if (checkExtension(filename, allowedExtensions)) 
+                    {
+                        let ansimg = `<img src="{{ asset('public/image/ans_images/') }}/${questions[i]['answers'][j]['answer']}" width="50px" height="50px" alt="image issue">`
+                        html += `<tr>
+                            <td>`+(j+1)+`</td>
+                                <td>`+ansimg+`</td>
+                                <td>`+is_correct+`</td>
+                            </tr>`;
+                    } 
+                    else 
+                    {
+                        html += `<tr>
                         <td>`+(j+1)+`</td>
                             <td>`+questions[i]['answers'][j]['answer']+`</td>
                             <td>`+is_correct+`</td>
                         </tr>`;
+                    }
+
+                   
                 }
                 break;
             }

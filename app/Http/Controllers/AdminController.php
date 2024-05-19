@@ -169,6 +169,7 @@ class AdminController extends Controller
      public function qnaDashboard()
      {
        $questions =  Question::with('answers')->get();
+    //    return $questions;
         return view('admin.qnaDashboard',compact('questions'));
      }
 
@@ -183,15 +184,17 @@ class AdminController extends Controller
             $questionImageName = null;
             if ($request->hasFile('que_file')) 
             {  
-                $uploadedQuestionFile = $request->file('que_file');
-                $questionImagePath = $uploadedQuestionFile->store('public/images/ans_images');
-                $questionImageName = basename($questionImagePath);
+                $File = $request->file('que_file');
+                $questionFileName = $File->getClientOriginalName();
+                // $questionImagePath = $uploadedQuestionFile->store('public/images/que_images');
+                $File-> move(public_path('public/image/que_images'), $questionFileName);
+                // $questionImageName = basename($uploadedQuestionFile);
             }
 
             // Insert the question into the database
             $questionId = Question::insertGetId([
                 'question' => $request->question,
-                'image' => $questionImageName ?? '',
+                'image' => $questionFileName ?? '',
                 'explaination' => $request->explaination ?? null,
                 'subject_id' => $request->subject,
                 'category_id' => $request->category,
@@ -225,7 +228,8 @@ class AdminController extends Controller
 
                     $uploadedAnswerFile = $value;
                     $answerFileName = $uploadedAnswerFile->getClientOriginalName();
-                    $answerImagePath = $uploadedAnswerFile->store('public/images/ans_images');
+                    // $answerImagePath = $uploadedAnswerFile->store('public/images/ans_images');
+                    $uploadedAnswerFile-> move(public_path('public/image/ans_images'), $answerFileName);
                     Answer::insert([
                         'question_id' => $questionId,
                         'answer' => $answerFileName,

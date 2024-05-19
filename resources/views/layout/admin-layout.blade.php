@@ -58,6 +58,9 @@
           <li>
             <a href="/admin/review-exams"><span class="fa fa-file-text-o mr-3"></span> Exam Review</a>
           </li>
+          {{-- <li>
+            <a href="/question/show"><span class="fa fa-book mr-3"></span> Question Bank</a>
+          </li> --}}
           <li>
             <a href="/logout"><span class="fa fa-sign-out mr-3"></span> Logout</a>
           </li>

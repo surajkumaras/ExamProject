@@ -6,6 +6,15 @@
 </style>
     @php
         $time = explode(':',$exam[0]['time']);
+    
+        function checkExtension($filename, $extensions) 
+        {
+            $extPattern = '/\.' . implode('|', $extensions) . '$/i';
+            return preg_match($extPattern, $filename);
+        }
+
+        
+        $allowedExtensions = ["jpg", "jpeg", "png"];
     @endphp
     <div class="container">
         <p style="color:black;">Welcome, {{Auth::user()->name }}</p>
@@ -24,13 +33,30 @@
             @foreach ($qna as $data)
             <div class="question-container">
                 <h5>Q{{$qcount++}}. {{$data['question'][0]['question']}}</h5>
+                @php
+                    $filename = $data['question'][0]['image'];
+                @endphp
+                @if (checkExtension($filename, $allowedExtensions))
+                    <img src="{{ asset('public/image/que_images/'. $data['question'][0]['image']) }}" style="margin-left:50%;border-radius:5px;" width="80px" height="80px" alt="image issue">
+                @endif
+                <br>
                 <input type="hidden" name="q[]" value="{{$data['question'][0]['id']}}">
                 <input type="hidden" name="ans_{{$qcount-1}}" id="ans_{{$qcount-1}}">
                 @php $acount = 1; @endphp
                 @foreach ($data['question'][0]['answers'] as $answer )
                 <label class="answer-label">
                     <span class="answer-number">{{$acount++}}).</span>
-                    {{$answer['answer']}}
+
+                    @php
+                        $filename = $answer['answer'];
+                    @endphp
+                    @if (checkExtension($filename, $allowedExtensions))
+                        <img src="{{ asset('public/image/ans_images/'. $answer['answer']) }}" style="border-radius:5px;" width="50px" height="50px" alt="image issue">
+                    @else
+                        {{$answer['answer']}}
+                    @endif
+
+                    
                     <input type="radio" name="radio_{{$qcount-1}}" data-id="{{$qcount-1}}" class="select_ans" value={{ $answer['id']}}>
                     <span class="checkmark"></span>
                 </label>
