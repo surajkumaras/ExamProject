@@ -23,21 +23,17 @@ class ExamController extends Controller
             if($attemptCount >= $qnaExam[0]['attempt'])
             {
                 return view('student.exam-dashboard',['success'=>false, 'msg'=>'Your exam attemption has been completed! ','exam'=>$qnaExam]);
-
             }
             else if($qnaExam[0]['date'] == date('Y-m-d'))
             {
                 if(count($qnaExam[0]['getQnaExam']) > 0)
                 {
                     $qna = QnaExam::where('exam_id',$qnaExam[0]['id'])->with(['question','answers'])->inRandomOrder()->get();    
-                    // return $qna;
                     return view('student.exam-dashboard',['success'=>true,'exam'=>$qnaExam,'qna'=>$qna]);
-
                 }
                 else 
                 {
                     return view('student.exam-dashboard',['success'=>false, 'msg'=>'This exam is not availabele for now! ','exam'=>$qnaExam]);
-
                 }
             }
             else if($qnaExam[0]['date'] > date('Y-m-d'))
@@ -58,8 +54,6 @@ class ExamController extends Controller
 
     public function examSubmit(Request $request)
     {
-        //  return $request->all();
-
        $attempt_id = examsAttempt::insertGetId([
             'exam_id'=>$request->exam_id,
             'user_id'=>Auth::user()->id,
@@ -89,7 +83,6 @@ class ExamController extends Controller
     public function resultDashboard()
     {
         $attempts = examsAttempt::where('user_id',Auth::user()->id)->with('exam.getQnaExam')->orderBy('updated_at')->get();
-        //   return $attempts;
         return view('student.results',compact('attempts'));
     }
 
@@ -101,7 +94,6 @@ class ExamController extends Controller
             $examData = examsAnswer::where('attempt_id', $request->attempt_id)
                         ->with(['question.answers', 'answers'])
                         ->get();
-                        //  return $examData;
             return response()->json(['success'=>true,'msg'=>'data found','data'=>$examData]);
         }
         catch(\Exception $e)
@@ -116,9 +108,9 @@ class ExamController extends Controller
                         ->with(['question.answers', 'answers'])
                         ->get();
         $student = examsAttempt::where('id',$attempt_id)->with(['user','exam'])->get();
-        // return $student;
-            view()->share('employee',$examData);
-            $pdf = PDF::loadView('pdf.answersheet', compact('examData','student'));
-            return $pdf->download('pdf_file.pdf');
+       
+        view()->share('employee',$examData);
+        $pdf = PDF::loadView('pdf.answersheet', compact('examData','student'));
+        return $pdf->download('pdf_file.pdf');
     }
 }

@@ -284,7 +284,8 @@ class AuthController extends Controller
             $user->save();
             PasswordReset::where('email', $request->email)->delete();
             return "<h2>Password reset successfully!</h2>";
-        }catch(\Exception $e)
+        }
+        catch(\Exception $e)
         {
             return back()->with('error', $e->getMessage());
         }

@@ -316,7 +316,6 @@ class AdminController extends Controller
                 }
             }
 
-            
             return response()->json(['success'=>true, 'msg'=>'Question updated successfully!']);
 
         }catch(\Exception $e)
@@ -380,7 +379,7 @@ class AdminController extends Controller
      //update 
 
      public function editStudent(Request $request)
-     { //return $request->all();
+     { 
         try
         {
 
@@ -577,8 +576,6 @@ class AdminController extends Controller
                     {
                         $totalMarks += $marks;
                     }
-
-
                 }
                 $totalQue = count($attemptData);
             }
@@ -609,7 +606,8 @@ class AdminController extends Controller
 
             dispatch(new SendMailJob($data));
             return response()->json(['success'=>true,'msg'=>'Approved Successfully']);
-        }catch(\Exception $e)
+        }
+        catch(\Exception $e)
         {
             return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
         }
@@ -626,13 +624,11 @@ class AdminController extends Controller
                 $filePath = $file->getPathname();
     
                 $spreadsheet = IOFactory::load($filePath);
-    
                 $worksheet = $spreadsheet->getActiveSheet();
     
                 foreach ($worksheet->getRowIterator() as $row) 
                 {
                     $rowData = $row->getValues();
-
                     \Log::info($rowData);
                 }
     
@@ -697,7 +693,6 @@ class AdminController extends Controller
             // Generate a unique file name
             $fileName = 'qna_export_' . date('Y-m-d_H-i-s') . '.xlsx';
     
-            // Save the file to the public directory
              $filePath = public_path($fileName);
              $writer = new Xlsx($spreadsheet);
              $writer->save($filePath);
