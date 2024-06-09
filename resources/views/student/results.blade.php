@@ -124,6 +124,14 @@
                             var data = data.data;
                             if(data.length > 0) 
                             {
+
+                                function checkExtension(filename, extensions) 
+                                {
+                                    const ext = filename.split('.').pop().toLowerCase();
+                                    return extensions.includes(ext);
+                                }
+                                const allowedExtensions = ["jpg", "jpeg", "png"];
+
                                 for(var i = 0; i < data.length; i++) 
                                 {
                                     var is_correct = `<span style="color:red;" class="fa fa-close"></span>`;
@@ -134,21 +142,72 @@
                                    
                                     for(var j = 0; j < data[i]['question']['answers'].length; j++) 
                                     {
-                                        if(data[i]['question']['answers'][j]['is_correct'] == 1)
+                                        const filename = data[i]['question']['answers'][j]['answer'];
+// console.log(filename);
+
+
+                                        if (checkExtension(filename, allowedExtensions)) 
                                         {
-                                             answers_html += `<p style="color:green">` + data[i]['question']['answers'][j]['answer'] + `</p>`;
-                                        }
+                                            let ansimg = `<img src="{{ asset('public/image/ans_images/') }}/` + filename + `" width="50px" height="50px" alt="image issue">`;
+                                            if(data[i]['question']['answers'][j]['is_correct'] == 1)
+                                            {
+                                                answers_html += `<p>`+(j+1)+`</p><p style="color:green">` + ansimg + `</p>`;
+                                            }
+                                            else 
+                                            {
+                                                answers_html += `<p>`+(j+1)+`</p><p style="color:red">` + ansimg + `</p>`;
+                                            }
+                                            
+                                            // let ansimg = `<img src="{{ asset('public/image/ans_images/') }}/${questions[i]['answers'][j]['answer']}" width="50px" height="50px" alt="image issue">`
+                                            // html += `<tr>
+                                            //     <td>`+(j+1)+`</td>
+                                            //         <td>`+ansimg+`</td>
+                                            //         <td>`+is_correct+`</td>
+                                            //     </tr>`;
+                                        } 
                                         else 
                                         {
-                                            answers_html += `<p style="color:red">` + data[i]['question']['answers'][j]['answer'] + `</p>`;
+                                        //     html += `<tr>
+                                        //     <td>`+(j+1)+`</td>
+                                        //         <td>`+questions[i]['answers'][j]['answer']+`</td>
+                                        //         <td>`+is_correct+`</td>
+                                        //     </tr>`;
+
+                                            if(data[i]['question']['answers'][j]['is_correct'] == 1)
+                                            {
+                                                answers_html += `<p>`+(j+1)+`</p><p style="color:green">` + filename + `</p>`;
+                                            }
+                                            else 
+                                            {
+                                                answers_html += `<p>`+(j+1)+`</p><p style="color:red">` + filename + `</p>`;
+                                            }
                                         }
+
+
+
+                                        // if(data[i]['question']['answers'][j]['is_correct'] == 1)
+                                        // {
+                                        //      answers_html += `<p style="color:green">` + data[i]['question']['answers'][j]['answer'] + `</p>`;
+                                        // }
+                                        // else 
+                                        // {
+                                        //     answers_html += `<p style="color:red">` + data[i]['question']['answers'][j]['answer'] + `</p>`;
+                                        // }
                                         
                                     }
+
+                                   let myans = data[i]['answers']['answer'];
+                                    if (checkExtension(myans, allowedExtensions)) 
+                                    {
+                                        myans = `<img src="{{ asset('public/image/ans_images/') }}/` + myans + `" width="50px" height="50px" alt="image issue">`;
+                                       
+                                    }
+                                    
                                     html += `<div class="row">
                                                 <div class="col-sm-12">
                                                     <h6><b>Q.` + (i+1) + `:` + data[i]['question']['question'] + `</b></h6>
                                                     ` + answers_html + `
-                                                    <p><b>Your Ans:&nbsp</b>` + data[i]['answers']['answer'] + `` + is_correct + `</p>`;
+                                                    <p><b>Your Ans:&nbsp</b>` + myans + `` + is_correct + `</p>`;
                                     if(data[i]['question']['explaination'] != null) {
                                         html += `<p><a href="#" data-explaination="` + data[i]['question']['explaination'] + `" class="explaination" data-toggle="modal" data-target="#explainationModal">Explaination</a></p>`
                                     }

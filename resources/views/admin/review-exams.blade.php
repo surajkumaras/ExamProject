@@ -92,8 +92,18 @@
                         var data = data.data;
                         if(data.length > 0)
                         {
+                            function checkExtension(filename, extensions) 
+                            {
+                                const ext = filename.split('.').pop().toLowerCase();
+                                return extensions.includes(ext);
+                            }
+                            const allowedExtensions = ["jpg", "jpeg", "png"];
+                            
+
                             for(i = 0;i<data.length;i++)
                             {
+                                const filename = data[i]['answers']['answer'];
+
                                 let isCorrect = `<span style="color:red" class="fa fa-close"></span>`;
 
                                 if(data[i]['answers']['is_correct'] == 1)
@@ -103,12 +113,48 @@
 
                                 let answer = data[i]['answers']['answer'];
 
-                                html += `<div class="row">
-                                            <div class="col-sm-12">
-                                                <h6>Q.`+(i+1)+`:`+data[i]['question']['question']+`</h6>
-                                                <p>Ans.`+answer+`: `+isCorrect+`</p>
-                                            </div>
-                                        </div>`;
+                                // html += `<div class="row">
+                                //             <div class="col-sm-12">
+                                //                 <h6>Q.`+(i+1)+`:`+data[i]['question']['question']+`</h6>
+                                //                 <p>Ans.`+answer+`: `+isCorrect+`</p>
+                                //             </div>
+                                //         </div>`;
+
+                                        if (checkExtension(filename, allowedExtensions)) 
+                                        {
+                                            let ansimg = `<img src="{{ asset('public/image/ans_images/') }}/` + data[i]['answers']['answer'] + `" width="50px" height="50px" alt="image issue">`;
+
+                                            // html += `<tr>
+                                            //     <td>`+(j+1)+`</td>
+                                            //         <td>`+ansimg+`</td>
+                                            //         <td>`+is_correct+`</td>
+                                            //     </tr>`;
+
+
+                                                html += `<div class="row">
+                                                            <div class="col-sm-12">
+                                                                <h6>Q.`+(i+1)+`:`+data[i]['question']['question']+`</h6>
+                                                                <p>Ans.`+ansimg+`: `+isCorrect+`</p>
+                                                            </div>
+                                                        </div>`;
+                                        } 
+                                        else 
+                                        {
+                                            // html += `<tr>
+                                            // <td>`+(j+1)+`</td>
+                                            //     <td>`+questions[i]['answers'][j]['answer']+`</td>
+                                            //     <td>`+is_correct+`</td>
+                                            // </tr>`;
+
+                                            html += `<div class="row">
+                                                        <div class="col-sm-12">
+                                                            <h6>Q.`+(i+1)+`:`+data[i]['question']['question']+`</h6>
+                                                            <p>Ans.`+filename+`: `+isCorrect+`</p>
+                                                        </div>
+                                                    </div>`;
+                                        }
+
+
                             }
                         }
                         else 

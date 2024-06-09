@@ -20,7 +20,8 @@ class Exam extends Model
         'attempt',
         'enterance_id',
         'plan',
-        'price'
+        'price',
+        'marks'
     ];
 
     protected $appends = ['attempt_counter'];

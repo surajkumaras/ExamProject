@@ -71,7 +71,7 @@ class AdminController extends Controller
     public function examDassboard()
     {
         $subjects = Subject::all();
-        $exam = Exam::with('subjects')->get();
+        $exam = Exam::with(['subjects','getQnaExam'])->get();
         // return $exam;
         return view('admin.exam-dashboard', ['subjects'=>$subjects, 'exams'=>$exam]);
        
@@ -80,7 +80,7 @@ class AdminController extends Controller
     //add exam
 
     public function addExam(Request $request)
-    {
+    {   
         try{
             $plan = $request->plan;
             $price = null;
@@ -99,6 +99,7 @@ class AdminController extends Controller
                 'enterance_id'=> $unique_id,
                 'plan' => $plan,
                 'price' => $price,
+                'marks' => $request->marks
             ]);
             return response()->json(['success'=>true, 'msg'=>'Exam added successfully!']);
         }
@@ -114,7 +115,7 @@ class AdminController extends Controller
     public function getExamDetail($id)
     {
         try{
-            $exam = Exam::where('id', $id)->get();
+            $exam = Exam::with('getQnaExam')->where('id', $id)->get();
             return response()->json(['success'=>true, 'data'=>$exam]);
         }
         catch(\Exception $e)
@@ -125,9 +126,8 @@ class AdminController extends Controller
 
     //update exam
      public function updateExam(Request $request)
-     {
+     {  
         try{
-            $plan = $request->plan;
             $price = null;
             if(isset($request->inr) && isset($request->usd))
             {
@@ -135,13 +135,16 @@ class AdminController extends Controller
             }
 
             $exam = Exam::find($request->exam_id);
-            $exam->exam_name = $request->exam_name;
-            $exam->subject_id = $request->subject_id;
-            $exam->date = $request->date;
-            $exam->time = $request->time;
-            $exam->attempt = $request->attempt;
-            $exam->plan = $plan;
-            $exam->price = $price;
+            
+            $exam->exam_name     = $request->exam_name;
+            $exam->subject_id    = $request->subject_id;
+            $exam->date          = $request->date;
+            $exam->time          = $request->time;
+            $exam->attempt       = $request->attempt;
+            $exam->marks         = $request->marks;
+            $exam->pass_marks    = $request->pass_marks;
+            $exam->plan          = $request->plan;
+            $exam->price         = $price;
             $exam->save();
             return response()->json(['success'=>true, 'msg'=>'Exam updated successfully!']);
         }
@@ -256,6 +259,7 @@ class AdminController extends Controller
         $qna = Question::with(['subject','category'])->where('id',$request->qid)->with('answers')->get();
         $subjects = Subject::all();
         $categories = Category::all();
+        
         return response()->json(['success'=>true, 'data'=>$qna, 'subjects'=>$subjects, 'categories'=>$categories]);
        
      }
@@ -272,11 +276,13 @@ class AdminController extends Controller
 
      public function updateQna(Request $request)
      {
-         try{
+         try{   //return $request->all();
             Question::where('id',$request->question_id)
             ->update([
                 'question'=>$request->question,
                 'explaination' =>$request->explaination ?? null,
+                'category_id' =>$request->category,
+                'subject_id' =>$request->editSubject
             ]);
 
             //old answer 
@@ -551,6 +557,7 @@ class AdminController extends Controller
      { 
         try{
             $attemptData = examsAnswer::where('attempt_id',$request->attempt_id)->with(['question','answers'])->get();
+            // return $attemptData;
             return response()->json(['success'=>true,'data'=>$attemptData]);
         }
         catch(\Exception $e)
