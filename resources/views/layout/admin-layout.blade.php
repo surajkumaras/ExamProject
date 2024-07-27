@@ -9,10 +9,12 @@
 		
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="{{ asset('css/style.css')}}">
+		<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css')}}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('js/multiselect-dropdown.js')}}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" integrity="sha512-In/+MILhf6UMDJU4ZhDL0R0fEpsp4D3Le23m6+ujDWXwl3whwpucJG1PEmI3B07nyJx+875ccs+yX2CqQJUxUw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
       .multiselect-dropdown{
         width: 100% ! important;
@@ -35,7 +37,7 @@
             <a href="{{ route('admin.dashboard')}}"><span class="fa fa-home mr-3"></span> Homepage</a>
           </li>
           <li>
-              <a href="/admin/dashboard"><span class="fa fa-user mr-3"></span> Dashboard</a>
+              <a href="{{ route('settingDashboard')}}"><span class="fa fa-user mr-3"></span> Setting</a>
           </li>
           <li>
             <a href="/admin/dashboard"><span class="fa fa-book mr-3"></span> Subjects</a>
@@ -58,6 +60,9 @@
           <li>
             <a href="/admin/review-exams"><span class="fa fa-file-text-o mr-3"></span> Exam Review</a>
           </li>
+          <li>
+            <a href="{{route('examReview')}}"><span class="fa fa-file-text-o mr-3"></span> Exam Review New</a>
+          </li>
           {{-- <li>
             <a href="/question/show"><span class="fa fa-book mr-3"></span> Question Bank</a>
           </li> --}}
@@ -79,5 +84,11 @@
     <script src="{{ asset('js/popper.js')}}"></script>
     <script src="{{ asset('js/bootstrap.min.js')}}"></script>
     <script src="{{ asset('js/main.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+          $('.dropify').dropify();
+      });
+  </script>
   </body>
 </html>

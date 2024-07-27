@@ -111,6 +111,15 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
     Route::get('/admin/review-exams',[AdminController::class,'reviewExams'])->name('reviewExams');
     Route::get('/get-reviewed-qna',[AdminController::class,'reviewQna'])->name('reviewQna');
     Route::post('/approved-qna',[AdminController::class,'approvedQna'])->name('approvedQna');
+
+    Route::get('/admin/exam/review',[AdminController::class,'examReview'])->name('examReview');
+    Route::get('/admin/exam/review/{id}',[AdminController::class,'examReviewById'])->name('exam-review');
+    Route::get('/admin/ansswersheet/review/{eid}/{sid}/{exid}',[AdminController::class,'answersheetReviewById'])->name('answersheet-review');
+
+    //setting
+    Route::get('/admin/setting',[AdminController::class,'settingDashboard'])->name('settingDashboard');
+    Route::post('/update-setting',[AdminController::class,'updateSetting'])->name('updateSetting');
+
 });
 
 Route::group(['middleware'=>['web','checkStudent']],function()

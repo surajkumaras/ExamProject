@@ -726,5 +726,54 @@ class AdminController extends Controller
         return response()->json(['success'=>true,'cats'=>$cats]);
      }
 
-     
+     public function settingDashboard()
+     {
+        return view('admin.setting');
+     }
+
+     //========== Save Setting ==============//
+     public function updateSetting(Request $request)
+     {
+        return $request->all();
+     }
+
+     //============= Exam Review =============//
+     public function examReview()
+     {
+        $exams = Exam::all();
+        // return $exams;
+        return view('admin.exam-review',compact('exams'));
+     }
+
+     //============= Exam Review by Id ===========//
+     public function examReviewById($id)
+     {
+        $data = examsAttempt::with('user')->where('exam_id',$id)->orderBy('marks','desc')->get();
+        // return $data;
+        $exam = Exam::with('subject')->where('id',$id)->first();
+        // return $exam;
+        
+        return view('admin.exam-ranking',compact('data','exam'));
+     }
+
+     //============= Review Answersheet ============//
+     public function answersheetReviewById($id,$sid,$exid)
+     {  //return $exid;
+        try{
+            $examData = examsAnswer::where('attempt_id', $id)
+                        ->with(['question.answers', 'answers'])
+                        ->get();
+                        // return $examData;
+            $exam = Exam::with('subject')->where('id',$exid)->first();
+            $student = User::where('id',$sid)->first();
+            // return $exam;
+            // return $student;
+            return view('admin.student-ans-sheet',compact('examData','exam','student'));
+            // return response()->json(['success'=>true,'data'=>$attemptData]);
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+     }
 }
