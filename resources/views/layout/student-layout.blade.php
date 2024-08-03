@@ -19,7 +19,11 @@
     </style>
   </head>
   <body>
-    
+    @php
+      use App\Models\Company;
+      $company = Company::first();
+
+    @endphp
 		
 		<div class="wrapper d-flex align-items-stretch">
 			<nav id="sidebar">
@@ -29,13 +33,21 @@
 	          <span class="sr-only">Toggle Menu</span>
 	        </button>
         </div>
-        <div class="custom-theam">
+        <h1>
+          <a href="index.html" class="logo">
+              @if ($company && $company->logo)
+                  <img src="{{ asset('uploads/logo/' . $company->logo) }}" alt="{{ $company->name }}" style="height: 50px;">
+              @endif
+              {{ $company->name }}
+          </a>
+      </h1>
+        {{-- <div class="custom-theam">
 					<button type="button" id="sidebarCollapse" class="btn btn-primary">
 	          <i class="fa fa-sun-o"></i>
 	          <span class="sr-only"></span>
 	        </button>
-        </div>
-	  		<h1><a href="index.html" class="logo">HII ,{{ Auth::user()->name}}</a></h1>
+        </div> --}}
+	  		<h1><a href="javascript:void(0)" class="logo">HII ,{{ Auth::user()->name}}</a></h1>
         <ul class="list-unstyled components mb-5">
           <li class="active">
             <a href="{{ route('admin.dashboard')}}"><span class="fa fa-home mr-3"></span> Homepage</a>

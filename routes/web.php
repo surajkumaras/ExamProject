@@ -7,6 +7,7 @@ use App\Http\Controllers\ExamController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\CompanyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -117,8 +118,8 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
     Route::get('/admin/ansswersheet/review/{eid}/{sid}/{exid}',[AdminController::class,'answersheetReviewById'])->name('answersheet-review');
 
     //setting
-    Route::get('/admin/setting',[AdminController::class,'settingDashboard'])->name('settingDashboard');
-    Route::post('/update-setting',[AdminController::class,'updateSetting'])->name('updateSetting');
+    Route::get('/admin/setting',[CompanyController::class,'settingDashboard'])->name('settingDashboard');
+    Route::post('/update-setting',[CompanyController::class,'updateSetting'])->name('updateSetting');
 
 });
 

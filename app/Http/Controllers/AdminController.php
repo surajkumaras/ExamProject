@@ -726,17 +726,6 @@ class AdminController extends Controller
         return response()->json(['success'=>true,'cats'=>$cats]);
      }
 
-     public function settingDashboard()
-     {
-        return view('admin.setting');
-     }
-
-     //========== Save Setting ==============//
-     public function updateSetting(Request $request)
-     {
-        return $request->all();
-     }
-
      //============= Exam Review =============//
      public function examReview()
      {
