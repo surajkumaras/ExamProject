@@ -71,7 +71,7 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
     Route::post('/delete-category',[CategoryController::class,'deleteCategory'])->name('delete-category');
 
     //exam routes
-    Route::get('/admin/exams',[AdminController::class,'examDassboard']);
+    Route::get('/admin/exams',[AdminController::class,'examDassboard'])->name('examDassboard');
     Route::post('/add-exam',[AdminController::class,'addExam'])->name('addExam');
 
     Route::get('/get-exam-detail/{id}',[AdminController::class,'getExamDetail'])->name('getExamDetail');
@@ -79,7 +79,7 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
     Route::post('/delete-exam',[AdminController::class,'deleteExam'])->name('deleteExam');
 
     //Question & Answer
-    Route::get('/admin/qna-ans',[AdminController::class,'qnaDashboard']);
+    Route::get('/admin/qna-ans',[AdminController::class,'qnaDashboard'])->name('qnaDashboard');
     Route::post('/add-qna-ans',[AdminController::class,'addQna'])->name('addQna');
     Route::get('/get-qna-details',[AdminController::class,'getQnaDetails'])->name('getQnaDetails');
     Route::get('/delete-ans',[AdminController::class,'deleteAns'])->name('deleteAns');
@@ -93,7 +93,7 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
     
 
     //student routes
-    Route::get('/admin/students',[AdminController::class,'studentDashboard']);
+    Route::get('/admin/students',[AdminController::class,'studentDashboard'])->name('studentDashboard');
     Route::post('/add-students',[AdminController::class,'addStudent'])->name('addStudent');
     Route::post('/edit-students',[AdminController::class,'editStudent'])->name('editStudent');
     Route::post('/delete-students',[AdminController::class,'deleteStudent'])->name('deleteStudent');

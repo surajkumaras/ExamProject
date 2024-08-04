@@ -9,7 +9,7 @@
     </button>
 
     {{-- Table --}}
-    <table class="table">
+    <table class="table" id="myTable">
         <thead>
             <tr>
                 <th>#</th>
@@ -317,7 +317,7 @@
   </div>
   <script>
     $(document).ready(function()
-    {
+    {       
       $('#addExam').submit(function(e)
       {
         e.preventDefault();

@@ -4,7 +4,7 @@
     <h2 class="mb-4">Marks</h2>
 
     
-    <table class="table">
+    <table class="table" id="myTable">
         <thead>
             <tr>
                 <th>#</th>

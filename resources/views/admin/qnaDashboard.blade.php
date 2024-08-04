@@ -13,7 +13,7 @@
     <button type="button"  id="exportQna" class="btn btn-info">
         Export Q&A
     </button>
-    <table class="table">
+    <table class="table" id="myTable">
         <thead>
             <tr>
                 <th>#</th>

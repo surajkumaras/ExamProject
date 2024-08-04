@@ -7,7 +7,7 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStudentModel">
         Add Student
     </button>
-    <table class="table">
+    <table class="table" id="myTable">
         <thead>
             <tr>
                 <th>#</th>

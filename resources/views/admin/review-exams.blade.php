@@ -3,7 +3,7 @@
 @section('space-work')
     <h2 class="mb-4">Student Exam</h2>
 
-    <table class="table">
+    <table class="table" id="myTable">
         <thead>
             <tr>
                 <th>#</th>

@@ -4,7 +4,7 @@
     <h2 class="mb-4">Exam: {{$exam->exam_name}}</h2>
     <h2 class="mb-4">Subject: {{$exam->subject->name}}</h2>
 
-    <table class="table">
+    <table class="table" id="myTable">
         <thead>
             <tr>
                 <th>Ranking</th>
