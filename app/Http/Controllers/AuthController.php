@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Subject;
-use App\Models\Exam;
+use App\Models\{Exam,Question};
 use App\Models\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -196,8 +196,12 @@ class AuthController extends Controller
 
     public function adminDashboard()
     {
-        $subjects = Subject::all();
-        return view('admin.dashboard',compact('subjects'));
+        $students = User::where('is_admin',0)->count();
+        $exams = Exam::count();
+        $questions = Question::count();
+        $subjects = Subject::count();
+        return view('admin.dashboard',['students'=>$students,'exams'=>$exams,'questions'=>$questions,'subjects'=>$subjects]);
+    
     }
 
     public function logout(Request $request)

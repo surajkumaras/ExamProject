@@ -54,7 +54,7 @@
               <a href="{{ route('settingDashboard')}}"><span class="fa fa-user mr-3"></span> Setting</a>
           </li>
           <li>
-            <a href="/admin/dashboard"><span class="fa fa-book mr-3"></span> Subjects</a>
+            <a href="/subject"><span class="fa fa-book mr-3"></span> Subjects</a>
           </li>
           <li>
             <a href="/category"><span class="fa fa-book mr-3"></span> Topic</a>

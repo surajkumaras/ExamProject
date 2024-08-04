@@ -720,6 +720,12 @@ class AdminController extends Controller
         return response()->json(['success'=>true,'data'=>$subjects]);
      }
 
+     public function subject()
+    {
+        $subjects = Subject::all();
+        return view('admin.subject',compact('subjects'));
+    }
+
      public function getCategory($id)
      {
         $cats = Category::where('subject_id',$id)->get();
@@ -737,7 +743,7 @@ class AdminController extends Controller
      //============= Exam Review by Id ===========//
      public function examReviewById($id)
      {
-        $data = examsAttempt::with('user')->where('exam_id',$id)->orderBy('marks','desc')->get();
+        $data = examsAttempt::with('user')->where('exam_id',$id)->orderBy('marks','desc')->orderBy('updated_at','asc')->get();
         // return $data;
         $exam = Exam::with('subject')->where('id',$id)->first();
         // return $exam;

@@ -58,6 +58,7 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
     Route::get('/admin/dashboard',[AuthController::class,'adminDashboard'])->name('admin.dashboard');
 
     //subjects
+    Route::get('/subject',[AdminController::class,'subject'])->name('subject');
     Route::post('/add-subject',[AdminController::class,'addSubject'])->name('add-subject');
     Route::post('/edit-subject',[AdminController::class,'editSubject'])->name('edit-subject');
     Route::post('/delete-subject',[AdminController::class,'deleteSubject'])->name('delete-subject');

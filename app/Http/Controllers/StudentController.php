@@ -236,6 +236,7 @@ class StudentController extends Controller
 
     public function profileUpdate(Request $request)
 {
+    // return $request->all();
     try 
     {
         $user = auth()->user();
@@ -259,7 +260,7 @@ class StudentController extends Controller
         $user->update([
             'name' => $request->name,
             'email' => $request->email,
-            'phone' => $request->phone,
+            'phone' => $request->phone_number['full'],
             'address' => $request->address,
             'city' => $request->city,
             'state' => $request->state,
