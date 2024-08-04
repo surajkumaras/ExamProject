@@ -9,9 +9,16 @@
 		
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="{{ asset('css/style.css')}}">
+		<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css')}}">
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="{{ asset('js/multiselect-dropdown.js')}}"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" integrity="sha512-In/+MILhf6UMDJU4ZhDL0R0fEpsp4D3Le23m6+ujDWXwl3whwpucJG1PEmI3B07nyJx+875ccs+yX2CqQJUxUw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> --}}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/css/intlTelInput.min.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/intlTelInput.min.js"></script>
     <style>
       .multiselect-dropdown{
         width: 100% ! important;
@@ -38,7 +45,7 @@
               @if ($company && $company->logo)
                   <img src="{{ asset('uploads/logo/' . $company->logo) }}" alt="{{ $company->name }}" style="height: 50px;">
               @endif
-              {{ $company->name }}
+              {{-- {{ $company->name }} --}}
           </a>
       </h1>
         {{-- <div class="custom-theam">
@@ -53,7 +60,7 @@
             <a href="{{ route('admin.dashboard')}}"><span class="fa fa-home mr-3"></span> Homepage</a>
           </li>
           <li>
-              <a href="#"><span class="fa fa-user mr-3"></span> Profile</a>
+              <a href="{{ route('studentProfile')}}"><span class="fa fa-user mr-3"></span> Profile</a>
           </li>
           <li>
             <a href="{{ route('resultDashboard')}}"><span class="fa fa-list-alt mr-3"></span> Results</a>
@@ -91,5 +98,11 @@
     <script src="{{ asset('js/popper.js')}}"></script>
     <script src="{{ asset('js/bootstrap.min.js')}}"></script>
     <script src="{{ asset('js/main.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+          $('.dropify').dropify();
+      });
+  </script>
   </body>
 </html>

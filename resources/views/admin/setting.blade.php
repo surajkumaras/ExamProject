@@ -21,51 +21,57 @@
                 <div class="valid-feedback">
                   Looks good!
                 </div>
-              </div>
-          <div class="col-md-4 mb-3">
-            <label for="cname">Orgination name</label>
-            <input type="text" class="form-control" id="cname" name="cname" @if ($data) value="{{$data->name}}" @endif required>
-            <div class="valid-feedback">
-              Looks good!
             </div>
-          </div>
+            <div class="col-md-9">
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="cname">Orgination name</label>
+                  <input type="text" class="form-control" id="cname" name="cname" @if ($data) value="{{$data->name}}" @endif required>
+                  <div class="valid-feedback">
+                    Looks good!
+                  </div>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="email">Email</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="inputGroupPrepend">@</span>
+                    </div>
+                    <input type="text" class="form-control" id="email" name="email" @if ($data) value="{{$data->email}}" @endif aria-describedby="inputGroupPrepend" required>
+                    <div class="invalid-feedback">
+                      Please choose a username.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="phone">Phone</label>
+                  <div class="input-group">
+                    <input type="tel" class="form-control" name="phone_number[main]" id="phone_number" @if ($data) value="{{$data->phone}}" @endif aria-describedby="inputGroupPrepend" required/>
+                    {{-- <input type="text" class="form-control" id="phone" name="phone" aria-describedby="inputGroupPrepend" required> --}}
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="caddress">Company address</label>
+                  <input type="text" class="form-control" id="caddress" name="caddress" @if ($data) value="{{$data->address}}" @endif required>
+                  <div class="valid-feedback">
+                    Looks good!
+                  </div>
+              </div>
+              </div>
+            </div>
           
-          <div class="col-md-4 mb-3">
-            <label for="email">Email</label>
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroupPrepend">@</span>
-              </div>
-              <input type="text" class="form-control" id="email" name="email" @if ($data) value="{{$data->email}}" @endif aria-describedby="inputGroupPrepend" required>
-              <div class="invalid-feedback">
-                Please choose a username.
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <label for="phone">Phone</label>
-            <div class="input-group">
-              <input type="tel" class="form-control" name="phone_number[main]" id="phone_number" @if ($data) value="{{$data->phone}}" @endif aria-describedby="inputGroupPrepend" required/>
-              {{-- <input type="text" class="form-control" id="phone" name="phone" aria-describedby="inputGroupPrepend" required> --}}
-            </div>
-          </div>
         </div>
-        <div class="col-md-4 mb-3">
-            <label for="caddress">Company address</label>
-            <input type="text" class="form-control" id="caddress" name="caddress" @if ($data) value="{{$data->address}}" @endif required>
-            <div class="valid-feedback">
-              Looks good!
-            </div>
-          </div>
+        
         <div class="form-row">
-          <div class="col-md-2 mb-3">
-            <label for="country">Country</label>
-            <input type="text" class="form-control" id="country" name="country" @if ($data) value="{{$data->country}}" @endif required>
+          <div class="col-md-4 mb-3">
+            <label for="city">City</label>
+            <input type="text" class="form-control" id="city" name="city" @if ($data) value="{{$data->city}}" @endif required>
             {{-- <div class="invalid-feedback">
               Please provide a valid city.
             </div> --}}
           </div>
-          <div class="col-md-3 mb-3">
+          <div class="col-md-4 mb-3">
             <label for="state">State</label>
             <input type="text" class="form-control" id="state" name="state" @if ($data) value="{{$data->state}}" @endif required>
             {{-- <select class="custom-select" id="state" name="state" required>
@@ -77,14 +83,14 @@
             </div> --}}
           </div>
           <div class="col-md-2 mb-3">
-            <label for="city">City</label>
-            <input type="text" class="form-control" id="city" name="city" @if ($data) value="{{$data->city}}" @endif required>
+            <label for="country">Country</label>
+            <input type="text" class="form-control" id="country" name="country" @if ($data) value="{{$data->country}}" @endif required>
             {{-- <div class="invalid-feedback">
               Please provide a valid city.
             </div> --}}
           </div>
           
-          <div class="col-md-3 mb-3">
+          <div class="col-md-2 mb-3">
             <label for="pin">Zip/Pin</label>
             <input type="text" class="form-control" id="pin" name="pin" @if ($data) value="{{$data->zip}}" @endif required>
             {{-- <div class="invalid-feedback">

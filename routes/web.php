@@ -133,7 +133,9 @@ Route::group(['middleware'=>['web','checkStudent']],function()
     Route::get('/pdf/answersheet/{attempt_id}',[ExamController::class,'answersheet'])->name('answersheet');
     Route::get('/paid-exam',[StudentController::class,'examDashboard'])->name('examDashboard');
 
-
+    //profile
+    Route::get('/student/profile',[StudentController::class,'studentProfile'])->name('studentProfile');
+    Route::post('/profile/update',[StudentController::class,'profileUpdate'])->name('profileUpdate');
     //question bank
     Route::get('/question/show',[QuestionController::class,'questionBankShow'])->name('questionBankShow');
 

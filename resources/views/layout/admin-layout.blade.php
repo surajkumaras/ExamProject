@@ -43,7 +43,7 @@
               @if ($company && $company->logo)
                   <img src="{{ asset('uploads/logo/' . $company->logo) }}" alt="{{ $company->name }}" style="height: 50px;">
               @endif
-              {{ $company->name }}
+              {{-- {{ $company->name }} --}}
           </a>
       </h1>
         <ul class="list-unstyled components mb-5">

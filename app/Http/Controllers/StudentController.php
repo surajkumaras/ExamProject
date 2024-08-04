@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Exam;
+use App\Models\{Exam,User};
 use App\Models\ExamPayment;
 use Razorpay\Api\Api;
 
@@ -219,4 +219,63 @@ class StudentController extends Controller
         //     return view('payment',compact('msg'));
         // }
     }
+
+    public function studentProfile()
+    {
+        try
+        {
+            $data = User::where('id',auth()->user()->id)->first();
+            return view('student.profile')->with('data',$data);
+            // return $data;
+        }
+        catch(\Exception $e)
+        {
+            return redirect()->back()->with('error','Something went wrong');
+        }
+    }
+
+    public function profileUpdate(Request $request)
+{
+    try 
+    {
+        $user = auth()->user();
+
+        if ($request->hasFile('profileImg')) 
+        {
+            $logoPath = 'public/profile/';
+            $oldLogo = $user->profile_image;
+
+            if ($oldLogo && File::exists(public_path($logoPath . $oldLogo))) 
+            {
+                File::delete(public_path($logoPath . $oldLogo));
+            }
+
+            $file = $request->file('profileImg');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path($logoPath), $filename);
+            $user->image = $filename;
+        }
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'city' => $request->city,
+            'state' => $request->state,
+            'zip_code' => $request->pin,
+            'country' => $request->country,
+            'gender' => $request->gender,
+        ]);
+
+        return redirect()->back()->with('success', 'Profile updated successfully');
+    } 
+    catch (\Exception $e) 
+    {
+        return redirect()->back()->with('error', $e->getMessage());
+    }
+}
+
+
+    
 }
