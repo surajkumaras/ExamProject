@@ -5,7 +5,13 @@
 
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStudentModel">
-        Add Student
+        Add Student <i class="fa fa-user-plus"></i>
+    </button>
+    <button type="button" id="export_student" class="btn btn-info">
+        Export Student <i class="fa fa-download"></i>
+    </button>
+    <button type="button" id="import_student" class="btn btn-success" data-toggle="modal" data-target="#importStudentModel">
+        Import Student <i class="fa fa-file-excel-o"></i>
     </button>
     <table class="table" id="myTable">
         <thead>
@@ -177,6 +183,33 @@
         
     </div>
   </div>
+
+    {{-- Useer Import model --}}
+<div class="modal fade" id="importStudentModel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Upload Students Excelsheet</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <form id="importStudent" method="POST" enctype="multipart/form-data">
+                  @csrf
+                  <div class="modal-body">
+                    <label for="file"></label>
+                      <input type="file" name="file" id="file">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-info">Upload</button>
+                  </div>
+                </form>
+            </div>
+        
+    </div>
+  </div>
 <script>
     $(document).ready(function()
     {
@@ -289,6 +322,36 @@
                 }
             })
         })
+
+        //=================== Export Students ==============//
+        $('#export_student').click(function()
+        {
+            window.location.href = "{{ route('userExport') }}";
+        })
+
+        //=================== Import Students ==============//
+        $('#importStudent').on('submit',function(e)
+        {
+            e.preventDefault();
+            let formData = new FormData(this);
+            
+            $.ajax({
+                url: '{{ route('userImport') }}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) 
+                {
+                    alert('File has been uploaded successfully!');
+                },
+                error: function (response) 
+                {
+                    alert('File upload failed!');
+                }
+            });
+        })
+
     })
 </script>
   

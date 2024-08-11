@@ -8,6 +8,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ExcelController;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +98,9 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
     Route::post('/add-students',[AdminController::class,'addStudent'])->name('addStudent');
     Route::post('/edit-students',[AdminController::class,'editStudent'])->name('editStudent');
     Route::post('/delete-students',[AdminController::class,'deleteStudent'])->name('deleteStudent');
+    // Route::get('/student/export',[StudentController::class,'userExport'])->name('userExport');
+    Route::get('/student/export/new',[ExcelController::class,'userExport'])->name('userExport');
+    Route::post('/student/import',[ExcelController::class,'userImport'])->name('userImport');
 
 
     //qna 

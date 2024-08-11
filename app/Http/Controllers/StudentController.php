@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\{Exam,User};
 use App\Models\ExamPayment;
 use Razorpay\Api\Api;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 use Illuminate\Support\Facades\Input;
 use PayPal\Api\Amount;
@@ -234,49 +237,118 @@ class StudentController extends Controller
         }
     }
 
+    //================== User Profile Update ==================//
     public function profileUpdate(Request $request)
-{
-    // return $request->all();
-    try 
     {
-        $user = auth()->user();
-
-        if ($request->hasFile('profileImg')) 
+        // return $request->all();
+        try 
         {
-            $logoPath = 'public/profile/';
-            $oldLogo = $user->profile_image;
+            $user = auth()->user();
 
-            if ($oldLogo && File::exists(public_path($logoPath . $oldLogo))) 
+            if ($request->hasFile('profileImg')) 
             {
-                File::delete(public_path($logoPath . $oldLogo));
+                $logoPath = 'public/profile/';
+                $oldLogo = $user->profile_image;
+
+                if ($oldLogo && File::exists(public_path($logoPath . $oldLogo))) 
+                {
+                    File::delete(public_path($logoPath . $oldLogo));
+                }
+
+                $file = $request->file('profileImg');
+                $filename = time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path($logoPath), $filename);
+                $user->image = $filename;
             }
 
-            $file = $request->file('profileImg');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path($logoPath), $filename);
-            $user->image = $filename;
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone_number['full'],
+                'address' => $request->address,
+                'city' => $request->city,
+                'state' => $request->state,
+                'zip_code' => $request->pin,
+                'country' => $request->country,
+                'gender' => $request->gender,
+            ]);
+
+            return redirect()->back()->with('success', 'Profile updated successfully');
+        } 
+        catch (\Exception $e) 
+        {
+            return redirect()->back()->with('error', $e->getMessage());
         }
-
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone_number['full'],
-            'address' => $request->address,
-            'city' => $request->city,
-            'state' => $request->state,
-            'zip_code' => $request->pin,
-            'country' => $request->country,
-            'gender' => $request->gender,
-        ]);
-
-        return redirect()->back()->with('success', 'Profile updated successfully');
-    } 
-    catch (\Exception $e) 
-    {
-        return redirect()->back()->with('error', $e->getMessage());
     }
-}
 
+    //===================== User Export ==================//
+    public function userExport()
+    {
+        try{
+            $spreadsheet = new Spreadsheet();
+            $activeWorksheet = $spreadsheet->getActiveSheet();
+            $activeWorksheet->setCellValue('A1', 'ID');
+            $activeWorksheet->setCellValue('B1', 'Name');
+            $activeWorksheet->setCellValue('C1', 'Email');
+            $activeWorksheet->setCellValue('D1', 'Gender');
+            $activeWorksheet->setCellValue('E1', 'Phone');
+            $activeWorksheet->setCellValue('F1', 'Address');
+            $activeWorksheet->setCellValue('G1', 'City');
+            $activeWorksheet->setCellValue('H1', 'State');
+            $activeWorksheet->setCellValue('I1', 'Pin Code');
+            $activeWorksheet->setCellValue('J1', 'Country');
 
+            $users = user::all();
+
+            $row = 2;
+            foreach ($users as $user) 
+            {
+                $activeWorksheet->setCellValue('A' . $row, $user->id);
+                $activeWorksheet->setCellValue('B' . $row, $user->name);
+                $activeWorksheet->setCellValue('C' . $row, $user->email ?? 'null');
+                $activeWorksheet->setCellValue('D' . $row, $user->gender ?? 'null');
+                $activeWorksheet->setCellValue('E' . $row, $user->phone ?? 'null');
+                $activeWorksheet->setCellValue('F' . $row, $user->address ?? 'null');
+                $activeWorksheet->setCellValue('G' . $row, $user->city ?? 'null');
+                $activeWorksheet->setCellValue('H' . $row, $user->state ?? 'null');
+                $activeWorksheet->setCellValue('I' . $row, $user->zip_code ?? 'null');
+                $activeWorksheet->setCellValue('J' . $row, $user->country ?? 'null');
+               
+                $row++;
+            }
+            $folderPath = public_path('excel');
+
+            if (!file_exists($folderPath)) 
+            {
+                mkdir($folderPath, 0777, true);
+            }
+            
+            $fileName = 'users_export_' . date('Y-m-d_H-i-s') . '.xlsx';
+            $filePath = $folderPath ."/". $fileName;
+            // Generate a unique file name
+            // $fileName = 'users_export_' . date('Y-m-d_H-i-s') . '.xlsx';
+            //  $filePath = public_path($fileName);
+             $writer = new Xlsx($spreadsheet);
+             
+            // Prepare the response with headers to prompt the download
+            $response = new StreamedResponse(function() use ($writer) 
+            {
+                $writer->save('php://output'); // Output the file directly to the browser
+            });
+
+            $fileName = 'users_export_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+            // Set the headers for the response
+            $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            $response->headers->set('Content-Disposition', 'attachment;filename="' . $fileName . '"');
+            $response->headers->set('Cache-Control', 'max-age=0');
+
+            return $response;
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+    }
     
 }
