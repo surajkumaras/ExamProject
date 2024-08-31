@@ -5,7 +5,7 @@
 
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStudentModel">
-        Add Student <i class="fa fa-user-plus"></i>
+        <i class="fa fa-plus-circle" style="font-size:24px"></i> Student <i class="fa fa-user-plus"></i>
     </button>
     <button type="button" id="export_student" class="btn btn-info">
         Export Student <i class="fa fa-download"></i>
@@ -16,7 +16,7 @@
     <table class="table" id="myTable">
         <thead>
             <tr>
-                <th>#</th>
+                <th>Student ID</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Action</th>
@@ -31,9 +31,9 @@
                         <td>{{ $student->name}}</td>
                         <td>{{ $student->email}}</td>
                         <td>
-                            <button class="btn btn-info editButton" data-id="{{ $student->id}}" data-name="{{ $student->name}}" data-email="{{ $student->email}}" data-toggle="modal" data-target="#editStudentModel">Edit</button>
+                            <button class="btn btn-info editButton" data-id="{{ $student->id}}" data-name="{{ $student->name}}" data-email="{{ $student->email}}" data-toggle="modal" data-target="#editStudentModel"><i class="fa fa-edit"></i></button>
                         
-                            <button class="btn btn-danger deleteButton" data-id="{{ $student->id}}" data-toggle="modal" data-target="#deleteStudentModel">Delete</button>
+                            <button class="btn btn-danger deleteButton" data-id="{{ $student->id}}" data-toggle="modal" data-target="#deleteStudentModel"><i class="fa fa-trash-o"></i></button>
                         </td>
                     </tr>
                 @endforeach

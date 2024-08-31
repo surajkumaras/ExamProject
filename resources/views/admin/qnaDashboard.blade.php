@@ -4,14 +4,19 @@
     <h2 class="mb-4">Q & A</h2>
 
     <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" id="addQnaButton" data-toggle="modal" data-target="#addExamModel">
+    {{-- <button type="button" class="btn btn-primary" id="addQnaButton" data-toggle="modal" data-target="#addExamModel">
         Add Q&A
-    </button>
+    </button> --}}
+    <a href="{{ route('question')}}">
+        <button type="button" class="btn btn-primary">
+            <i class="fa fa-plus-circle" style="font-size:24px"></i> Q&A
+        </button>
+    </a>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#importExamModel">
-        Import Q&A
+        <i class="fa fa-upload" style="font-size:24px"></i> Import Q&A
     </button>
     <button type="button"  id="exportQna" class="btn btn-info">
-        Export Q&A
+        <i class="fa fa-file-excel-o" style="font-size:24px"></i> Export Q&A
     </button>
     <table class="table" id="myTable">
         <thead>
@@ -35,9 +40,9 @@
                             <a href="#" class="showAnsButton" data-id="{{ $question->id}}" data-toggle="modal" data-target="#showAnsModel">See answer</a>
                         </td>
                         <td>
-                            <button class="btn btn-info editButton" data-id="{{ $question->id}}" data-toggle="modal" data-target="#editAnsModel">Edit</button>
+                            <button class="btn btn-info editButton" data-id="{{ $question->id}}" data-toggle="modal" data-target="#editAnsModel"><i class="fa fa-edit"></i></button>
                         
-                            <button class="btn btn-danger deleteButton" data-id="{{ $question->id}}" data-toggle="modal" data-target="#deleteExamModel">Delete</button>
+                            <button class="btn btn-danger deleteButton" data-id="{{ $question->id}}" data-toggle="modal" data-target="#deleteExamModel"><i class="fa fa-trash-o"></i></button>
                         </td>
                     </tr>
                 @endforeach
@@ -234,7 +239,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-                <form id="importQna" method="GET" enctype="multipart/form-data">
+                <form name="importQna" id="importQna" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <input type="file" name="file" id="fileupload"  required accept=".xlsx, .xls, .csv">
@@ -691,6 +696,38 @@
             }
         })
     });
+
+    //=============== Import Qna ===================//
+
+    $('#importQna').submit(function(e) 
+    {
+        e.preventDefault(); 
+
+        var formData = new FormData(this); 
+
+        $.ajax({
+            url: "{{ route('importQna') }}", 
+            type: "POST", 
+            data: formData,
+            processData: false, 
+            contentType: false, 
+            success: function(data) 
+            {
+                if (data.success === true) 
+                {
+                    location.href = data.download_link;
+                }
+                else 
+                {
+                    alert(data.msg);
+                }
+            },
+            error: function(err) {
+                alert("An error occurred: " + err.responseText);
+            }
+        });
+    });
+
 
   });
 </script>

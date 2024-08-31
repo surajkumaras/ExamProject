@@ -22,21 +22,23 @@
                 @if (count($exams) > 0)
                     @php $count = 1; @endphp
                     @foreach ($exams as $exam)
-                        <tr>
-                            <td>{{ $count++ }}</td>
-                            <td>{{ $exam->exam_name }}</td>
-                            <td>{{ $exam->subjects[0]['name']}}</td>
-                            <td>{{ $exam->date }}</td>
-                            <td>{{ $exam->time }} hrs</td>
-                            <td>{{ $exam->pass_marks }}</td>
-                            <td>{{ $exam->attempt }} Time</td>
-                            <td>{{ $exam->attempt_counter }} Time</td>
-                            <td>
-                                {{-- <a href="#" data-code="{{ $exam->enterance_id }}" class="copy"><i class="fa fa-copy"></i></a> --}}
-                                <a href="{{ url('/exam/' . $exam->enterance_id) }}"><i class="badge badge-secondary"></i>click me</a>
+                        @if(count($exam->getQnaExam) > 0)
+                            <tr>
+                                <td>{{ $count++ }}</td>
+                                <td>{{ $exam->exam_name }}</td>
+                                <td>{{ $exam->subjects[0]['name']}}</td>
+                                <td>{{ $exam->date }}</td>
+                                <td>{{ $exam->time }} hrs</td>
+                                <td>{{ $exam->pass_marks }}</td>
+                                <td>{{ $exam->attempt }} Time</td>
+                                <td>{{ $exam->attempt_counter }} Time</td>
+                                <td>
+                                    {{-- <a href="#" data-code="{{ $exam->enterance_id }}" class="copy"><i class="fa fa-copy"></i></a> --}}
+                                    <a href="{{ url('/exam/' . $exam->enterance_id) }}"><i class="badge badge-secondary"></i>click me</a>
 
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+                        @endif
                     @endforeach
                 @else
                     <tr>

@@ -620,38 +620,6 @@ class AdminController extends Controller
         }
      }
 
-     //import qna
-
-     public function importQna(Request $request)
-     {
-        try{
-            if ($request->hasFile('file')) 
-            {
-                $file = $request->file('file');
-                $filePath = $file->getPathname();
-    
-                $spreadsheet = IOFactory::load($filePath);
-                $worksheet = $spreadsheet->getActiveSheet();
-    
-                foreach ($worksheet->getRowIterator() as $row) 
-                {
-                    $rowData = $row->getValues();
-                    \Log::info($rowData);
-                }
-    
-                return response()->json(['success' => true, 'msg' => 'Spreadsheet imported successfully']);
-            } 
-            else 
-            {
-                return response()->json(['success' => false, 'msg' => 'No file uploaded']);
-            }
-        }
-        catch(\Exception $e)
-        {
-            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
-        }
-     }
-
      //export qna
 
      public function exportQna(Request $request)
@@ -667,8 +635,10 @@ class AdminController extends Controller
             $activeWorksheet->setCellValue('F1', 'option_5');
             $activeWorksheet->setCellValue('G1', 'option_6');
             $activeWorksheet->setCellValue('H1', 'is_correct');
-            $activeWorksheet->setCellValue('I1', 'subject');
-            $activeWorksheet->setCellValue('J1', 'category');
+            $activeWorksheet->setCellValue('I1', 'subject_ID');
+            $activeWorksheet->setCellValue('J1', 'category_ID');
+            $activeWorksheet->setCellValue('K1', 'subject');
+            $activeWorksheet->setCellValue('L1', 'category');
 
             $questions = Question::with(['answers','subject','category'])->get();
 
@@ -691,8 +661,10 @@ class AdminController extends Controller
                     }
                     $r++;
                 }
-                $activeWorksheet->setCellValue('I' . $row, $question->subject->name ?? 'null');
-                $activeWorksheet->setCellValue('J' . $row, $question->category->name?? 'null');
+                $activeWorksheet->setCellValue('I' . $row, $question->subject_id ?? 'null');
+                $activeWorksheet->setCellValue('J' . $row, $question->category_id ?? 'null');
+                $activeWorksheet->setCellValue('K' . $row, $question->subject->name ?? 'null');
+                $activeWorksheet->setCellValue('L' . $row, $question->category->name?? 'null');
                
                 $row++;
             }

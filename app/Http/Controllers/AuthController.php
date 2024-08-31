@@ -189,7 +189,14 @@ class AuthController extends Controller
 
     public function loadDashboard()
     {
-       $exams =  Exam::where('plan',0)->with('subjects')->orderBy('date','DESC')->get();
+        $exams = Exam::where('plan', 0)
+        ->with(['subjects', 'getQnaExam'])
+        ->withCount('getQnaExam')
+        ->orderBy('date', 'DESC')
+        ->get();
+    
+    // $totalQna = $exams->sum('get_qna_exam_count');
+    
         // return $exams;
         return view('student.dashboard',['exams'=>$exams]);
     }

@@ -19,6 +19,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/css/intlTelInput.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/intlTelInput.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.3/js/dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <style>
       .multiselect-dropdown{
         width: 100% ! important;
@@ -58,7 +59,7 @@
             <a href="/subject"><span class="fa fa-book mr-3"></span> Subjects</a>
           </li>
           <li>
-            <a href="/category"><span class="fa fa-book mr-3"></span> Topic</a>
+            <a href="/category"><span class="fa fa-cubes mr-3"></span> Category</a>
           </li>
           <li>
             <a href="/admin/exams"><span class="fa fa-tasks mr-3"></span> Exams</a>
@@ -70,7 +71,7 @@
             <a href="/admin/qna-ans"><span class="fa fa-question-circle mr-3"></span> Q & A</a>
           </li>
           <li>
-            <a href="/admin/students"><span class="fa fa-graduation-cap mr-3"></span> Students</a>
+            <a href="/admin/students"><span class="fa fa-group mr-3"></span> Students</a>
           </li>
           <li>
             <a href="/admin/review-exams"><span class="fa fa-file-text-o mr-3"></span> Exam Review</a>

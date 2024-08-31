@@ -5,16 +5,15 @@
 
     <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSubjectModel">
-    Add subject
+  <i class="fa fa-plus-circle"></i> subject
   </button>
   {{-- Table --}}
   <table class="table" id="myTable">
     <thead>
       <tr>
-        <th scope="col">#</th>
+        <th scope="col">Subject ID</th>
         <th scope="col">Subject</th>
-        <th scope="col">Edit</th>
-        <th scope="col">Delete</th>
+        <th scope="col">Action</th>
       </tr>
     </thead>
     <tbody>
@@ -24,10 +23,9 @@
             <td>{{ $subject->id}}</td>
             <td>{{ $subject->name}}</td>
             <td>
-              <button data-toggle="modal" data-target="#editSubjectModel" class="btn btn-info editButton" data-id="{{ $subject->id}}" data-subject="{{ $subject->name}}">Edit</button>
-            </td>
-            <td>
-              <button class="btn btn-danger deleteButton" data-toggle="modal" data-target="#deleteSubjectModel" data-id="{{ $subject->id}}">Delete</button>
+              <button data-toggle="modal" data-target="#editSubjectModel" class="btn btn-info editButton" data-id="{{ $subject->id}}" data-subject="{{ $subject->name}}"><i class="fa fa-edit"></i></button>
+            
+              <button class="btn btn-danger deleteButton" data-toggle="modal" data-target="#deleteSubjectModel" data-id="{{ $subject->id}}"><i class="fa fa-trash-o"></i></button>
             </td>
           </tr>
         @endforeach

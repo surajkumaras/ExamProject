@@ -5,16 +5,16 @@
 
     <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary categories" data-toggle="modal" data-target="#addSubjectModel">
-    Add Category
+  <i class="fa fa-plus-circle"></i> Category
   </button>
   {{-- Table --}}
   <table class="table" id="myTable">
     <thead>
       <tr>
-        <th scope="col">#</th>
+        <th scope="col">Category ID</th>
         <th scope="col">Category</th>
-        <th scope="col">Edit</th>
-        <th scope="col">Delete</th>
+        <th scope="col">Subject Name</th>
+        <th scope="col">Action</th>
       </tr>
     </thead>
     <tbody>
@@ -23,11 +23,10 @@
           <tr>
             <td>{{ $category->id}}</td>
             <td>{{ $category->name}}</td>
+            <td>{{ $category->subject->name}}</td>
             <td>
-              <button data-toggle="modal" data-target="#editCategoryModel" class="btn btn-info editButton" data-id="{{ $category->id}}" data-subject="{{ $category->name}}">Edit</button>
-            </td>
-            <td>
-              <button class="btn btn-danger deleteButton" data-toggle="modal" data-target="#deleteSubjectModel" data-id="{{ $category->id}}">Delete</button>
+              <button data-toggle="modal" data-target="#editCategoryModel" class="btn btn-info editButton" data-id="{{ $category->id}}" data-subject="{{ $category->name}}"><i class="fa fa-edit"></i></button>
+              <button class="btn btn-danger deleteButton" data-toggle="modal" data-target="#deleteSubjectModel" data-id="{{ $category->id}}"><i class="fa fa-trash-o"></i></button>
             </td>
           </tr>
         @endforeach

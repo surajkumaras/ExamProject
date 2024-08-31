@@ -31,7 +31,8 @@ class User extends Authenticatable
         'password',
         'social_id',
         'social_type',
-        'is_admin'
+        'is_admin',
+        'device_token'
     ];
 
     /**

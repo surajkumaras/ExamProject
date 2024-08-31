@@ -5,7 +5,7 @@
 
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addExamModel">
-        Add exam
+        <i class="fa fa-plus-circle"></i> exam
     </button>
 
     {{-- Table --}}
@@ -23,8 +23,7 @@
                 <th>Price</th>
                 <th>Add Questions</th>
                 <th>Show Questions</th>
-                <th>Edit</th>
-                <th>Delete</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -62,11 +61,8 @@
                             <a href="" class="seeQuestion" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#seeQnaModel">Show Question</a>
                         </td>
                         <td>
-                            <button class="btn btn-info editButton" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#editExamModel">Edit</button>
-                        </td>
-                        
-                        <td>
-                            <button class="btn btn-danger deleteButton" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#deleteExamModel">Delete</button>
+                            <button class="btn btn-info editButton" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#editExamModel"><i class="fa fa-edit"></i></button>
+                            <button class="btn btn-danger deleteButton" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#deleteExamModel"><i class="fa fa-trash-o"></i></button>
                         </td>
                     </tr>
                 @endforeach

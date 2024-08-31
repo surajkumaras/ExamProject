@@ -12,7 +12,8 @@ class CategoryController extends Controller
     //Category show
     public function categoryDashboard()
     {
-        $categories = Category::all();
+        $categories = Category::with('subject')->get();
+        // return $categories;
         return view('admin.category',compact('categories'));
     }
 

@@ -7,8 +7,10 @@ use App\Http\Controllers\ExamController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\QuestionController;
+use App\Http\Controllers\Admin\QuestionController as AdminQuestionController;;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ExcelController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,11 +62,14 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
 
     //subjects
     Route::get('/subject',[AdminController::class,'subject'])->name('subject');
+    // Route::get('/show-subject',[AdminController::class,'showSubjects'])->name('showSubjects');
     Route::post('/add-subject',[AdminController::class,'addSubject'])->name('add-subject');
     Route::post('/edit-subject',[AdminController::class,'editSubject'])->name('edit-subject');
     Route::post('/delete-subject',[AdminController::class,'deleteSubject'])->name('delete-subject');
 
     //subject-category
+    // Route::get('/category-new/{id}',[CategoryController::class,'category'])->name('category');
+
     Route::get('/category',[CategoryController::class,'categoryDashboard'])->name('categoryDashboard');
     Route::post('/add-category',[CategoryController::class,'addCategory'])->name('add-category');
     Route::get('/category/subject/{id}',[CategoryController::class,'catgorySubject'])->name('catgorySubject');
@@ -86,10 +91,15 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
     Route::get('/delete-ans',[AdminController::class,'deleteAns'])->name('deleteAns');
     Route::post('/update-qna-ans',[AdminController::class,'updateQna'])->name('updateQna');
     Route::post('/delete-qna-ans',[AdminController::class,'deleteQna'])->name('deleteQna');
-    Route::get('/import-qna-ans',[AdminController::class,'importQna'])->name('importQna');
+    Route::post('/import-qna-ans',[ExcelController::class,'importQna'])->name('importQna');
     Route::get('/export-qna-ans',[AdminController::class,'exportQna'])->name('exportQna');
     Route::get('/subject/list',[AdminController::class,'getSubject'])->name('getSubject');
     Route::get('/category/list/{id}',[AdminController::class,'getCategory'])->name('getCategory');
+
+            /* New Code for question and answers*/
+    Route::get('/question/add',[AdminQuestionController::class,'index'])->name('question');
+    Route::get('admin/get-categories', [AdminQuestionController::class, 'getCategories'])->name('getCategories');
+    Route::post('/question/add',[AdminQuestionController::class,'store'])->name('question.store');
 
     
 
@@ -160,3 +170,9 @@ Route::group(['middleware'=>['web','checkStudent']],function()
     Route::get('/payment-status/{examid}',[StudentController::class,'paymentStatus'])->name('paymentStatus');
 
 });
+
+//Notification
+    Route::get('/notification',[NotificationController::class,'index'])->name('notification');
+    Route::post('/store-token', [NotificationController::class, 'updateDeviceToken'])->name('store.token');
+    Route::post('/send-web-notification', [NotificationController::class, 'sendNotification'])->name('send.web-notification');
+
