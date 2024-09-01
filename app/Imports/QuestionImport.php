@@ -4,8 +4,9 @@ namespace App\Imports;
 
 use App\Models\{Question,Answer};
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class QuestionImport implements ToModel
+class QuestionImport implements ToModel, WithHeadingRow
 {
     /**
     * @param array $row
@@ -14,24 +15,29 @@ class QuestionImport implements ToModel
     */
     public function model(array $row)
     {
-        // Create a new question
-        $question = Question::create([
-            'question'    => $row[0], // Column A in Excel
-            'subject_id'  => $row[8], // Column I in Excel
-            'category_id' => $row[9], // Column J in Excel
-        ]);
 
-        // Loop through options and create corresponding answers
+        $question = new Question();
+        $question->question    = $row['question'];    
+        $question->subject_id  = $row['subject_id'];  
+        $question->category_id = $row['category_id']; 
+        $question->save();
+
         for ($i = 1; $i <= 6; $i++) 
         {
-            if (!empty($row[$i])) 
+            $answerColumn = 'option_' . $i; 
+
+            if (!empty($row[$answerColumn])) 
             {
-                Answer::create([
-                    'question_id' => $question->id,   // Assign the newly created question's ID
-                    'answer'      => $row[$i],        // Columns B to G in Excel
-                    'is_correct'  => ($i == $row[7]) ? 1 : 0 // Column H in Excel
-                ]);
+                \Log::info("OpeionValue:".$answerColumn.":".$row[$answerColumn]);
+
+                $answer = new Answer();
+                $answer->question_id = $question->id;   
+                $answer->answer      = $row[$answerColumn]; 
+                $answer->is_correct  = ($i == $row['is_correct']) ? 1 : 0; 
+                $answer->save();
             }
+            
         }
+        return $question;
     }
 }

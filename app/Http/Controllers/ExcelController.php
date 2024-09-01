@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Exports\UsersExport;
+use App\Exports\{UsersExport, QuestionExport};
 use App\Imports\{UsersImport,QuestionImport};
 use Maatwebsite\Excel\Facades\Excel;
+use ZipArchive;
 
 class ExcelController extends Controller
 {
@@ -19,7 +20,6 @@ class ExcelController extends Controller
     //========= User Import ===========//
     public function userImport(Request $request)
     {
-        return $request->all();
         Excel::import(new UsersImport, $request->file('file'));
         return redirect()->back()->with('success', 'Data Imported Successfully.');
     }
@@ -44,5 +44,18 @@ class ExcelController extends Controller
        {
            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
        }
+    }
+
+    //================= Export qna ================//
+    public function exportQna()
+    {
+        try
+        {
+            return Excel::download(new QuestionExport, 'questions_' . date('Y-m-d_H-i-s') . '.xlsx');
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
     }
 }

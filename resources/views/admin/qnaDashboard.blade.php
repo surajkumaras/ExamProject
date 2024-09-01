@@ -676,25 +676,7 @@
 
     $('#exportQna').click(function()
     {
-        $.ajax({
-            url:"{{ route('exportQna')}}",
-            type:"GET",
-            success:function(data)
-            {
-                if(data.success == true)
-                {
-                    location.href = data.download_link;
-                }
-                else 
-                {
-                    alert(data.msg);
-                }
-            },
-            error:function(err)
-            {
-                alert(err)
-            }
-        })
+        window.location.href = "{{ route('exportQna') }}";
     });
 
     //=============== Import Qna ===================//

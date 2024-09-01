@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\QuestionController as AdminQuestionController;;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\LogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,8 @@ use App\Http\Controllers\NotificationController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+Route::get('/logs', [LogController::class, 'showLogs'])->name('logs');
+Route::post('/logs/clear', [LogController::class, 'clearLogs'])->name('logs.clear');
 
 Route::get('/register',[AuthController::class,'loadRegister'] )->name('register');
 Route::post('/register',[AuthController::class,'studentRegister'] )->name('studentRegister');
@@ -92,7 +95,7 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
     Route::post('/update-qna-ans',[AdminController::class,'updateQna'])->name('updateQna');
     Route::post('/delete-qna-ans',[AdminController::class,'deleteQna'])->name('deleteQna');
     Route::post('/import-qna-ans',[ExcelController::class,'importQna'])->name('importQna');
-    Route::get('/export-qna-ans',[AdminController::class,'exportQna'])->name('exportQna');
+    Route::get('/export-qna-ans',[ExcelController::class,'exportQna'])->name('exportQna');
     Route::get('/subject/list',[AdminController::class,'getSubject'])->name('getSubject');
     Route::get('/category/list/{id}',[AdminController::class,'getCategory'])->name('getCategory');
 
