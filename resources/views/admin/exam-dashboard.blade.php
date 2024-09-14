@@ -1,74 +1,76 @@
 @extends('layout.admin-layout')
 
 @section('space-work')
-    <h2 class="mb-4">Exams</h2>
+    <h2 class="mb-4 header">Exams</h2>
 
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addExamModel">
         <i class="fa fa-plus-circle"></i> exam
     </button>
 
+    <div class="container">
     {{-- Table --}}
-    <table class="table" id="myTable">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Exam Name</th>
-                <th>Subject</th>
-                <th>Total Questions</th>
-                <th>Data</th>
-                <th>Time</th>
-                <th>Attempts</th>
-                <th>Plan</th>
-                <th>Price</th>
-                <th>Add Questions</th>
-                <th>Show Questions</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (count($exams) > 0)
-                @foreach ($exams as $exam)
-                    <tr>
-                        <td>{{ $exam->id}}</td>
-                        <td>{{ $exam->exam_name }}</td>
-                        <td>{{ $exam->subjects[0]['name'] }}</td>
-                        <td>{{$exam->getQnaExam->count()}}</td>
-                        <td>{{ $exam->date }}</td>
-                        <td>{{ $exam->time }} Hrs</td>
-                        <td>{{ $exam->attempt }}</td>
-                        <td>
-                            @if($exam->plan !== 0)
-                                <span style="color:red">PAID</span>
-                            @else
-                                <span style="color:green">FREE</span>
-                            @endif
-                        </td>
-                        <td>
-                            @if($exam->price != null)
-                                @php  $planPrice = json_decode($exam->price); @endphp
-                                @foreach ($planPrice as $key=>$price )
-                                    <span>{{$key}} {{$price}},</span>
-                                @endforeach
-                            @else
-                                <span style="color:green">Not price</span>
-                            @endif
-                        </td>
-                        <td>
-                            <a href="" class="addQuestion" data-id="{{ $exam->id}}" data-cat-id="{{ $exam->subject_id}}" data-toggle="modal" data-target="#addQnaModel">Add Question</a>
-                        </td>
-                        <td>
-                            <a href="" class="seeQuestion" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#seeQnaModel">Show Question</a>
-                        </td>
-                        <td>
-                            <button class="btn btn-info editButton" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#editExamModel"><i class="fa fa-edit"></i></button>
-                            <button class="btn btn-danger deleteButton" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#deleteExamModel"><i class="fa fa-trash-o"></i></button>
-                        </td>
-                    </tr>
-                @endforeach
-            @endif
-        </tbody>
-    </table>
+        <table class="table" id="myTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Exam Name</th>
+                    <th>Subject</th>
+                    <th>Total Questions</th>
+                    <th>Data</th>
+                    <th>Time</th>
+                    <th>Attempts</th>
+                    <th>Plan</th>
+                    <th>Price</th>
+                    <th>Add Questions</th>
+                    <th>Show Questions</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (count($exams) > 0)
+                    @foreach ($exams as $exam)
+                        <tr>
+                            <td>{{ $exam->id}}</td>
+                            <td>{{ $exam->exam_name }}</td>
+                            <td>{{ $exam->subjects[0]['name'] }}</td>
+                            <td>{{$exam->getQnaExam->count()}}</td>
+                            <td>{{ $exam->date }}</td>
+                            <td>{{ $exam->time }} Hrs</td>
+                            <td>{{ $exam->attempt }}</td>
+                            <td>
+                                @if($exam->plan !== 0)
+                                    <span style="color:red">PAID</span>
+                                @else
+                                    <span style="color:green">FREE</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($exam->price != null)
+                                    @php  $planPrice = json_decode($exam->price); @endphp
+                                    @foreach ($planPrice as $key=>$price )
+                                        <span>{{$key}} {{$price}},</span>
+                                    @endforeach
+                                @else
+                                    <span style="color:green">Not price</span>
+                                @endif
+                            </td>
+                            <td>
+                                <a href="" class="addQuestion" data-id="{{ $exam->id}}" data-cat-id="{{ $exam->subject_id}}" data-toggle="modal" data-target="#addQnaModel">Add Question</a>
+                            </td>
+                            <td>
+                                <a href="" class="seeQuestion" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#seeQnaModel">Show Question</a>
+                            </td>
+                            <td>
+                                <button class="btn btn-info editButton" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#editExamModel"><i class="fa fa-edit"></i></button>
+                                <button class="btn btn-danger deleteButton" data-id="{{ $exam->id}}" data-toggle="modal" data-target="#deleteExamModel"><i class="fa fa-trash-o"></i></button>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
+            </tbody>
+        </table>
+    </div>
     <!-- Modal -->
   <div class="modal fade" id="addExamModel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">

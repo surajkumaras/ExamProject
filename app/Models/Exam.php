@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\examsAttempt;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Exam extends Model
 {
@@ -59,4 +60,10 @@ class Exam extends Model
         return $this->hasMany(QnaExam::class,'exam_id','id');
     }
 
+    protected function exam_name(): Attribute
+    {
+        return Attribute::make(
+            set: fn($value) => ucfirst($value)
+        );
+    }
 }

@@ -59,8 +59,8 @@ h1 {
 pre {
     white-space: pre-wrap; /* Allows for wrapping */
     word-wrap: break-word; /* Break long words */
-    background: #333;
-    color: #f4f4f4;
+    background: #f5f2f2;
+    color: #141313;
     padding: 15px;
     border-radius: 3px;
     overflow-x: auto; /* Add horizontal scroll if needed */

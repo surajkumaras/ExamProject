@@ -1,7 +1,7 @@
 @extends('layout.admin-layout')
 
 @section('space-work')
-    <h2 class="mb-4">Student</h2>
+    <h2 class="mb-4 header">Student</h2>
 
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStudentModel">
@@ -13,39 +13,40 @@
     <button type="button" id="import_student" class="btn btn-success" data-toggle="modal" data-target="#importStudentModel">
         Import Student <i class="fa fa-file-excel-o"></i>
     </button>
-    <table class="table" id="myTable">
-        <thead>
-            <tr>
-                <th>Student ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Action</th>
+    <div class="container">
+        <table class="table" id="myTable">
+            <thead>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Action</th>
 
-            </tr>
-        </thead>
-        <tbody>
-            @if (!empty($students))
-                @foreach ($students as $student)
-                    <tr>
-                        <td>{{ $student->id}}</td>
-                        <td>{{ $student->name}}</td>
-                        <td>{{ $student->email}}</td>
-                        <td>
-                            <button class="btn btn-info editButton" data-id="{{ $student->id}}" data-name="{{ $student->name}}" data-email="{{ $student->email}}" data-toggle="modal" data-target="#editStudentModel"><i class="fa fa-edit"></i></button>
-                        
-                            <button class="btn btn-danger deleteButton" data-id="{{ $student->id}}" data-toggle="modal" data-target="#deleteStudentModel"><i class="fa fa-trash-o"></i></button>
-                        </td>
-                    </tr>
-                @endforeach
-            @else
-                    <tr>
-                        <td colspan="3">Student not fount!</td>
-                    </tr>
-            @endif
-           
-        </tbody>
-    </table>
-
+                </tr>
+            </thead>
+            <tbody>
+                @if (!empty($students))
+                    @foreach ($students as $student)
+                        <tr>
+                            <td>{{ $student->id}}</td>
+                            <td>{{ $student->name}}</td>
+                            <td>{{ $student->email}}</td>
+                            <td>
+                                <button class="btn btn-info editButton" data-id="{{ $student->id}}" data-name="{{ $student->name}}" data-email="{{ $student->email}}" data-toggle="modal" data-target="#editStudentModel"><i class="fa fa-edit"></i></button>
+                            
+                                <button class="btn btn-danger deleteButton" data-id="{{ $student->id}}" data-toggle="modal" data-target="#deleteStudentModel"><i class="fa fa-trash-o"></i></button>
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                        <tr>
+                            <td colspan="3">Student not fount!</td>
+                        </tr>
+                @endif
+            
+            </tbody>
+        </table>
+    </div>
     {{--Add modal --}}
   <div class="modal fade" id="addStudentModel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">

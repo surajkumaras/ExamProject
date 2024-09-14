@@ -131,7 +131,7 @@
     @endif --}}
     
    
-    <form action="" method="post" onsubmit="return validateForm()">
+    <form action="{{route('studentRegister')}}" method="post" onsubmit="return validateForm()">
         @csrf
 		<h2>Create an Account</h2>
 		<p class="hint-text">Sign up with your social media account or email address</p>

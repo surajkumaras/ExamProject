@@ -1,46 +1,46 @@
 @extends('layout.admin-layout')
 
 @section('space-work')
-    <h2 class="mb-4">Marks</h2>
+    <h2 class="mb-4 header">Marks</h2>
 
-    
-    <table class="table" id="myTable">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Exam Name</th>
-                <th>Marks/Q</th>
-                <th>Total marks</th>
-                <th>Passing marks</th>
-                <th>Edit</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (!empty($exams))
-            @php $i= 1; @endphp
-                @foreach ($exams as $exam)
-                    <tr>
-                        <td>{{ $i++}}</td>
-                        <td>{{ $exam->exam_name}}</td>
-                        <td>{{ $exam->marks}}</td>
-                        <td>{{ count($exam->getQnaExam) * $exam->marks }}</td>
-                        <td>{{ $exam->pass_marks}}</td>
-                        <td>
-                            <button class="btn btn-info editMarks" data-id="{{$exam->id}}" data-pass-marks="{{ $exam->pass_marks}}" data-name="" data-marks="{{$exam->marks}}" data-totalq="{{ count($exam->getQnaExam)}}" data-toggle="modal" data-target="#editMarksModal">Edit</button>
-                        
-                            <button class="btn btn-danger deleteButton" data-id="" data-toggle="modal" data-target="#deleteStudentModel">Delete</button>
-                        </td>
-                    </tr>
-                @endforeach
-            @else
-                    <tr>
-                        <td colspan="5">Exam not fount!</td>
-                    </tr>
-            @endif
-           
-        </tbody>
-    </table>
-    
+    <div class="container">
+        <table class="table" id="myTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Exam Name</th>
+                    <th>Marks/Q</th>
+                    <th>Total marks</th>
+                    <th>Passing marks</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!empty($exams))
+                @php $i= 1; @endphp
+                    @foreach ($exams as $exam)
+                        <tr>
+                            <td>{{ $i++}}</td>
+                            <td>{{ $exam->exam_name}}</td>
+                            <td>{{ $exam->marks}}</td>
+                            <td>{{ count($exam->getQnaExam) * $exam->marks }}</td>
+                            <td>{{ $exam->pass_marks}}</td>
+                            <td>
+                                <button class="btn btn-info editMarks" data-id="{{$exam->id}}" data-pass-marks="{{ $exam->pass_marks}}" data-name="" data-marks="{{$exam->marks}}" data-totalq="{{ count($exam->getQnaExam)}}" data-toggle="modal" data-target="#editMarksModal">Edit</button>
+                            
+                                <button class="btn btn-danger deleteButton" data-id="" data-toggle="modal" data-target="#deleteStudentModel">Delete</button>
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                        <tr>
+                            <td colspan="5">Exam not fount!</td>
+                        </tr>
+                @endif
+            
+            </tbody>
+        </table>
+    </div>
     {{-- Edit modal --}}
     <div class="modal fade" id="editMarksModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">

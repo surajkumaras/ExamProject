@@ -1,6 +1,6 @@
 @extends('layout.admin-layout')
 @section('space-work')
-    <h1>Setting</h1>
+    <h1 class="mb-4 header">Setting</h1>
 
     <!-- Success Message -->
     @if (session('success'))
@@ -8,7 +8,7 @@
           {{ session('success') }}
       </div>
     @endif
-
+    <div class="container">
     <form class="needs-validation" action="{{route('updateSetting')}}" method="post" enctype="multipart/form-data" >
         @csrf
         <div class="form-row">
@@ -101,7 +101,7 @@
        
         <button class="btn btn-primary" type="submit">Save Changes</button>
       </form>
-      
+    </div>  
       <script>
       // Example starter JavaScript for disabling form submissions if there are invalid fields
     //   (function() 
