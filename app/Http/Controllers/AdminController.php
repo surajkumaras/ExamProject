@@ -12,10 +12,15 @@ use App\Models\Question;
 use App\Models\Answer;
 use App\Models\QnaExam;
 use App\Models\User;
+use App\Models\Category;
 use Illuminate\Support\Facades\Hash;
 use Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
+use App\Jobs\SendMailJob;
+// use PhpOffice\PhpSpreadsheet\Spreadsheet;
+// use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -66,7 +71,8 @@ class AdminController extends Controller
     public function examDassboard()
     {
         $subjects = Subject::all();
-        $exam = Exam::with('subjects')->get();
+        $exam = Exam::with(['subjects','getQnaExam'])->get();
+        // return $exam;
         return view('admin.exam-dashboard', ['subjects'=>$subjects, 'exams'=>$exam]);
        
     }
@@ -74,16 +80,26 @@ class AdminController extends Controller
     //add exam
 
     public function addExam(Request $request)
-    {
+    {   
         try{
+            $plan = $request->plan;
+            $price = null;
+            if(isset($request->inr) && isset($request->usd))
+            {
+                $price = json_encode(['INR'=>$request->inr, 'USD'=>$request->usd]);
+            }
+
             $unique_id = uniqid('exam');
-            Exam::insert([
+            Exam::create([
                 'exam_name' => $request->exam_name,
                 'subject_id' => $request->subject_id,
                 'date' => $request->date,
                 'time' => $request->time,
                 'attempt' => $request->attempt,
                 'enterance_id'=> $unique_id,
+                'plan' => $plan,
+                'price' => $price,
+                'marks' => $request->marks
             ]);
             return response()->json(['success'=>true, 'msg'=>'Exam added successfully!']);
         }
@@ -99,7 +115,7 @@ class AdminController extends Controller
     public function getExamDetail($id)
     {
         try{
-            $exam = Exam::where('id', $id)->get();
+            $exam = Exam::with('getQnaExam')->where('id', $id)->get();
             return response()->json(['success'=>true, 'data'=>$exam]);
         }
         catch(\Exception $e)
@@ -110,14 +126,25 @@ class AdminController extends Controller
 
     //update exam
      public function updateExam(Request $request)
-     {
+     {  
         try{
+            $price = null;
+            if(isset($request->inr) && isset($request->usd))
+            {
+                $price = json_encode(['INR'=>$request->inr, 'USD'=>$request->usd]);
+            }
+
             $exam = Exam::find($request->exam_id);
-            $exam->exam_name = $request->exam_name;
-            $exam->subject_id = $request->subject_id;
-            $exam->date = $request->date;
-            $exam->time = $request->time;
-            $exam->attempt = $request->attempt;
+            
+            $exam->exam_name     = $request->exam_name;
+            $exam->subject_id    = $request->subject_id;
+            $exam->date          = $request->date;
+            $exam->time          = $request->time;
+            $exam->attempt       = $request->attempt;
+            $exam->marks         = $request->marks;
+            $exam->pass_marks    = $request->pass_marks;
+            $exam->plan          = $request->plan;
+            $exam->price         = $price;
             $exam->save();
             return response()->json(['success'=>true, 'msg'=>'Exam updated successfully!']);
         }
@@ -145,40 +172,96 @@ class AdminController extends Controller
      public function qnaDashboard()
      {
        $questions =  Question::with('answers')->get();
+    //    return $questions;
         return view('admin.qnaDashboard',compact('questions'));
      }
 
      //add question
      public function addQna(Request $request)
-     {
-        try{
-           $questionId =  Question::insertGetId([
-                'question'=>$request->question,
-                'explaination'=>$request->explaination??null,
+    {
+        DB::beginTransaction();
+        try {
+            $now = now();
+            
+            // Upload question related image if available
+            $questionImageName = null;
+            if ($request->hasFile('que_file')) 
+            {  
+                $File = $request->file('que_file');
+                $questionFileName = $File->getClientOriginalName();
+                // $questionImagePath = $uploadedQuestionFile->store('public/images/que_images');
+                $File-> move(public_path('public/image/que_images'), $questionFileName);
+                // $questionImageName = basename($uploadedQuestionFile);
+            }
+
+            // Insert the question into the database
+            $questionId = Question::insertGetId([
+                'question' => $request->question,
+                'image' => $questionFileName ?? '',
+                'explaination' => $request->explaination ?? null,
+                'subject_id' => $request->subject,
+                'category_id' => $request->category,
+                'created_at' => $now,
+                'updated_at' => $now,
             ]);
 
+
+            //------------------ New Code -----------------//
+           
             foreach($request->answers as $answer)
             {
                 Answer::insert([
-                    'question_id'=>$questionId,
-                    'answer'=>$answer,
-                    'is_correct'=>$request->is_correct == $answer ? 1 : 0,
+                    'question_id' => $questionId,
+                    'answer' => $answer,
+                    'is_correct' => $request->is_correct == $answer ? 1 : 0,
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ]);
             }
+
+            if($request->hasFile('ans_images'))
+            {
+                foreach($request->file('ans_images') as $key => $value)
+                {
+                    $path = $request->is_correct;
+                    if (preg_match('/[^\\\\]+$/', $path, $matches)) 
+                    {
+                        $lastWordWithExtension = $matches[0];
+                    } 
+
+                    $uploadedAnswerFile = $value;
+                    $answerFileName = $uploadedAnswerFile->getClientOriginalName();
+                    // $answerImagePath = $uploadedAnswerFile->store('public/images/ans_images');
+                    $uploadedAnswerFile-> move(public_path('public/image/ans_images'), $answerFileName);
+                    Answer::insert([
+                        'question_id' => $questionId,
+                        'answer' => $answerFileName,
+                        'is_correct' => $lastWordWithExtension == $answerFileName ?1:0, 
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ]);
+                }
+            }
+            DB::commit();
             return response()->json(['success'=>true, 'msg'=>'Question added successfully!']);
         }
         catch(\Exception $e)
         {
+            DB::rollBack();
             return response()->json(['success'=>false, 'msg'=>$e->getMessage()]);
         }
-     }
+    }
 
      //Edit qna-ans
 
      public function getQnaDetails(Request $request)
      {
-        $qna = Question::where('id',$request->qid)->with('answers')->get();
-        return response()->json(['success'=>true, 'data'=>$qna]);
+        $qna = Question::with(['subject','category'])->where('id',$request->qid)->with('answers')->get();
+        $subjects = Subject::all();
+        $categories = Category::all();
+        
+        return response()->json(['success'=>true, 'data'=>$qna, 'subjects'=>$subjects, 'categories'=>$categories]);
+       
      }
 
      //delete ans
@@ -193,11 +276,13 @@ class AdminController extends Controller
 
      public function updateQna(Request $request)
      {
-         try{
+         try{   //return $request->all();
             Question::where('id',$request->question_id)
             ->update([
                 'question'=>$request->question,
                 'explaination' =>$request->explaination ?? null,
+                'category_id' =>$request->category,
+                'subject_id' =>$request->editSubject
             ]);
 
             //old answer 
@@ -237,7 +322,6 @@ class AdminController extends Controller
                 }
             }
 
-            
             return response()->json(['success'=>true, 'msg'=>'Question updated successfully!']);
 
         }catch(\Exception $e)
@@ -301,25 +385,28 @@ class AdminController extends Controller
      //update 
 
      public function editStudent(Request $request)
-     {
+     { 
         try
         {
-// return $request->all();
+
             $user = User::find($request->id);
             $user->name = $request->name;
             $user->email = $request->email;
             $user->save();
 
             $url = URL::to('/');
-
             $data['url'] = $url;
             $data['name'] = $request->name;
             $data['email'] = $request->email;
             $data['title'] = "Update Student Profile on Online Examination System";
 
-            Mail::send('updateProfileMail',['data'=>$data],function($message) use($data){
-                $message->to($data['email'])->subject($data['title']);
-            });
+            // Mail::send('updateProfileMail',['data'=>$data],function($message) use($data){
+            //     $message->to($data['email'])->subject($data['title']);
+            // });
+
+            //=========JOB MAIL USE ==========//
+
+            dispatch(new SendMailJob($data));
 
             return response()->json(['success'=>true, 'msg'=>'Student updated successfully!']);
         }
@@ -353,7 +440,7 @@ class AdminController extends Controller
      {
         try
         {
-            $questions = Question::all();
+            $questions = Question::where('subject_id','=',$request->sub_id)->get();
 
             if(count($questions) > 0)
             {
@@ -436,6 +523,7 @@ class AdminController extends Controller
      public function loadMarks()
      {
         $exams = Exam::with('getQnaExam')->get();
+        // return $exams;
         return view('admin.marksDashboard',compact('exams'));
      }
 
@@ -469,6 +557,7 @@ class AdminController extends Controller
      { 
         try{
             $attemptData = examsAnswer::where('attempt_id',$request->attempt_id)->with(['question','answers'])->get();
+            // return $attemptData;
             return response()->json(['success'=>true,'data'=>$attemptData]);
         }
         catch(\Exception $e)
@@ -483,8 +572,8 @@ class AdminController extends Controller
         try{
             $examData = examsAttempt::where('id',$request->attempt_id)->with(['user','exam'])->get();
             $marks = $examData[0]['exam']['marks'];
-// return $marks;
             $attemptData = examsAnswer::where('attempt_id',$request->attempt_id)->with('answers')->get();
+            $totalQue = 0;
             $totalMarks = 0;
             if(count($attemptData) > 0)
             {
@@ -494,9 +583,8 @@ class AdminController extends Controller
                     {
                         $totalMarks += $marks;
                     }
-
-
                 }
+                $totalQue = count($attemptData);
             }
             examsAttempt::where('id',$request->attempt_id)->update(['status'=>1,'marks'=>$totalMarks]);
 
@@ -508,22 +596,149 @@ class AdminController extends Controller
             $data['email'] = $examData[0]['user']['email'];
             $data['title'] = $examData[0]['exam']['exam_name'].'Result';
             $data['exam_name'] = $examData[0]['exam']['exam_name'];
-            $data['obt_marks'] = $examData[0]['marks'];
-            $data['max_marks'] = $examData[0]['marks'];
+            $data['obt_marks'] = $totalMarks;
+            $data['max_marks'] = $totalQue * $examData[0]['exam']['marks'];;
             $data['pass_marks'] = $examData[0]['exam']['pass_marks'];
             $data['per_qna_marks'] = $examData[0]['exam']['marks'];
-            $data['date'] = $examData[0]['created_at'];
+            $data['date'] = $examData[0]['updated_at'];
             $data['exam_id'] = $examData[0]['exam']['id'];
-// return $data;
+//  return $data;
             // Mail::send('result-mail',['data'=>$data], function($message) use($data){
             //     $message->to($data['email'])->subject($data['title']);
             // });
             //=========== NEW SEND MAIL VIEW FILE ==========//
-            Mail::send('mail.result',['data'=>$data], function($message) use($data){
-                $message->to($data['email'])->subject($data['title']);
-            });
+            // Mail::send('mail.result',['data'=>$data], function($message) use($data){
+            //     $message->to($data['email'])->subject($data['title']);
+            // });
+
+            dispatch(new SendMailJob($data));
             return response()->json(['success'=>true,'msg'=>'Approved Successfully']);
-        }catch(\Exception $e)
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+     }
+
+     //export qna
+
+     public function exportQna(Request $request)
+     {
+        try{
+            $spreadsheet = new Spreadsheet();
+            $activeWorksheet = $spreadsheet->getActiveSheet();
+            $activeWorksheet->setCellValue('A1', 'question');
+            $activeWorksheet->setCellValue('B1', 'option_1');
+            $activeWorksheet->setCellValue('C1', 'option_2');
+            $activeWorksheet->setCellValue('D1', 'option_3');
+            $activeWorksheet->setCellValue('E1', 'option_4');
+            $activeWorksheet->setCellValue('F1', 'option_5');
+            $activeWorksheet->setCellValue('G1', 'option_6');
+            $activeWorksheet->setCellValue('H1', 'is_correct');
+            $activeWorksheet->setCellValue('I1', 'subject_ID');
+            $activeWorksheet->setCellValue('J1', 'category_ID');
+            $activeWorksheet->setCellValue('K1', 'subject');
+            $activeWorksheet->setCellValue('L1', 'category');
+
+            $questions = Question::with(['answers','subject','category'])->get();
+
+            // return $questions;
+            $row = 2;
+            foreach ($questions as $question) 
+            {
+                $activeWorksheet->setCellValue('A' . $row, $question->question);
+                $r = 'B';
+                for($i = 0;$i <= 5;$i++)
+                {
+                    $activeWorksheet->setCellValue($r . $row, $question->answers[$i]['answer'] ?? 'null');
+
+                    if(!empty($question->answers[$i]))
+                    {
+                        if($question->answers[$i]['is_correct'] == 1)
+                        {
+                            $activeWorksheet->setCellValue('H' . $row, $i+1 ?? 'null');
+                        }
+                    }
+                    $r++;
+                }
+                $activeWorksheet->setCellValue('I' . $row, $question->subject_id ?? 'null');
+                $activeWorksheet->setCellValue('J' . $row, $question->category_id ?? 'null');
+                $activeWorksheet->setCellValue('K' . $row, $question->subject->name ?? 'null');
+                $activeWorksheet->setCellValue('L' . $row, $question->category->name?? 'null');
+               
+                $row++;
+            }
+
+            // Generate a unique file name
+            $fileName = 'qna_export_' . date('Y-m-d_H-i-s') . '.xlsx';
+    
+             $filePath = public_path($fileName);
+             $writer = new Xlsx($spreadsheet);
+             $writer->save($filePath);
+    
+            // Return a success response with the file download link
+            $downloadLink = url($fileName);
+            return response()->json(['success' => true, 'download_link' => $downloadLink]);
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+     }
+
+     public function getSubject()
+     {
+        $subjects = Subject::all();
+        return response()->json(['success'=>true,'data'=>$subjects]);
+     }
+
+     public function subject()
+    {
+        $subjects = Subject::all();
+        return view('admin.subject',compact('subjects'));
+    }
+
+     public function getCategory($id)
+     {
+        $cats = Category::where('subject_id',$id)->get();
+        return response()->json(['success'=>true,'cats'=>$cats]);
+     }
+
+     //============= Exam Review =============//
+     public function examReview()
+     {
+        $exams = Exam::all();
+        // return $exams;
+        return view('admin.exam-review',compact('exams'));
+     }
+
+     //============= Exam Review by Id ===========//
+     public function examReviewById($id)
+     {
+        $data = examsAttempt::with('user')->where('exam_id',$id)->orderBy('marks','desc')->orderBy('updated_at','asc')->get();
+        // return $data;
+        $exam = Exam::with('subject')->where('id',$id)->first();
+        // return $exam;
+        
+        return view('admin.exam-ranking',compact('data','exam'));
+     }
+
+     //============= Review Answersheet ============//
+     public function answersheetReviewById($id,$sid,$exid)
+     {  //return $exid;
+        try{
+            $examData = examsAnswer::where('attempt_id', $id)
+                        ->with(['question.answers', 'answers'])
+                        ->get();
+                        // return $examData;
+            $exam = Exam::with('subject')->where('id',$exid)->first();
+            $student = User::where('id',$sid)->first();
+            // return $exam;
+            // return $student;
+            return view('admin.student-ans-sheet',compact('examData','exam','student'));
+            // return response()->json(['success'=>true,'data'=>$attemptData]);
+        }
+        catch(\Exception $e)
         {
             return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
         }

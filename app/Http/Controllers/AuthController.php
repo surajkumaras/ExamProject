@@ -6,17 +6,109 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Subject;
-use App\Models\Exam;
+use App\Models\{Exam,Question};
 use App\Models\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
+use Socialite;
 use Illuminate\Support\Str;
 use Mail;
 
 class AuthController extends Controller
 {
+    //============= Google Login ===========//
+
+    public function loginWithGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    //============= Google Login Callback ==========//
+    public function callbackFromGoogle()
+    {
+        try {
+    
+            $user = Socialite::driver('google')->user();
+    //  dd($user);
+            // $finduser = User::where('social_id', $user->id)->first();
+            $finduser = User::where('email', $user->email)->first();
+     
+            if($finduser)
+            {
+     
+                User::where('email',$user->email)->update([
+                    'social_id'=>$user->id,
+                    'social_type'=>'google'
+                ]);
+     
+                Auth::loginUsingId($finduser->id);
+     
+                return redirect('/');
+     
+            }
+            else
+            {
+                $newUser = User::create([
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'social_id'=> $user->id,
+                    'social_type'=> 'google',
+                    'password' => Hash::make('admin123')
+                ]);
+    
+                Auth::login($newUser);
+     
+                return redirect('/');
+            }
+    
+        } 
+        catch (Exception $e) 
+        {
+            dd($e->getMessage());
+        }
+    }
+
+    //=============== FACEBOOK LOGIN =================//
+
+    public function loginWithFacebook()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+
+    //=============== FACEBOOK LOGIN CALLBACK =================//
+
+    public function handleProviderCallback()
+    {
+        try{
+            $user = Socialite::driver('facebook')->user();
+            
+            $provider_id = $user->getId();
+            $name = $user->getName();
+            $email = $user->getEmail();
+            $avatar = $user->getAvatar();
+            //$user->getNickname();
+            
+            $user = User::firstOrCreate([
+                'provider_id' => $provider_id,
+                'name'        => $name,
+                'email'       => $email,
+                'avatar'      => $avatar,
+            ]);
+            
+            Auth::login($user,true);
+           
+            return redirect()->route('home');
+        }
+        catch(\Exception $e)
+        {
+            return redirect()
+                ->back()
+                ->with('status','authentication failed, please try again!');
+        }
+    }
+
     public function loadRegister()
     {
         if(Auth::user() && Auth::user()->is_admin ==1)
@@ -28,11 +120,12 @@ class AuthController extends Controller
             return redirect('/dashboard');
         }
 
-        return view('register');
+        return view('newregister');
     }
 
     public function studentRegister(Request $request)
     {
+        // return $request->all();
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
@@ -44,7 +137,13 @@ class AuthController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->save();
-
+        $data['title'] = 'Successful Registration';
+        $data['name'] = $user->name;
+        $data['email'] = $user->email;
+        $data['body'] = 'Thank you for registering with us. We are happy to have you on board <b>Online Examination System<b/>.';
+        Mail::send('mail.register',['data'=>$data], function($message) use($data){
+            $message->to($data['email'])->subject($data['title']);
+        });
         return back()->with('success', 'You have successfully registered! Please login.');
     }
 
@@ -59,7 +158,8 @@ class AuthController extends Controller
             return redirect('/dashboard');
         }
 
-        return view('login');
+        // return view('login');
+        return view('loginnew');
     }
 
     public function userLogin(Request $request)
@@ -89,14 +189,26 @@ class AuthController extends Controller
 
     public function loadDashboard()
     {
-       $exams =  Exam::with('subjects')->orderBy('date')->get();
+        $exams = Exam::where('plan', 0)
+        ->with(['subjects', 'getQnaExam'])
+        ->withCount('getQnaExam')
+        ->orderBy('date', 'DESC')
+        ->get();
+    
+    // $totalQna = $exams->sum('get_qna_exam_count');
+    
+        // return $exams;
         return view('student.dashboard',['exams'=>$exams]);
     }
 
     public function adminDashboard()
     {
-        $subjects = Subject::all();
-        return view('admin.dashboard',compact('subjects'));
+        $students = User::where('is_admin',0)->count();
+        $exams = Exam::count();
+        $questions = Question::count();
+        $subjects = Subject::count();
+        return view('admin.dashboard',['students'=>$students,'exams'=>$exams,'questions'=>$questions,'subjects'=>$subjects]);
+    
     }
 
     public function logout(Request $request)
@@ -183,7 +295,8 @@ class AuthController extends Controller
             $user->save();
             PasswordReset::where('email', $request->email)->delete();
             return "<h2>Password reset successfully!</h2>";
-        }catch(\Exception $e)
+        }
+        catch(\Exception $e)
         {
             return back()->with('error', $e->getMessage());
         }

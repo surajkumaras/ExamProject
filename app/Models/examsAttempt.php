@@ -26,6 +26,6 @@ class examsAttempt extends Model
 
     public function examAnswer()
     {
-        return $this->hasOne(examsAnswer::class,'attempt_id','id');
+        return $this->belongsTo(examsAnswer::class);
     }
 }

@@ -18,6 +18,10 @@ class Exam extends Model
         'created_at',
         'updated_at',
         'attempt',
+        'enterance_id',
+        'plan',
+        'price',
+        'marks'
     ];
 
     protected $appends = ['attempt_counter'];
@@ -26,6 +30,11 @@ class Exam extends Model
     public function subjects()
     {
         return $this->hasMany(Subject::class,'id','subject_id');
+    }
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class,'subject_id','id');
     }
 
     public function getQnaExam()

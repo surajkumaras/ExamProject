@@ -33,7 +33,7 @@
                         </td>
                         <td>
                             @if ($attempt->marks > 0)
-                                {{ $attempt->marks}}/{{ $attempt->exam->total_marks}}
+                                {{ $attempt->marks}}/{{ count($attempt->exam->getQnaExam) * $attempt->exam->marks}}
                             @else
                                 -- / --
                             @endif
@@ -74,6 +74,7 @@
                 </div>
 
                 <div class="modal-footer">
+                <a id="pdfLink" href="#" target="_blank"><button type="button" class="btn btn-secondary"  attempt-id="">Print</button></a>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
         </div>
@@ -104,44 +105,117 @@
     <script>
         $(document).ready(function()
         {
+            var attempt_id = '';
             $('.reviewExam').click(function()
             {
                 var id = $(this).attr('data-id');
-
+                attempt_id = id;
+                $('#pdfLink').attr('href', '/pdf/answersheet/' + attempt_id);
                 $.ajax({
                     url:"{{ route('resultStudentQna')}}",
                     type:"GET",
                     data:{ attempt_id:id},
                     success:function(data)
                     {
-                        console.log(data);
+                        console.log(data); 
                         var html = '';
-                        if(data.success == true)
+                        if(data.success == true) 
                         {
                             var data = data.data;
-                            if(data.length > 0)
+                            if(data.length > 0) 
                             {
-                                for(var i = 0; i < data.length; i++)
+
+                                function checkExtension(filename, extensions) 
+                                {
+                                    const ext = filename.split('.').pop().toLowerCase();
+                                    return extensions.includes(ext);
+                                }
+                                const allowedExtensions = ["jpg", "jpeg", "png"];
+
+                                for(var i = 0; i < data.length; i++) 
                                 {
                                     var is_correct = `<span style="color:red;" class="fa fa-close"></span>`;
-                                    if(data[i]['answers']['is_correct'] == 1)
-                                    {
+                                    if(data[i]['answers']['is_correct'] == 1) {
                                         is_correct = `<span style="color:green;" class="fa fa-check"></span>`;
                                     }
-                                    html += `<div class="row">
-                                            <div class="col-sm-12">
-                                                <h6>Q.`+(i+1)+`:`+data[i]['question']['question']+`</h6>
-                                                <p>Ans:`+data[i]['answers']['answer']+``+is_correct+`</p>`;
+                                    var answers_html = '';
+                                   
+                                    for(var j = 0; j < data[i]['question']['answers'].length; j++) 
+                                    {
+                                        const filename = data[i]['question']['answers'][j]['answer'];
+// console.log(filename);
 
-                                                if(data[i]['question']['explaination'] != null)
-                                                {
-                                                    html += `<p><a href="#" data-explaination="`+data[i]['question']['explaination']+`" class="explaination" data-toggle="modal" data-target="#explainationModal">Explaination</a></p>`
-                                                }
-                                                html +=`
-                                            </div>
-                                        </div>`;
+
+                                        if (checkExtension(filename, allowedExtensions)) 
+                                        {
+                                            let ansimg = `<img src="{{ asset('public/image/ans_images/') }}/` + filename + `" width="50px" height="50px" alt="image issue">`;
+                                            if(data[i]['question']['answers'][j]['is_correct'] == 1)
+                                            {
+                                                answers_html += `<p>`+(j+1)+`</p><p style="color:green">` + ansimg + `</p>`;
+                                            }
+                                            else 
+                                            {
+                                                answers_html += `<p>`+(j+1)+`</p><p style="color:red">` + ansimg + `</p>`;
+                                            }
+                                            
+                                            // let ansimg = `<img src="{{ asset('public/image/ans_images/') }}/${questions[i]['answers'][j]['answer']}" width="50px" height="50px" alt="image issue">`
+                                            // html += `<tr>
+                                            //     <td>`+(j+1)+`</td>
+                                            //         <td>`+ansimg+`</td>
+                                            //         <td>`+is_correct+`</td>
+                                            //     </tr>`;
+                                        } 
+                                        else 
+                                        {
+                                        //     html += `<tr>
+                                        //     <td>`+(j+1)+`</td>
+                                        //         <td>`+questions[i]['answers'][j]['answer']+`</td>
+                                        //         <td>`+is_correct+`</td>
+                                        //     </tr>`;
+
+                                            if(data[i]['question']['answers'][j]['is_correct'] == 1)
+                                            {
+                                                answers_html += `<p>`+(j+1)+`</p><p style="color:green">` + filename + `</p>`;
+                                            }
+                                            else 
+                                            {
+                                                answers_html += `<p>`+(j+1)+`</p><p style="color:red">` + filename + `</p>`;
+                                            }
+                                        }
+
+
+
+                                        // if(data[i]['question']['answers'][j]['is_correct'] == 1)
+                                        // {
+                                        //      answers_html += `<p style="color:green">` + data[i]['question']['answers'][j]['answer'] + `</p>`;
+                                        // }
+                                        // else 
+                                        // {
+                                        //     answers_html += `<p style="color:red">` + data[i]['question']['answers'][j]['answer'] + `</p>`;
+                                        // }
+                                        
+                                    }
+
+                                   let myans = data[i]['answers']['answer'];
+                                    if (checkExtension(myans, allowedExtensions)) 
+                                    {
+                                        myans = `<img src="{{ asset('public/image/ans_images/') }}/` + myans + `" width="50px" height="50px" alt="image issue">`;
+                                       
+                                    }
+                                    
+                                    html += `<div class="row">
+                                                <div class="col-sm-12">
+                                                    <h6><b>Q.` + (i+1) + `:` + data[i]['question']['question'] + `</b></h6>
+                                                    ` + answers_html + `
+                                                    <p><b>Your Ans:&nbsp</b>` + myans + `` + is_correct + `</p>`;
+                                    if(data[i]['question']['explaination'] != null) {
+                                        html += `<p><a href="#" data-explaination="` + data[i]['question']['explaination'] + `" class="explaination" data-toggle="modal" data-target="#explainationModal">Explaination</a></p>`
+                                    }
+                                    html +=`
+                                                </div>
+                                            </div>`;
                                 }
-                            }
+                            } 
                             else 
                             {
                                 html += '<p>You do not attempt any questions.</p>';
@@ -166,6 +240,25 @@
                 var explaination = $(this).attr('data-explaination');
                 $('#explaination').text(explaination);
            })
+
+           $('#print').click(function()
+           {
+                // window.print();
+                let attemptId = attempt_id;
+                console.log(attemptId);
+                $.ajax({
+                    url:"/pdf/answersheet/" + attemptId,
+                    method:"GET",
+                    success:function(data)
+                    {
+                        console.log(data);
+                    },
+                    error:function(err)
+                    {
+                        alert(err);
+                    }
+                })
+           });
         })
     </script>
 @endsection
