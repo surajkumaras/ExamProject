@@ -10,7 +10,7 @@
         $allowedExtensions = ["jpg", "jpeg", "png"];
 @endphp
     <h1>View Questions</h1>
-<table border="1">
+<table >
     <div class="row">
         <div class="col-sm-12">
             @if (count($questions) > 0)
@@ -45,17 +45,18 @@
                         
                             @if ($answeroption['is_correct'] == 1)
                                <td colspan="2"> {{$j}}: &nbsp<img src="{{ asset('public/image/ans_images/'. $answeroption['answer']) }}" style="border-radius:5px;" width="50px" height="50px" alt="image issue">
-                                <span style="color:green">(Correct)</span><td>
-                            @else
-                                <td colspan="2">{{$j}}: &nbsp<img src="{{ asset('public/image/ans_images/'. $answeroption['answer']) }}" style="border-radius:5px;" width="50px" height="50px" alt="image issue"></td>
+                                {{-- <span style="color:green">(Correct)</span><td> --}}
+                            {{-- @else
+                                <td colspan="2">{{$j}}: &nbsp<img src="{{ asset('public/image/ans_images/'. $answeroption['answer']) }}" style="border-radius:5px;" width="50px" height="50px" alt="image issue"></td> --}}
                             @endif
                         @else
                         
                             @if ($answeroption['is_correct'] == 1)
-                               <td> {{$j}}: &nbsp{{ $answeroption['answer'] }}
-                                <span style="color:green">(Correct)</span></td>
-                            @else
-                               <td> {{$j}}: {{ $answeroption['answer'] }}</td>
+                               {{-- <td> {{$j}}: &nbsp{{ $answeroption['answer'] }} --}}
+                                <td><b>Ans:</b> {{ $answeroption['answer'] }}
+                                {{-- <span style="color:green">(Correct)</span></td> --}}
+                            {{-- @else
+                               <td> {{$j}}: {{ $answeroption['answer'] }}</td> --}}
                             @endif
                         @endif
                         

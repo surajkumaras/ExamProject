@@ -6,6 +6,9 @@
     <title>Logs</title>
     <link rel="stylesheet" href="{{ asset('css/logs.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.7/css/dataTables.dataTables.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.3/js/dataTables.js"></script>
 </head>
 <body>
     @if(session('success'))
@@ -19,7 +22,23 @@
             @csrf
             <button type="submit" class="clear-logs-btn">Clear All Logs</button>
         </form>
-        <pre>{{ $logs }}</pre>
+        <table id="logTable" class="table table-striped table-bordered display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Message</th>
+                    <th>Created At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{-- @foreach($logs as $log) --}}
+                <tr>
+                    <td>{{ $logs }}</td>
+                    <td>{{ Carbon\Carbon::now()->format('Y-m-d H:i:s')}}</td>
+                </tr>
+                {{-- @endforeach --}}
+            </tbody>
+        </table>
+        {{-- <pre>{{ $logs }}</pre> --}}
     </div>
 
     <script>
@@ -81,3 +100,10 @@ pre {
 
 
 </style>
+
+<script>
+    $(document).ready(function()
+    {
+        $('#logTable').DataTable();
+    });
+</script>

@@ -142,6 +142,9 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
 
     //Config
     Route::get('/admin/config',[ConfigurationController::class,'index'])->name('config');
+    Route::post('/admin/config/mail',[ConfigurationController::class,'setMail'])->name('config.mail');
+    Route::post('/admin/config/google/auth',[ConfigurationController::class,'setGoogleAuth'])->name('config.google.setauth');
+    Route::post('/admin/config/facebook/auth',[ConfigurationController::class,'setFacebookAuth'])->name('config.facebook.setauth');
 
 
 });

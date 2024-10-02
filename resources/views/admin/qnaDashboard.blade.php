@@ -253,9 +253,18 @@
         </div>
     </div>
   </div>
+
+  {{-- @include('loader') --}}
+
+  <div class="loader-wrapper">
+    <img src="{{ asset('/images/loder.gif') }}" style="width: 100px; height: 100px; border-radius:35%;" alt="Loader image">
+    <br><p>please wait....</p>
+</div>
+
 <script>
   $(document).ready(function()
   {
+     $('.loader-wrapper').hide();
      $('#addQna').submit(function(e){
         e.preventDefault(); 
         console.log("Add Qna:"+ $('.answers').length)
@@ -685,7 +694,7 @@
     $('#importQna').submit(function(e) 
     {
         e.preventDefault(); 
-
+        $('.loader-wrapper').show();
         var formData = new FormData(this); 
 
         $.ajax({
@@ -695,17 +704,22 @@
             processData: false, 
             contentType: false, 
             success: function(data) 
-            {
+            {   $('.loader-wrapper').hide();
+                $('#importExamModel').modal('hide');
                 if (data.success === true) 
                 {
                     location.href = data.download_link;
                 }
                 else 
                 {
+                    $('.loader-wrapper').hide();
                     alert(data.msg);
                 }
             },
-            error: function(err) {
+            error: function(err) 
+            {
+                $('.loader-wrapper').hide();
+                $('#importExamModel').modal('hide');
                 alert("An error occurred: " + err.responseText);
             }
         });

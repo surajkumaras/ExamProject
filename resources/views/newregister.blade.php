@@ -120,29 +120,22 @@
 	font-size: 20px;
 }
 </style>
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 <body>
-<div class="signup-form">
-    {{-- @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            <p style="color:red;"> {{ $error}}</p>
-        @endforeach
-    @endif --}}
-    
-   
-    <form action="{{route('studentRegister')}}" method="post" onsubmit="return validateForm()">
+<div class="signup-form">  
+    <form action="{{route('studentRegister')}}" method="post" id="registerform">
         @csrf
 		<h2>Create an Account</h2>
 		<p class="hint-text">Sign up with your social media account or email address</p>
 		<div class="social-btn text-center">
 			<a href="#" class="btn btn-primary btn-lg"><i class="fa fa-facebook"></i> Facebook</a>
 			<a href="#" class="btn btn-info btn-lg"><i class="fa fa-twitter"></i> Twitter</a>
-			<a href="#" class="btn btn-danger btn-lg"><i class="fa fa-google"></i> Google</a>
+			<a href="{{ route('google.login')}}" class="btn btn-danger btn-lg"><i class="fa fa-google"></i> Google</a>
 		</div>
 		<div class="or-seperator"><b>or</b></div>
         <div class="form-group">
-        	<input type="text" class="form-control input-lg" value="{{ old('name')}}" id="user" name="name" placeholder="Username">
+        	<input type="text" class="form-control input-lg" value="{{ old('name') }}" id="user" name="name" placeholder="Username">
         </div>
 		<div class="form-group">
         	<input type="email" class="form-control input-lg" id="email" value="{{ old('email')}}" name="email" placeholder="Email Address" >
@@ -157,7 +150,6 @@
             <button type="submit" class="btn btn-success btn-lg btn-block signup-btn">Sign Up</button>
         </div>
     </form>
-    
     <div class="text-center">Already have an account? <a href="{{ route('login')}}">Login here</a></div>
 </div>
 
@@ -185,10 +177,31 @@
 @endif
 
 @if (Session::has('success'))
-    toastr.success("{{ Session::get('success')}}");
-    <script>
-        setTimeout(() => {
-            window.location.href = "{{ route('login')}}";
-        }, 2000);
+	<script>
+		$('.signup-btn').html('Sign Up');
+		$('.signup-btn').attr('disabled', true);
+
+		swal({
+			title: "Registration Successful",
+			icon: "success", 
+		}).then((willRedirect) => {
+			if (willRedirect) 
+			{
+				window.location.href = "{{ route('login') }}";
+			}
+		});
+
     </script>
 @endif
+
+<script>
+	$(document).ready(function()
+	{
+		$('.signup-btn').click(function()
+		{
+			$('.signup-btn').html('Please Wait...');
+			$('.signup-btn').attr('disabled', true);
+			$('#registerform').submit();
+		});
+	});
+</script>
