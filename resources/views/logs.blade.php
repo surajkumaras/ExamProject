@@ -6,9 +6,12 @@
     <title>Logs</title>
     <link rel="stylesheet" href="{{ asset('css/logs.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+<<<<<<< HEAD
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.7/css/dataTables.dataTables.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.3/js/dataTables.js"></script>
+=======
+>>>>>>> 974a5ad (import and export issue fixed)
 </head>
 <body>
     @if(session('success'))
@@ -22,6 +25,7 @@
             @csrf
             <button type="submit" class="clear-logs-btn">Clear All Logs</button>
         </form>
+<<<<<<< HEAD
         <table id="logTable" class="table table-striped table-bordered display" style="width:100%">
             <thead>
                 <tr>
@@ -39,6 +43,9 @@
             </tbody>
         </table>
         {{-- <pre>{{ $logs }}</pre> --}}
+=======
+        <pre>{{ $logs }}</pre>
+>>>>>>> 974a5ad (import and export issue fixed)
     </div>
 
     <script>
@@ -78,8 +85,13 @@ h1 {
 pre {
     white-space: pre-wrap; /* Allows for wrapping */
     word-wrap: break-word; /* Break long words */
+<<<<<<< HEAD
     background: #f5f2f2;
     color: #141313;
+=======
+    background: #333;
+    color: #f4f4f4;
+>>>>>>> 974a5ad (import and export issue fixed)
     padding: 15px;
     border-radius: 3px;
     overflow-x: auto; /* Add horizontal scroll if needed */
@@ -99,6 +111,7 @@ pre {
 }
 
 
+<<<<<<< HEAD
 </style>
 
 <script>
@@ -107,3 +120,6 @@ pre {
         $('#logTable').DataTable();
     });
 </script>
+=======
+</style>
+>>>>>>> 974a5ad (import and export issue fixed)
