@@ -1,49 +1,56 @@
 @extends('layout.admin-layout')
 
 @section('space-work')
-    <h2 class="mb-4">Category</h2>
+    <h2 class="mb-4 header">Category</h2>
 
     <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary categories" data-toggle="modal" data-target="#addSubjectModel">
+<button type="button" class="btn btn-primary categories" data-toggle="modal" data-target="#addSubjectModel" id="addCat">
   <i class="fa fa-plus-circle"></i> Category
   </button>
   {{-- Table --}}
-  <table class="table" id="myTable">
-    <thead>
-      <tr>
-        <th scope="col">Category ID</th>
-        <th scope="col">Category</th>
-        <th scope="col">Subject Name</th>
-        <th scope="col">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      @if (count($categories) > 0)
-        @foreach ($categories as $category)
-          <tr>
-            <td>{{ $category->id}}</td>
-            <td>{{ $category->name}}</td>
-            <td>{{ $category->subject->name}}</td>
-            <td>
-              <button data-toggle="modal" data-target="#editCategoryModel" class="btn btn-info editButton" data-id="{{ $category->id}}" data-subject="{{ $category->name}}"><i class="fa fa-edit"></i></button>
-              <button class="btn btn-danger deleteButton" data-toggle="modal" data-target="#deleteSubjectModel" data-id="{{ $category->id}}"><i class="fa fa-trash-o"></i></button>
-            </td>
-          </tr>
-        @endforeach
-      @else
+  <div class="container">
+    <table class="table" id="myTable">
+      <thead>
         <tr>
-          <td colspan="4" class="text-center">No Category found.</td>
+          <th scope="col">Category ID</th>
+          <th scope="col">Category</th>
+          <th scope="col">Subject Name</th>
+          <th scope="col">Action</th>
         </tr>
-      @endif
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        @if (count($categories) > 0)
+          @foreach ($categories as $category)
+            <tr>
+              <td>{{ $category->id}}</td>
+              <td>{{ $category->name}}</td>
+              <td>{{ $category->subject->name}}</td>
+              <td>
+                <button data-toggle="modal" data-target="#editCategoryModel" class="btn btn-info editButton" data-id="{{ $category->id}}" data-subject="{{ $category->name}}"><i class="fa fa-edit"></i></button>
+                <button class="btn btn-danger deleteButton" data-toggle="modal" data-target="#deleteSubjectModel" data-id="{{ $category->id}}"><i class="fa fa-trash-o"></i></button>
+              </td>
+            </tr>
+          @endforeach
+        @else
+          <tr>
+            <td colspan="4" class="text-center">No Category found.</td>
+          </tr>
+        @endif
+      </tbody>
+    </table>
+  </div>
   <!-- Modal -->
   <div class="modal fade" id="addSubjectModel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Add Category</h5>
+                {{-- <div class="d-flex align-items-center">
+                  <p class="mb-0 mr-2">Lock Subject</p>
+                  <i class="fa fa-toggle-off" id="toggle-off" style="cursor: pointer;"></i>
+                  <i class="fa fa-toggle-on d-none" id="toggle-on" style="cursor: pointer;"></i>
+                </div> --}}
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -53,11 +60,18 @@
                   <div class="modal-body">
                     <div class="row ">
                         <div class="col">
-                            <select class="w-100" name="subject" id="subject_id" required>
+                            <select class="w-100" name="subject" id="subject_id" onchange="lockSubject()" required>
                                 <option value="">Subject</option>
                                 
                             </select>
                         </div>
+                    </div>
+                    <div class="row" style="display: none" id="lockSubject">
+                      <div class="col">
+                        <p class="mb-0 mr-2">Lock Subject</p>
+                        <i class="fa fa-toggle-off" id="toggle-off" style="cursor: pointer;font-size:24px;"></i>
+                        <i class="fa fa-toggle-on d-none" id="toggle-on" style="cursor: pointer;font-size:24px;color:rgb(19, 125, 212)"></i>
+                      </div>
                     </div>
                     <div class="row ">
                         <div class="col">
@@ -148,6 +162,33 @@
   <script>
     $(document).ready(function()
     {
+      $('#addCat').click(function()
+      {
+        setTimeout(() => {
+          $('#catName').focus();
+        }, 1000);
+      });
+
+      $('#toggle-off').click(function() 
+      {
+          $(this).addClass('d-none');
+          $('#toggle-on').removeClass('d-none');
+
+          let selectedSubject = $('#subject_id').val();
+          if (selectedSubject) 
+          {
+              localStorage.setItem('selectedSubject', selectedSubject);
+          }
+          $('#catName').focus();
+      });
+
+      $('#toggle-on').click(function() 
+      {
+          $(this).addClass('d-none');
+          $('#toggle-off').removeClass('d-none');
+
+          localStorage.removeItem('selectedSubject');
+      });
       //=================== Add Category ================//
 
       $('#addCategory').submit(function(e){
@@ -274,6 +315,7 @@
 
       $('.categories').click(function()
         {
+          $('#catName').focus();
             $.ajax({
                 url:"{{ route('getSubject')}}",
                 type:"GET",
@@ -287,15 +329,51 @@
                             html += `<option value="`+data.data[i]['id']+`">`+data.data[i]['name']+`</option>`;
                         }
                         $('#subject_id').html(html);
+                        $('#catName').focus();
+
+                        let savedSubject = localStorage.getItem('selectedSubject');
+                        if (savedSubject) 
+                        {
+                            $('#subject_id').val(savedSubject);
+                            $('#toggle-off').addClass('d-none');
+                            $('#toggle-on').removeClass('d-none');
+
+                            if(savedSubject)
+                            {
+                              $('#catName').focus();
+                              $('#lockSubject').show();
+                            }
+                        }
                     }
                 },
                 error:function(err)
                 {
                     console.log(err);
                 }
+
             })
         })
-        
+       
     });
+
+    function lockSubject()
+    {
+        let subval = $('#subject_id').val();
+        localStorage.removeItem('selectedSubject');
+
+        $("#toggle-off").removeClass('d-none');
+        $('#toggle-on').addClass('d-none');
+
+        console.log(subval);
+        if(subval == '')
+        {
+          $('#lockSubject').hide();
+        }
+        else 
+        {
+          $('#lockSubject').show();
+          $('#catName').focus();
+        }
+    }
   </script>
 @endsection

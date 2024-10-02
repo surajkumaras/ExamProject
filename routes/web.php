@@ -12,6 +12,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\Admin\ConfigurationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -139,6 +140,13 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
     Route::get('/admin/setting',[CompanyController::class,'settingDashboard'])->name('settingDashboard');
     Route::post('/update-setting',[CompanyController::class,'updateSetting'])->name('updateSetting');
 
+    //Config
+    Route::get('/admin/config',[ConfigurationController::class,'index'])->name('config');
+    Route::post('/admin/config/mail',[ConfigurationController::class,'setMail'])->name('config.mail');
+    Route::post('/admin/config/google/auth',[ConfigurationController::class,'setGoogleAuth'])->name('config.google.setauth');
+    Route::post('/admin/config/facebook/auth',[ConfigurationController::class,'setFacebookAuth'])->name('config.facebook.setauth');
+
+
 });
 
 Route::group(['middleware'=>['web','checkStudent']],function()
@@ -177,5 +185,5 @@ Route::group(['middleware'=>['web','checkStudent']],function()
 //Notification
     Route::get('/notification',[NotificationController::class,'index'])->name('notification');
     Route::post('/store-token', [NotificationController::class, 'updateDeviceToken'])->name('store.token');
-    Route::post('/send-web-notification', [NotificationController::class, 'sendNotification'])->name('send.web-notification');
+    Route::post('/send-web-notification', [NotificationController::class, 'sendFcmNotification'])->name('send.web-notification');
 

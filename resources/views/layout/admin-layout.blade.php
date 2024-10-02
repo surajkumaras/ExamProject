@@ -24,6 +24,19 @@
       .multiselect-dropdown{
         width: 100% ! important;
       }
+
+      .header {
+      background-color: #efdc13;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .container {
+      background-color: #efecec;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
     </style>
   </head>
   <body>
@@ -53,7 +66,13 @@
             <a href="{{ route('admin.dashboard')}}"><span class="fa fa-home mr-3"></span> Homepage</a>
           </li>
           <li>
-              <a href="{{ route('settingDashboard')}}"><i class="fa fa-gears mr-3"></i> Setting</a>
+              <a href="{{ route('settingDashboard')}}"><i class="fa fa-cog fa-spin" style="font-size:20px"></i>  Setting</a>
+          </li>
+          <li>
+            <a href="{{ route('config')}}"><i class="fa fa-gears mr-3"></i> Configuration</a>
+        </li>
+          <li>
+            <a href="/admin/students"><span class="fa fa-group mr-3"></span> Students</a>
           </li>
           <li>
             <a href="/subject"><span class="fa fa-book mr-3"></span> Subjects</a>
@@ -69,9 +88,6 @@
           </li>
           <li>
             <a href="/admin/qna-ans"><span class="fa fa-question-circle mr-3"></span> Q & A</a>
-          </li>
-          <li>
-            <a href="/admin/students"><span class="fa fa-group mr-3"></span> Students</a>
           </li>
           <li>
             <a href="/admin/review-exams"><span class="fa fa-file-text-o mr-3"></span> Exam Review</a>

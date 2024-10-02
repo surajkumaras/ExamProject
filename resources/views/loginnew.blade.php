@@ -133,6 +133,7 @@
     <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js'></script>
     <script type='text/javascript' src='https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body oncontextmenu='return false' class='snippet-body'>
@@ -149,13 +150,12 @@
                             @csrf
                             <div class="form-group py-2">
                                 <div class="input-field"> <span class="far fa-user p-2"></span> 
-                                    <input id="email" type="text" name="email"
-                                    value="{{ old('email')}}"  placeholder="Username or Email" required> 
+                                    <input id="email" type="text" name="email" value="{{ old('email')}}"  placeholder="Username or Email" > 
                                 </div>
                             </div>
                             <div class="form-group py-1 pb-2">
                                 <div class="input-field"> <span class="fas fa-lock px-2"></span> <input type="password" id="psw" name="password"
-                                        placeholder="Enter your Password" required> 
+                                        placeholder="Enter your Password" > 
                                      {{-- <span class="far fa-eye-slash"></span> --}}
                                     
                                 </div>
@@ -177,10 +177,7 @@
                                 <img src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png"
                                     alt=""> 
                             </a> 
-                            {{-- <a href="https://www.github.com" target="_blank" class="px-2"> 
-                                <img src="https://www.freepnglogos.com/uploads/512x512-logo-png/512x512-logo-github-icon-35.png"
-                                    alt=""> 
-                            </a>  --}}
+                            
                         </div>
                     </div>
                     @if (Session::has('error'))
@@ -194,18 +191,19 @@
                         </script>
                     @endif
 
-                    {{-- @if ($errors->any())
-                        @foreach ($errors->all() as $error)
-                            <script>
-                                toastr.options = {
+                    @if ($errors->any())
+                        <script>
+                            toastr.options = {
                                 "closeButton": true,
                                 "progressBar": true,
-                                };
-                                toastr.error("{{ $error}}");
-                                
-                            </script>
-                        @endforeach
-                    @endif --}}
+                            };
+
+                            @foreach ($errors->all() as $error)
+                                toastr.error("{{ $error }}");
+                            @endforeach
+                        </script>
+                    @endif
+
                 </div>
             </div>
         </div>
@@ -218,24 +216,29 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('psw').value;
 
-            // Basic email validation (you can enhance this)
-            if (!isValidEmail(email)) {
-                alert('Please enter a valid email address.');
+            if (!isValidEmail(email)) 
+            {
+                swal({
+                        title: "Please enter a valid email address.",
+                        icon: "warning",
+                    });
                 return false;
             }
 
-            // Basic password length validation
-            // if (password.length < 8) {
-            //     alert('Password must be at least 8 characters long.');
-            //     return false;
-            // }
-
-            return true; // Form submission allowed
+            if(password.length < 1)
+            {
+                swal({
+                        title: "Please enter a valid password.",
+                        icon: "warning",
+                    });
+                return false;
+            }
+            
+            return true;
         }
 
         function isValidEmail(email) 
         {
-            // Simple email validation regex (you can use a more robust one)
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return emailRegex.test(email);
         }

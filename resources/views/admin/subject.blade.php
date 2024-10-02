@@ -1,41 +1,43 @@
 @extends('layout.admin-layout')
 
 @section('space-work')
-    <h2 class="mb-4">Subjects</h2>
+    <h2 class="mb-4 header">Subjects</h2>
 
     <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSubjectModel">
   <i class="fa fa-plus-circle"></i> subject
   </button>
   {{-- Table --}}
-  <table class="table" id="myTable">
-    <thead>
-      <tr>
-        <th scope="col">Subject ID</th>
-        <th scope="col">Subject</th>
-        <th scope="col">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      @if (count($subjects) > 0)
-        @foreach ($subjects as $subject)
-          <tr>
-            <td>{{ $subject->id}}</td>
-            <td>{{ $subject->name}}</td>
-            <td>
-              <button data-toggle="modal" data-target="#editSubjectModel" class="btn btn-info editButton" data-id="{{ $subject->id}}" data-subject="{{ $subject->name}}"><i class="fa fa-edit"></i></button>
-            
-              <button class="btn btn-danger deleteButton" data-toggle="modal" data-target="#deleteSubjectModel" data-id="{{ $subject->id}}"><i class="fa fa-trash-o"></i></button>
-            </td>
-          </tr>
-        @endforeach
-      @else
+  <div class="container">
+    <table class="table" id="myTable">
+      <thead>
         <tr>
-          <td colspan="4" class="text-center">No subjects found.</td>
+          <th scope="col">Subject ID</th>
+          <th scope="col">Subject</th>
+          <th scope="col">Action</th>
         </tr>
-      @endif
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        @if (count($subjects) > 0)
+          @foreach ($subjects as $subject)
+            <tr>
+              <td>{{ $subject->id}}</td>
+              <td>{{ $subject->name}}</td>
+              <td>
+                <button data-toggle="modal" data-target="#editSubjectModel" class="btn btn-info editButton" data-id="{{ $subject->id}}" data-subject="{{ $subject->name}}"><i class="fa fa-edit"></i></button>
+              
+                <button class="btn btn-danger deleteButton" data-toggle="modal" data-target="#deleteSubjectModel" data-id="{{ $subject->id}}"><i class="fa fa-trash-o"></i></button>
+              </td>
+            </tr>
+          @endforeach
+        @else
+          <tr>
+            <td colspan="4" class="text-center">No subjects found.</td>
+          </tr>
+        @endif
+      </tbody>
+    </table>
+  </div>
   <!-- Modal -->
   <div class="modal fade" id="addSubjectModel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">

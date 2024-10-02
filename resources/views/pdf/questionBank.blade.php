@@ -33,14 +33,14 @@
 
    
     <h4>Topics:{{ $catName}} related questions and answers</h4>
-    <p>Total Questions: {{ $questions->count()}}</p>
+    <p><b>Total Questions:</b> {{ $questions->count()}}</p>
     <div class="row">
         <div class="col-sm-12">
             @if (count($questions) > 0)
                 @php
                     $i = 1;
                 @endphp
-                <table border="1">
+                <table >
                 @foreach ($questions as $data)
                     <tr>
                         <td colspan="4">
@@ -66,19 +66,21 @@
                         @endphp
                             @if (checkExtension($filename, $allowedExtensions))
                                 @if ($answeroption['is_correct'] == 1)
-                                    <td > {{ $j }}: <img src="{{ public_path('public/image/ans_images/' . $answeroption['answer']) }}" style="margin-left:50%;border-radius:5px;" width="80px" height="80px" alt="image issue"> 
-                                        <span style="color:green">(Correct)</span>
+                                    {{-- <td > {{ $j }}: <img src="{{ public_path('public/image/ans_images/' . $answeroption['answer']) }}" style="margin-left:50%;border-radius:5px;" width="80px" height="80px" alt="image issue">  --}}
+                                        <td > Ans : <img src="{{ public_path('public/image/ans_images/' . $answeroption['answer']) }}" style="margin-left:50%;border-radius:5px;" width="80px" height="80px" alt="image issue"> 
+                                        {{-- <span style="color:green">(Correct)</span> --}}
                                     </td>
-                                @else
-                                   <td > {{ $j }}: <img src="{{ public_path('public/image/ans_images/' . $answeroption['answer']) }}" style="margin-left:50%;border-radius:5px;" width="80px" height="80px" alt="image issue"> </td>
+                                {{-- @else
+                                   <td > {{ $j }}: <img src="{{ public_path('public/image/ans_images/' . $answeroption['answer']) }}" style="margin-left:50%;border-radius:5px;" width="80px" height="80px" alt="image issue"> </td> --}}
                                 @endif
                             @else
                                 @if ($answeroption['is_correct'] == 1)
-                                   <td > {{ $j }}: <span style="color:green">{{ $answeroption['answer'] }}</span>
-                                        <span style="color:green">(Correct)</span>
+                                   {{-- <td > {{ $j }}: <span style="color:green">{{ $answeroption['answer'] }}</span> --}}
+                                    <td >Ans: <span style="color:green">{{ $answeroption['answer'] }}</span>
+                                        {{-- <span style="color:green">(Correct)</span> --}}
                                     </td>
-                                @else
-                                   <td > {{ $j }}: {{ $answeroption['answer'] }}</td>
+                                {{-- @else
+                                   <td > {{ $j }}: {{ $answeroption['answer'] }}</td> --}}
                                 @endif
                             @endif
                         @if ($j == 2)

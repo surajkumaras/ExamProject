@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Question extends Model
 {
@@ -24,6 +25,13 @@ class Question extends Model
     public function category()
     {
         return $this->belongsTo(Category::class,'category_id','id');
+    }
+
+    protected function question(): Attribute
+    {
+        return Attribute::make(
+            set: fn($value) => ucfirst($value)
+        );
     }
 
   

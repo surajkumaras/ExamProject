@@ -1,7 +1,7 @@
 @extends('layout.admin-layout')
 
 @section('space-work')
-    <h2 class="mb-4">Q & A</h2>
+    <h2 class="mb-4 header">Q & A</h2>
 
     <!-- Button trigger modal -->
     {{-- <button type="button" class="btn btn-primary" id="addQnaButton" data-toggle="modal" data-target="#addExamModel">
@@ -18,42 +18,43 @@
     <button type="button"  id="exportQna" class="btn btn-info">
         <i class="fa fa-file-excel-o" style="font-size:24px"></i> Export Q&A
     </button>
-    <table class="table" id="myTable">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Questione</th>
-                <th>Answer</th>
-                <th>Action</th>
+    <div class="container">
+        <table class="table" id="myTable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Questione</th>
+                    <th>Answer</th>
+                    <th>Action</th>
 
-            </tr>
-        </thead>
-        <tbody>
-            @if (count($questions) > 0)
-                @foreach ($questions as $question)
-                    <tr>
-                        <td>{{ $question->id}}</td>
-                        <td>{{ $question->question }}</td>
-                        {{-- <td>{{ $question->subjects[0]['name'] }}</td> --}}
-                        
-                        <td>
-                            <a href="#" class="showAnsButton" data-id="{{ $question->id}}" data-toggle="modal" data-target="#showAnsModel">See answer</a>
-                        </td>
-                        <td>
-                            <button class="btn btn-info editButton" data-id="{{ $question->id}}" data-toggle="modal" data-target="#editAnsModel"><i class="fa fa-edit"></i></button>
-                        
-                            <button class="btn btn-danger deleteButton" data-id="{{ $question->id}}" data-toggle="modal" data-target="#deleteExamModel"><i class="fa fa-trash-o"></i></button>
-                        </td>
-                    </tr>
-                @endforeach
-            @else
-                    <tr>
-                        <td colspan="3">Data not found</td>
-                    </tr>
-            @endif
-        </tbody>
-    </table>
-
+                </tr>
+            </thead>
+            <tbody>
+                @if (count($questions) > 0)
+                    @foreach ($questions as $question)
+                        <tr>
+                            <td>{{ $question->id}}</td>
+                            <td>{{ $question->question }}</td>
+                            {{-- <td>{{ $question->subjects[0]['name'] }}</td> --}}
+                            
+                            <td>
+                                <a href="#" class="showAnsButton" data-id="{{ $question->id}}" data-toggle="modal" data-target="#showAnsModel">See answer</a>
+                            </td>
+                            <td>
+                                <button class="btn btn-info editButton" data-id="{{ $question->id}}" data-toggle="modal" data-target="#editAnsModel"><i class="fa fa-edit"></i></button>
+                            
+                                <button class="btn btn-danger deleteButton" data-id="{{ $question->id}}" data-toggle="modal" data-target="#deleteExamModel"><i class="fa fa-trash-o"></i></button>
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                        <tr>
+                            <td colspan="3">Data not found</td>
+                        </tr>
+                @endif
+            </tbody>
+        </table>
+    </div>
     {{--Add modal --}}
     <div class="modal fade" id="addExamModel" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -252,9 +253,18 @@
         </div>
     </div>
   </div>
+
+  {{-- @include('loader') --}}
+
+  <div class="loader-wrapper">
+    <img src="{{ asset('/images/loder.gif') }}" style="width: 100px; height: 100px; border-radius:35%;" alt="Loader image">
+    <br><p>please wait....</p>
+</div>
+
 <script>
   $(document).ready(function()
   {
+     $('.loader-wrapper').hide();
      $('#addQna').submit(function(e){
         e.preventDefault(); 
         console.log("Add Qna:"+ $('.answers').length)
@@ -684,7 +694,7 @@
     $('#importQna').submit(function(e) 
     {
         e.preventDefault(); 
-
+        $('.loader-wrapper').show();
         var formData = new FormData(this); 
 
         $.ajax({
@@ -694,17 +704,22 @@
             processData: false, 
             contentType: false, 
             success: function(data) 
-            {
+            {   $('.loader-wrapper').hide();
+                $('#importExamModel').modal('hide');
                 if (data.success === true) 
                 {
                     location.href = data.download_link;
                 }
                 else 
                 {
+                    $('.loader-wrapper').hide();
                     alert(data.msg);
                 }
             },
-            error: function(err) {
+            error: function(err) 
+            {
+                $('.loader-wrapper').hide();
+                $('#importExamModel').modal('hide');
                 alert("An error occurred: " + err.responseText);
             }
         });

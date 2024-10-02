@@ -41,14 +41,14 @@
 <script src="https://www.gstatic.com/firebasejs/8.3.2/firebase.js"></script>
 <script>
     var firebaseConfig = {
-        apiKey: "AIzaSyCSxDZNHEZKdrUS3bhP4usNySbxPn_redc",
-        authDomain: "fir-push-64503.firebaseapp.com",
-        databaseURL: "https://fir-push-64503-default-rtdb.firebaseio.com",
-        projectId: "fir-push-64503",
-        storageBucket: "fir-push-64503.appspot.com",
-        messagingSenderId: "612944039123",
-        appId: "1:612944039123:web:6baf64a76dc08c257f9826",
-        measurementId: "G-S8W81VPZKN"
+        apiKey: "AIzaSyCe5XcqQYBogMSq77Vbkke7szT0q4NYacw",
+        authDomain: "fir-crud-e30d0.firebaseapp.com",
+        databaseURL: "https://fir-crud-e30d0-default-rtdb.firebaseio.com",
+        projectId: "fir-crud-e30d0",
+        storageBucket: "fir-crud-e30d0.appspot.com",
+        messagingSenderId: "1085183356658",
+        appId: "1:1085183356658:web:d4ec874b79e1e287216a6b",
+        measurementId: "G-ZRVERTCXFK"
     };
     firebase.initializeApp(firebaseConfig);
     const messaging = firebase.messaging();
@@ -90,9 +90,11 @@
         icon: payload.notification.icon,
     };
     
-    if (!("Notification" in window)) {
+    if (!("Notification" in window)) 
+    {
         alert("This browser does not support system notifications.");
-    } else if (Notification.permission === "granted") {
+    } 
+    else if (Notification.permission === "granted") {
         new Notification(notificationTitle, notificationOptions);
     }
 });
