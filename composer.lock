@@ -2946,6 +2946,7 @@
             "time": "2024-01-04T16:10:04+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "lcobucci/jwt",
             "version": "5.3.0",
             "source": {
@@ -3028,6 +3029,17 @@
             },
             "dist": {
                 "type": "zip",
+=======
+            "name": "league/commonmark",
+            "version": "2.5.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/commonmark.git",
+                "reference": "b650144166dfa7703e62a22e493b853b58d874b0"
+            },
+            "dist": {
+                "type": "zip",
+>>>>>>> 974a5ad (import and export issue fixed)
                 "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/b650144166dfa7703e62a22e493b853b58d874b0",
                 "reference": "b650144166dfa7703e62a22e493b853b58d874b0",
                 "shasum": ""
@@ -4921,6 +4933,7 @@
                 }
             ],
             "time": "2024-08-12T00:13:54+00:00"
+<<<<<<< HEAD
         },
         {
             "name": "psr/cache",
@@ -4970,6 +4983,8 @@
                 "source": "https://github.com/php-fig/cache/tree/3.0.0"
             },
             "time": "2021-02-03T23:26:27+00:00"
+=======
+>>>>>>> 974a5ad (import and export issue fixed)
         },
         {
             "name": "psr/clock",
