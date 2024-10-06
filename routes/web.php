@@ -7,7 +7,8 @@ use App\Http\Controllers\ExamController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\Admin\QuestionController as AdminQuestionController;;
+use App\Http\Controllers\Admin\QuestionController as AdminQuestionController;
+use App\Http\Controllers\Admin\BannerController as BannerController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\NotificationController;
@@ -26,7 +27,8 @@ use App\Http\Controllers\Admin\ConfigurationController;
 */
 
 // Route::get('/', function () {
-//     return view('welcome');
+//     // return view('welcome');
+//     return view('student.dashboardnew');
 // });
 Route::get('/logs', [LogController::class, 'showLogs'])->name('logs');
 Route::post('/logs/clear', [LogController::class, 'clearLogs'])->name('logs.clear');
@@ -140,6 +142,13 @@ Route::group(['middleware'=>['web','checkAdmin']],function()
     Route::get('/admin/setting',[CompanyController::class,'settingDashboard'])->name('settingDashboard');
     Route::post('/update-setting',[CompanyController::class,'updateSetting'])->name('updateSetting');
 
+    //Banner
+    Route::get('/admin/banner/index',[BannerController::class,'index'])->name('banner.index');
+    Route::post('/banner/store',[BannerController::class,'store'])->name('banner.store');
+    Route::get('/banner/edit/{id}',[BannerController::class,'editBanner'])->name('banner.edit');
+    Route::post('/banner/update/{id}',[BannerController::class,'updateBanner'])->name('banner.update');
+    Route::post('/banner/delete/{id}',[BannerController::class,'deleteBanner'])->name('banner.delete');
+
     //Config
     Route::get('/admin/config',[ConfigurationController::class,'index'])->name('config');
     Route::post('/admin/config/mail',[ConfigurationController::class,'setMail'])->name('config.mail');
@@ -158,6 +167,10 @@ Route::group(['middleware'=>['web','checkStudent']],function()
     Route::get('/review-student-qna',[ExamController::class,'reviewQna'])->name('resultStudentQna');
     Route::get('/pdf/answersheet/{attempt_id}',[ExamController::class,'answersheet'])->name('answersheet');
     Route::get('/paid-exam',[StudentController::class,'examDashboard'])->name('examDashboard');
+
+    Route::get('/mock-test',[ExamController::class,'mockTest'])->name('mockTest');
+    Route::get('/category/{subject_id}',[ExamController::class,'categorySubject'])->name('categorySubject');
+    Route::get('/category/exam/{category_id}',[ExamController::class,'categoryExam'])->name('categoryExam');
 
     //profile
     Route::get('/student/profile',[StudentController::class,'studentProfile'])->name('studentProfile');

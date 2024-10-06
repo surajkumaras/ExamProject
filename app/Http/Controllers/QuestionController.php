@@ -56,8 +56,9 @@ class QuestionController extends Controller
         set_time_limit(300); 
         $questions = Question::with('answers')->where('category_id', $id)->get();
         $catName = Category::where('id', $id)->first()->name;
+        $sanitizedCatName = preg_replace('/[^A-Za-z0-9\-]/', '_', $catName);
         $pdf = PDF::loadView('pdf.questionBank', compact('questions','catName'));
 
-        return $pdf->download($catName . '.pdf');
+        return $pdf->download($sanitizedCatName . '.pdf');
     }
 }

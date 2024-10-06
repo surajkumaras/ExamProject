@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Exam;
 use App\Models\QnaExam;
 use App\Models\examsAttempt;
-use App\Models\examsAnswer;
+use App\Models\{examsAnswer,Subject,Category,Question};
 use Illuminate\Support\Facades\Auth;
 use PDF;
 use Illuminate\Support\Facades\View;
@@ -112,5 +112,41 @@ class ExamController extends Controller
         view()->share('employee',$examData);
         $pdf = PDF::loadView('pdf.answersheet', compact('examData','student'));
         return $pdf->download('pdf_file.pdf');
+    }
+
+    public function mockTest()
+    {
+        $subjects = Subject::all();
+        // return $subjects;
+        return view('student.mocktest')->with('subjects',$subjects);
+    }
+
+    public function categorySubject($id)
+    {
+        try
+        {
+            $cat = Category::where('subject_id',$id)->get();
+            return response()->json(['success'=>true,'msg'=>'data found','data'=>$cat]);
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+    }
+
+    public function categoryExam($id)
+    {
+        try{
+            $questions = Question::with('answers')
+                        ->where('category_id',$id)
+                        ->inRandomOrder()
+                        ->limit(10)
+                        ->get();
+            return response()->json(['success'=>true,'msg'=>'data found','data'=>$questions]);
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
     }
 }

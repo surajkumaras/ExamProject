@@ -7,16 +7,9 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Add any custom styles here */
-        .navbar {
-            background-color: #1A237E;
-        }
-        .navbar-brand {
-            color: white;
-        }
         .carousel-item img {
             width: 100%;
-            height: 500px;
+            height: 300px;
             object-fit: cover;
         }
         /* Custom Footer */
@@ -24,12 +17,15 @@
             background-color: #1A237E;
             color: white;
             padding: 20px 0;
+            width: 100%;
         }
         .dashboard-container {
             padding: 20px;
         }
         .quick-links, .calendar {
-            background-color: #f8f9fa;
+            /* background-color: #5cbdb9; */
+            background: linear-gradient(to top, #c1f4f5 10%, #5cbdb9 90%);
+            width: 100%;
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
@@ -52,35 +48,35 @@
             color: #6c757d;
         }
 
+        .btn 
+        {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+        .container {
+    width: 100%;
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+    margin-right: auto; /* Use 'auto' instead of a percentage for more predictable behavior */
+    margin-left: 0%;
+}
+
+
+        @media(max-width: 360px) {
+            .carousel-item img {
+                width: 100%;
+                height: 150px;
+                object-fit: cover;
+            }
+
+         }
+
+
     </style>
 </head>
 <body>
+    @extends('layout.student-layout')
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">SSC</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Notifications</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    @section('space-work')
 
     <!-- Carousel Section -->
     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
@@ -112,43 +108,61 @@
 
     <!-- Main Content Section -->
 
-<div class="container dashboard-container">
-    <!-- Quick Links Section -->
-    <div class="quick-links">
-        <h4>Quick Links</h4>
-        <div class="row">
-            <div class="col-6 col-md-3">
-                <button class="btn btn-primary w-100">Apply</button>
-            </div>
-            <div class="col-6 col-md-3">
-                <button class="btn btn-info w-100">Admit Card</button>
-            </div>
-            <div class="col-6 col-md-3">
-                <button class="btn btn-warning w-100">Answer Key</button>
-            </div>
-            <div class="col-6 col-md-3">
-                <button class="btn btn-success w-100">Result</button>
+    <div class="container dashboard-container">
+        <!-- Quick Links Section -->
+        <div class="quick-links">
+            <h4>Quick Links</h4>
+            <div class="row">
+                <div class="col-6 col-md-3">
+                    <a href="{{ route('admin.dashboard')}}"><button class="btn btn-primary w-100">Profile</button></a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="{{ route('studentProfile')}}"><button class="btn btn-info w-100">Results</button></a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="{{ route('resultDashboard')}}"><button class="btn btn-warning w-100">Free Exam</button></a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="{{ route('mockTest')}}"><button class="btn btn-success w-100">Mock Test</button></a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="/question/show"><button class="btn btn-success w-100">Questions</button></a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="#"><button class="btn btn-success w-100">Contact Us</button></a>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a href="/logout"><button class="btn btn-success w-100">Logout</button></a>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Calendar Section -->
-    <div class="calendar">
-        <h4>Exam Notice</h4>
-        <div class="event">
-            <span class="event-date">5 Jan</span> - Grade 'C' Stenographer Limited Departmental Competitive Examination, 2023-2024
-        </div>
-        <div class="event">
-            <span class="event-date">12 Jan</span> - JSA/ LDC Grade Limited Departmental Competitive Examination, 2023-2024
-        </div>
-        <div class="event">
-            <span class="event-date">19 Jan</span> - SSA/ UDC Grade Limited Departmental Competitive Examination, 2023-2024
-        </div>
-        <div class="event">
-            <span class="event-date">1 Feb</span> - Selection Post Examination, Phase-XII, 2024
+        <!-- Calendar Section -->
+        <div class="calendar">
+            <h4>Exam Notice</h4>
+            
+            @foreach ($exams as $exam)
+                <div class="event">
+                    @php
+                        $examDate = \Carbon\Carbon::parse($exam->date); // Convert string to Carbon instance
+                    @endphp
+
+                    <span class="event-date">Exam Date: {{ $examDate->format('d M, Y') }}</span> - {{ $exam->exam_name }} 
+                    <a href="{{ url('/exam/' . $exam->enterance_id) }}"><i class="badge badge-secondary"></i>Link</a>
+                    
+                    @if($exam->date < \Carbon\Carbon::today()->toDateString())
+                        <span class="badge badge-danger">Expired</span>
+                    @elseif ($exam->date > \Carbon\Carbon::today()->toDateString())
+                        <span class="badge badge-warning">Coming Soon</span>
+                    @else
+                        <span class="badge badge-success">Live</span>
+                    @endif
+
+                </div>
+            @endforeach
+            
         </div>
     </div>
-</div>
    <!-- Footer -->
     <footer class="text-center">
         <div class="container">
@@ -158,5 +172,6 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+@endsection
 </body>
 </html>

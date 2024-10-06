@@ -195,10 +195,8 @@ class AuthController extends Controller
         ->orderBy('date', 'DESC')
         ->get();
     
-    // $totalQna = $exams->sum('get_qna_exam_count');
-    
-        // return $exams;
-        return view('student.dashboard',['exams'=>$exams]);
+        return view('student.dashboardnew',['exams'=>$exams]);
+        // return view('student.dashboard',['exams'=>$exams]);
     }
 
     public function adminDashboard()

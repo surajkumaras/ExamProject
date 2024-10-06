@@ -20,6 +20,10 @@
 </body>
 </html>
 <style>
+  body {
+            height: 100vh;
+            background: linear-gradient(to top, #c9c9ff 50%, #b5e5d7 90%) no-repeat
+        }
   .container {
   margin-left: auto;
   margin-right: auto;
