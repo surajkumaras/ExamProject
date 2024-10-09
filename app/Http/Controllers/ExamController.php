@@ -118,15 +118,18 @@ class ExamController extends Controller
     {
         $subjects = Subject::all();
         // return $subjects;
-        return view('student.mocktest')->with('subjects',$subjects);
+        // return view('student.mocktest')->with('subjects',$subjects);
+        return view('student.mocktest_new')->with('subjects',$subjects);
     }
 
     public function categorySubject($id)
     {
         try
         {
-            $cat = Category::where('subject_id',$id)->get();
-            return response()->json(['success'=>true,'msg'=>'data found','data'=>$cat]);
+            $categories = Category::where('subject_id',$id)->get();
+            return view('student.mocktest_category')->with('categories',$categories);
+            // return response()->json(['success'=>true,'msg'=>'data found','data'=>$cat]);
+
         }
         catch(\Exception $e)
         {
@@ -137,16 +140,67 @@ class ExamController extends Controller
     public function categoryExam($id)
     {
         try{
+            $category = Category::with('subject')->where('id',$id)->get();
             $questions = Question::with('answers')
                         ->where('category_id',$id)
                         ->inRandomOrder()
-                        ->limit(10)
+                        ->limit(2)
                         ->get();
-            return response()->json(['success'=>true,'msg'=>'data found','data'=>$questions]);
+                        // ->paginate(10);
+            // return $questions;
+            return view('student.mocktest_exam')->with(['questions' => $questions, 'category' => $category]);
+            // return response()->json(['success'=>true,'msg'=>'data found','data'=>$questions]);
         }
         catch(\Exception $e)
         {
             return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
         }
+    }
+
+    public function mocktestResult(Request $request) 
+    {
+        // return $request->all();
+        $data = $request->all();
+
+    // Extract the 'answers' array from the request data
+    $answers = $data['answers'];
+
+    $questionIds = array_keys($answers);
+
+    $answerIds = array_values($answers);
+   
+     $questions = Question::whereIn('id', $questionIds)->with('answers')->get();
+     
+        $selectedAnswers = $request->input('answers', []); 
+        $correctCount = 0;
+        $wrongCount = 0;
+        foreach ($questions as $question) 
+        {
+            foreach ($question['answers'] as $answer) 
+            {
+                // Check if this answer was selected by the user
+                $answer['selected'] = isset($selectedAnswers[$question['id']]) && $selectedAnswers[$question['id']] == $answer['id'];
+    
+                // Check if this answer is correct
+                $answer['is_correct'] = $answer['is_correct'] == 1;
+
+                // If the selected answer is correct, increase the correct count
+                if ($answer['selected'] && $answer['is_correct']) {
+                    $correctCount++;
+                }
+                
+            }
+
+            // If no correct answer was selected for the question, increase the wrong count
+            if (!isset($selectedAnswers[$question['id']]) || !$question['answers']->where('id', $selectedAnswers[$question['id']])->first()->is_correct) {
+                $wrongCount++;
+            }
+        }
+        return view('student.mocktest_result')->with([
+            'questions' => $questions,
+            'correctCount' => $correctCount,
+            'wrongCount' => $wrongCount,
+            'success' => true, 
+        ]);
     }
 }

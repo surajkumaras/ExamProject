@@ -12,7 +12,7 @@
             <select name="subject" id="subject" class="form-select">
                 <option value="1" disabled selected>Select Subject</option>
                 @foreach ($subjects as $subject)
-                    <option value="{{ $subject->id}}">{{$subject->name}}</option>    
+                    <option value="{{ $subject->id }}">{{ $subject->name }}</option>    
                 @endforeach
             </select>
         </div>
@@ -30,7 +30,7 @@
     <!-- Quiz Form Section -->
     <form id="quiz-form">
         @csrf
-        <div id="questions-container">
+        <div id="questions-container" class="row">
             <!-- Dynamic questions and answers will be appended here -->
         </div>
 
@@ -49,6 +49,7 @@
         </div>
     </div>
 </div>
+
 
 
 
@@ -222,139 +223,51 @@
     </script>
 
 <style>
-    .container 
-    {
-        width: 100%;
-        padding-right: 0px;
-        padding-left: 0px;
-        margin-right: auto;
-        margin-left: auto;
+ /* Ensure proper padding on smaller devices */
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
     }
 
-/* Container for each question */
-.question-container {
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    padding: 0px;
-    margin-bottom: 20px;
-}
-
-/* Styling for answer options */
-.answer-label {
-    display: block;
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    font-size: 16px;
-    z-index: 999;
-}
-
-/* Custom radio button design */
-.answer-label input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-}
-
-.checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    background-color: #eee;
-    border-radius: 50%;
-}
-
-.answer-label:hover input ~ .checkmark {
-    background-color: #ccc;
-}
-
-/* When the radio button is checked, change the background color */
-.answer-label input:checked ~ .checkmark {
-    background-color: #2196F3;
-}
-
-/* Hide the default radio button */
-.answer-label input:checked ~ .checkmark:after {
-    display: block;
-}
-
-/* Show the dot/circle when radio button is checked */
-.answer-label .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-}
-
-/* Position the dot/circle */
-.answer-label .checkmark:after {
-    top: 9px;
-    left: 9px;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: white;
-}
-
-/* Style for answer number */
-.answer-number {
-    font-weight: bold;
-    margin-right: 5px;
-}
-
-/* Button style */
-.btn-submit {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.btn-submit:hover {
-    background-color: #45a049;
-}
-
-        .time {
-            overflow: hidden;
-            position: fixed;
-            top: 0;
-            font-size: 24px;
-            color: #fff;
-            background-color: #007bff;
-            padding: 10px 20px;
-            border-radius: 5px;
-            display: inline-block;
-            animation: pulse 1s infinite alternate;
-            z-index: 1000;
-        }
-        #time {
-            overflow: hidden;
-            position: fixed;
-            top: 0;
-            font-size: 24px;
-            color: #fff;
-            background-color: #ff0000;
-            padding: 10px 20px;
-            border-radius: 5px;
-            display: inline-block;
-            animation: pulse 0.5s infinite alternate;
-            z-index: 1000;
+    /* Make sure the form elements and options adjust to screen width */
+    @media (max-width: 576px) {
+        .form-select {
+            font-size: 14px; /* Smaller font size for mobile */
         }
 
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-    
-            100% {
-                transform: scale(1.1);
-            }
+        .form-check-label {
+            font-size: 14px; /* Smaller font size for labels */
         }
-    </style>
+
+        /* Adjust the submit button */
+        #submit-quiz {
+            font-size: 16px;
+            padding: 12px;
+        }
+
+        /* Improve layout for results */
+        #results-container .question-block h4 {
+            font-size: 16px;
+        }
+    }
+
+    /* Customize radio buttons and question options */
+    .form-check {
+        margin-bottom: 10px;
+    }
+
+    .selected-answer {
+        background-color: #f8d7da;
+    }
+
+    .text-success {
+        color: #28a745 !important;
+    }
+
+    .text-danger {
+        color: #dc3545 !important;
+    }
+
+</style>
     
 @endsection

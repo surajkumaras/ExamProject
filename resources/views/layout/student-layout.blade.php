@@ -134,7 +134,7 @@
             <a href="{{ route('examDashboard')}}"><span class="fa fa-tasks mr-3"></span> Paid Exams</a>
           </li> --}}
           <li>
-            <a href="#"><span class="fa fa-flash mr-3"></span>  Mock Test</a>
+            <a href="{{ route('mockTest')}}"><span class="fa fa-flash mr-3"></span>  Mock Test</a>
           </li>
           <li>
             <a href="/question/show"><span class="fa fa-book mr-3"></span> Question Bank</a>

@@ -171,6 +171,7 @@ Route::group(['middleware'=>['web','checkStudent']],function()
     Route::get('/mock-test',[ExamController::class,'mockTest'])->name('mockTest');
     Route::get('/category/{subject_id}',[ExamController::class,'categorySubject'])->name('categorySubject');
     Route::get('/category/exam/{category_id}',[ExamController::class,'categoryExam'])->name('categoryExam');
+    Route::post('/mock-test/result',[ExamController::class,'mocktestResult'])->name('mocktest.result');
 
     //profile
     Route::get('/student/profile',[StudentController::class,'studentProfile'])->name('studentProfile');
