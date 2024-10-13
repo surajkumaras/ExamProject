@@ -144,7 +144,7 @@ class ExamController extends Controller
             $questions = Question::with('answers')
                         ->where('category_id',$id)
                         ->inRandomOrder()
-                        ->limit(2)
+                        ->limit(10)
                         ->get();
                         // ->paginate(10);
             // return $questions;
