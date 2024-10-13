@@ -20,13 +20,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/css/intlTelInput.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.3/js/intlTelInput.min.js"></script>
     <style>
-      body {
+      /* body {
             height: 100vh;
             background: linear-gradient(to top, #c9c9ff 50%, #ababfe 90%) no-repeat
         }
       .multiselect-dropdown{
         width: 100% ! important;
-      }
+      } */
 
       .wrapper {
     position: relative;

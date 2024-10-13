@@ -17,7 +17,7 @@
             background-color: #1A237E;
             color: white;
             padding: 20px 0;
-            width: 100%;
+            /* width: 100%; */
         }
         .dashboard-container {
             padding: 20px;
@@ -25,7 +25,7 @@
         .quick-links, .calendar {
             /* background-color: #5cbdb9; */
             background: linear-gradient(to top, #c1f4f5 10%, #5cbdb9 90%);
-            width: 100%;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
             padding: 15px;
             border-radius: 10px;
             margin-bottom: 20px;
@@ -108,11 +108,11 @@
 
     <!-- Main Content Section -->
 
-    <div class="container dashboard-container">
+    <div class="container-fluid dashboard-container">
         <!-- Quick Links Section -->
         <div class="quick-links">
             <h4>Quick Links</h4>
-            <div class="row">
+            <div class="row d-flex justify-content-center">
                 <div class="col-6 col-md-3">
                     <a href="{{ route('admin.dashboard')}}"><button class="btn btn-primary w-100">Profile</button></a>
                 </div>
