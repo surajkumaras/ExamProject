@@ -105,25 +105,31 @@
 
             <!-- Submit Button -->
             <div class="quiz-submit mt-4 text-center">
-                <a href="#" class="btn btn-primary">Reattempt Quiz</a>
+                <a href="{{$url}}" class="btn btn-primary">Reattempt Quiz</a>
             </div>
         </div>
         
-        @if(isset($success) && $success)
         <script>
-             @if(isset($success) && $success)
+            @if($correctCount > 0)
+                let titl = 'Congratulations!';
+                let imgsrc = "{{ asset('images/trophy.png') }}"; // Wrap asset in quotes
+            @else
+                let titl = 'Better Luck Next Time!';
+                let imgsrc = "{{ asset('images/oh.png') }}"; // Wrap asset in quotes
+            @endif
+        
+            @if(isset($success) && $success)
                 Swal.fire({
-                    title: 'Congratulations!',
-                    text: 'Your correct answers is {{ $correctCount }} and wrong answers is {{ $wrongCount }}',
-                    imageUrl: "{{ asset('images/trophy.png') }}",
+                    title: titl,
+                    text: 'Your correct answers are {{ $correctCount }} and wrong answers are {{ $wrongCount }} out of {{ $total_q }}',
+                    imageUrl: imgsrc,  // Use the dynamically assigned imgsrc
                     imageWidth: 100,
                     imageHeight: 100,
                     imageAlt: 'Custom image',
-
-                    });
+                });
             @endif
         </script>
-    @endif
+        
 <!-- Bootstrap JS and Popper.js -->
 
 

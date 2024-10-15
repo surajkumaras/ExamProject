@@ -47,20 +47,26 @@
 
 
   <div class="container">
-    <h2 class="text-center mt-4">Mock Test</h2>
+    <h2 class="text-center mt-4 text-uppercase">Category</h2>
 
     <div class="row card-container">
       <!-- Card 1 -->
-      @foreach ($categories as $category)
-        <div class="col-6 col-md-4 col-lg-3">
-            <a href="{{ route('categoryExam', ['category_id' => $category->id]) }}" style="text-decoration: none;">
-                <div class="card-custom">
-                    <img src="https://via.placeholder.com/50" alt="{{ $category->name }}">
-                    <div class="card-title">{{ $category->name }}</div>
-                </div>
-            </a>
-        </div>
-      @endforeach
+      @if (count($categories) > 0)
+        @foreach ($categories as $category)
+          @if ($category->question_count > 0)
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="{{ route('categoryExam', ['category_id' => $category->id]) }}" style="text-decoration: none;">
+                    <div class="card-custom">
+                        <img src="https://via.placeholder.com/50" alt="{{ $category->name }}">
+                        <div class="card-title">{{ $category->name }}</div>
+                    </div>
+                </a>
+            </div>
+          @endif
+        @endforeach
+      @else
+            <h5>Question available soon...</h5>
+      @endif
 
       
 

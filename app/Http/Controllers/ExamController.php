@@ -117,8 +117,6 @@ class ExamController extends Controller
     public function mockTest()
     {
         $subjects = Subject::all();
-        // return $subjects;
-        // return view('student.mocktest')->with('subjects',$subjects);
         return view('student.mocktest_new')->with('subjects',$subjects);
     }
 
@@ -126,10 +124,9 @@ class ExamController extends Controller
     {
         try
         {
-            $categories = Category::where('subject_id',$id)->get();
+            $categories = Category::withCount(['question'])->where('subject_id',$id)->get();
+            
             return view('student.mocktest_category')->with('categories',$categories);
-            // return response()->json(['success'=>true,'msg'=>'data found','data'=>$cat]);
-
         }
         catch(\Exception $e)
         {
@@ -146,10 +143,8 @@ class ExamController extends Controller
                         ->inRandomOrder()
                         ->limit(10)
                         ->get();
-                        // ->paginate(10);
-            // return $questions;
             return view('student.mocktest_exam')->with(['questions' => $questions, 'category' => $category]);
-            // return response()->json(['success'=>true,'msg'=>'data found','data'=>$questions]);
+            
         }
         catch(\Exception $e)
         {
@@ -159,21 +154,21 @@ class ExamController extends Controller
 
     public function mocktestResult(Request $request) 
     {
-        // return $request->all();
         $data = $request->all();
 
-    // Extract the 'answers' array from the request data
-    $answers = $data['answers'];
+        // Extract the 'answers' array from the request data
+        $answers = $data['answers'];
 
-    $questionIds = array_keys($answers);
+        $questionIds = array_keys($answers);
 
-    $answerIds = array_values($answers);
-   
-     $questions = Question::whereIn('id', $questionIds)->with('answers')->get();
+        $answerIds = array_values($answers);
+    
+        $questions = Question::whereIn('id', $questionIds)->with('answers')->get();
      
         $selectedAnswers = $request->input('answers', []); 
         $correctCount = 0;
         $wrongCount = 0;
+        $total_questions = count($questions);
         foreach ($questions as $question) 
         {
             foreach ($question['answers'] as $answer) 
@@ -196,11 +191,15 @@ class ExamController extends Controller
                 $wrongCount++;
             }
         }
+        
+        $url = "/category/exam/".$request->category_id;
         return view('student.mocktest_result')->with([
-            'questions' => $questions,
-            'correctCount' => $correctCount,
-            'wrongCount' => $wrongCount,
-            'success' => true, 
+            'questions'     => $questions,
+            'correctCount'  => $correctCount,
+            'wrongCount'    => $wrongCount,
+            'success'       => true, 
+            'total_q'       => $total_questions,
+            'url'           => $url
         ]);
     }
 }

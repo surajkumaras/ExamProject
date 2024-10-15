@@ -50,7 +50,7 @@
 
 
   <div class="container">
-    <h2 class="text-center mt-4">Mock Test</h2>
+    <h2 class="text-center mt-4 text-uppercase">Subjects</h2>
 
     <div class="row card-container">
       <!-- Card 1 -->

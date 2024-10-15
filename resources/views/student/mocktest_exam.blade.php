@@ -75,6 +75,7 @@
         <!-- Quiz Questions -->
         <form method="POST" action="{{ route('mocktest.result')}}"> {{-- Assuming you have a route for form submission --}}
             @csrf
+            <input type="hidden" name="category_id" value="{{ $category[0]->id }}">
             @foreach ($questions as $index => $question)
                 <div class="quiz-content mt-4" id="question{{ $index }}" style="display: none;">
                     <h4>Question {{ $index + 1 }} of {{ $questions->count() }}</h4>
