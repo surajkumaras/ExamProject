@@ -9,7 +9,7 @@ class Kernel extends ConsoleKernel
 {
 
     protected $commands = [
-        Commands\DemoCron::class,
+        App\Console\Commands\DemoCron::class,
     ];
     /**
      * Define the application's command schedule.
