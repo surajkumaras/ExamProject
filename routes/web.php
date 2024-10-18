@@ -182,7 +182,7 @@ Route::group(['middleware'=>['web','checkStudent']],function()
 
     Route::get('/question/list/{$id}',[QuestionController::class,'questionList'])->name('questionList');
     Route::get('/question/list',[QuestionController::class,'questionAll'])->name('questionAll');
-    Route::get('/category/{id}',[QuestionController::class,'categoryQue'])->name('categoryQue');
+    Route::get('/category-pdf/{id}',[QuestionController::class,'categoryQue'])->name('categoryQue');
     Route::get('/questionBank/{category_id}',[QuestionController::class,'categoryQueBank'])->name('categoryQueBank');
     Route::get('/questionBank/pdf/{id}',[QuestionController::class,'downloadQuePdf'])->name('downloadQuePdf');
 
