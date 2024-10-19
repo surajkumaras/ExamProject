@@ -27,13 +27,15 @@ class DemoCron extends Command
      */
     public function handle()
     {
-        $data['title'] = 'Successful Registration';
-        $data['name'] = 'Suraj Kumar';
-        $data['email'] = 'suraj.enact@gmail.com';
-        $data['body'] = 'Cron Testing mail';
-        $data['url'] = 'surajdeveloper-net.stackstaging.com';
-        Mail::send('forgetPasswordMail',['data'=>$data],function($message) use($data){
-            $message->to($data['email'])->subject($data['title']);
-         });
+        // $data['title'] = 'Successful Registration';
+        // $data['name'] = 'Suraj Kumar';
+        // $data['email'] = 'suraj.enact@gmail.com';
+        // $data['body'] = 'Cron Testing mail';
+        // $data['url'] = 'surajdeveloper-net.stackstaging.com';
+        // Mail::send('forgetPasswordMail',['data'=>$data],function($message) use($data){
+        //     $message->to($data['email'])->subject($data['title']);
+        //  });
+
+        //Do here cron task code
     }
 }
