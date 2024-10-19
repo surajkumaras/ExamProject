@@ -114,25 +114,25 @@
             <h4>Quick Links</h4>
             <div class="row d-flex justify-content-center">
                 <div class="col-6 col-md-3">
-                    <a href="{{ route('admin.dashboard')}}"><button class="btn btn-primary w-100">Profile</button></a>
+                    <a href="{{ route('admin.dashboard')}}"><button class="btn btn-primary w-100">Profile <i class="fa fa-user-circle-o"></i></button></a>
                 </div>
                 <div class="col-6 col-md-3">
-                    <a href="{{ route('studentProfile')}}"><button class="btn btn-info w-100">Results</button></a>
+                    <a href="{{ route('studentProfile')}}"><button class="btn btn-info w-100">Results <i class="fa fa-sticky-note-o"></i></button></a>
                 </div>
                 <div class="col-6 col-md-3">
-                    <a href="{{ route('resultDashboard')}}"><button class="btn btn-warning w-100">Free Exam</button></a>
+                    <a href="{{ route('resultDashboard')}}"><button class="btn btn-warning w-100">Free Exam <i class="fa fa-laptop"></i></button></a>
                 </div>
                 <div class="col-6 col-md-3">
-                    <a href="{{ route('mockTest')}}"><button class="btn btn-success w-100">Mock Test</button></a>
+                    <a href="{{ route('mockTest')}}"><button class="btn btn-success w-100">Mock Test <i class="fa fa-pencil-square-o"></i></button></a>
                 </div>
                 <div class="col-6 col-md-3">
-                    <a href="/question/show"><button class="btn btn-success w-100">Questions</button></a>
+                    <a href="/question/show"><button class="btn btn-success w-100">Questions <i class="fa fa-folder-open-o"></i></button></a>
                 </div>
                 <div class="col-6 col-md-3">
-                    <a href="#"><button class="btn btn-success w-100">Contact Us</button></a>
+                    <a href="#"><button class="btn btn-success w-100">Contact Us <i class="fa fa-comments-o"></i></button></a>
                 </div>
                 <div class="col-6 col-md-3">
-                    <a href="/logout"><button class="btn btn-success w-100">Logout</button></a>
+                    <a href="/logout"><button class="btn btn-success w-100">Logout <span class="fa fa-sign-out mr-3"></button></a>
                 </div>
             </div>
         </div>
