@@ -163,6 +163,7 @@
     <script src="{{ asset('js/bootstrap.min.js')}}"></script>
     <script src="{{ asset('js/main.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
       $(document).ready(function(){
           $('.dropify').dropify();
@@ -177,6 +178,23 @@
         // $('#sidebarCollapse').on('click', function () {
         //     $('#sidebar').toggleClass('active');
         // });
+    });
+
+    $(window).on('offline', function() 
+    {
+      Swal.fire({
+                    title: 'No !nternet',
+                    text: 'You are offline. Please check your internet connection.',
+                    imageWidth: 100,
+                    imageHeight: 100,
+                    imageAlt: 'No Internet',
+                    icon: "warning",
+                });
+    });
+
+    $(window).on('online', function() 
+    {
+      
     });
   </script>
   </body>

@@ -31,7 +31,11 @@ class QuestionController extends Controller
 
     public function questionBankShow()
     {
-        $subjects = Subject::all();
+        // $subjects = Subject::all();
+        $subjects = Subject::whereHas('category.question',function($q)
+        {
+            $q->whereNotNull('id');
+        })->get();
         return view('student.questionbank')->with('subjects',$subjects);
     }
 

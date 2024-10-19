@@ -13,7 +13,7 @@
         color: #007bff;           /* Blue color for the title */
     }
 </style>
-    <h1>Topics</h1>
+    <h1 class="text-uppercase">Subjects</h1>
 
     <div class="container">
         <div class="row">
