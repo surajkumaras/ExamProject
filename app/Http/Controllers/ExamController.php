@@ -116,7 +116,11 @@ class ExamController extends Controller
 
     public function mockTest()
     {
-        $subjects = Subject::all();
+        // $subjects = Subject::all();
+        $subjects = Subject::whereHas('category.question', function($q) {
+            $q->whereNotNull('id');
+        })->get();
+
         return view('student.mocktest_new')->with('subjects',$subjects);
     }
 
