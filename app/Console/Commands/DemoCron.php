@@ -38,24 +38,24 @@ class DemoCron extends Command
 
         //Do here cron task code
 
-        $users = User::select('name','email')->get();
+        // $users = User::select('name','email')->get();
 
-        $emails = [];
+        // $emails = [];
 
-        foreach($users as $user)
-        {
+        // foreach($users as $user)
+        // {
             // $emails[] = $user->email;
 
-            $data['title'] = 'Cron job Test Mail';
-            $data['name'] = $user->name;
-            $data['email'] = $user->email;
-            $data['body'] = 'Cron Testing mail';
+            // $data['title'] = 'Cron job Test Mail';
+            // $data['name'] = $user->name;
+            // $data['email'] = $user->email;
+            // $data['body'] = 'Cron Testing mail';
 
-            Mail::send('mail.test-mail',['data'=>$data],function($message) use($data)
-            {
-                $message->to($data['email'])->subject($data['title']);
-            });
-        }
+            // Mail::send('mail.test-mail',['data'=>$data],function($message) use($data)
+            // {
+            //     $message->to($data['email'])->subject($data['title']);
+            // });
+        // }
 
         // Mail::send('mail.test-mail',['data'=>$users],function($message) use($emails)
         // {
