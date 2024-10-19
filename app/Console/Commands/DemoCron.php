@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Mail;
-use App\User;
+use App\Models\User;
 
 class DemoCron extends Command
 {
@@ -51,7 +51,7 @@ class DemoCron extends Command
             $data['email'] = $user->email;
             $data['body'] = 'Cron Testing mail';
 
-            Mail::send('forgetPasswordMail',['data'=>$data],function($message) use($data)
+            Mail::send('mail.test-mail',['data'=>$data],function($message) use($data)
             {
                 $message->to($data['email'])->subject($data['title']);
             });
