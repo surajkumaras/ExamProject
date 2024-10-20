@@ -31,7 +31,11 @@ class QuestionController extends Controller
 
     public function questionBankShow()
     {
-        $subjects = Subject::all();
+        // $subjects = Subject::all();
+        $subjects = Subject::whereHas('category.question',function($q)
+        {
+            $q->whereNotNull('id');
+        })->get();
         return view('student.questionbank')->with('subjects',$subjects);
     }
 
@@ -56,8 +60,9 @@ class QuestionController extends Controller
         set_time_limit(300); 
         $questions = Question::with('answers')->where('category_id', $id)->get();
         $catName = Category::where('id', $id)->first()->name;
+        $sanitizedCatName = preg_replace('/[^A-Za-z0-9\-]/', '_', $catName);
         $pdf = PDF::loadView('pdf.questionBank', compact('questions','catName'));
 
-        return $pdf->download($catName . '.pdf');
+        return $pdf->download($sanitizedCatName . '.pdf');
     }
 }

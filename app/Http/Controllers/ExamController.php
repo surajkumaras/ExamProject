@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Exam;
 use App\Models\QnaExam;
 use App\Models\examsAttempt;
-use App\Models\examsAnswer;
+use App\Models\{examsAnswer,Subject,Category,Question};
 use Illuminate\Support\Facades\Auth;
 use PDF;
 use Illuminate\Support\Facades\View;
@@ -112,5 +112,98 @@ class ExamController extends Controller
         view()->share('employee',$examData);
         $pdf = PDF::loadView('pdf.answersheet', compact('examData','student'));
         return $pdf->download('pdf_file.pdf');
+    }
+
+    public function mockTest()
+    {
+        // $subjects = Subject::all();
+        $subjects = Subject::whereHas('category.question', function($q) {
+            $q->whereNotNull('id');
+        })->get();
+
+        return view('student.mocktest_new')->with('subjects',$subjects);
+    }
+
+    public function categorySubject($id)
+    {
+        try
+        {
+            $categories = Category::withCount(['question'])->where('subject_id',$id)->get();
+            
+            return view('student.mocktest_category')->with('categories',$categories);
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+    }
+
+    public function categoryExam($id)
+    {
+        try{
+            $category = Category::with('subject')->where('id',$id)->get();
+            $questions = Question::with('answers')
+                        ->where('category_id',$id)
+                        ->inRandomOrder()
+                        ->limit(10)
+                        ->get();
+            return view('student.mocktest_exam')->with(['questions' => $questions, 'category' => $category]);
+            
+        }
+        catch(\Exception $e)
+        {
+            return response()->json(['success'=>false,'msg'=>$e->getMessage()]);
+        }
+    }
+
+    public function mocktestResult(Request $request) 
+    {
+        $data = $request->all();
+
+        // Extract the 'answers' array from the request data
+        $answers = $data['answers'];
+
+        $questionIds = array_keys($answers);
+
+        $answerIds = array_values($answers);
+    
+        $questions = Question::whereIn('id', $questionIds)->with('answers')->get();
+     
+        $selectedAnswers = $request->input('answers', []); 
+        $correctCount = 0;
+        $wrongCount = 0;
+        $total_questions = count($questions);
+        foreach ($questions as $question) 
+        {
+            foreach ($question['answers'] as $answer) 
+            {
+                // Check if this answer was selected by the user
+                $answer['selected'] = isset($selectedAnswers[$question['id']]) && $selectedAnswers[$question['id']] == $answer['id'];
+    
+                // Check if this answer is correct
+                $answer['is_correct'] = $answer['is_correct'] == 1;
+
+                // If the selected answer is correct, increase the correct count
+                if ($answer['selected'] && $answer['is_correct']) {
+                    $correctCount++;
+                }
+                
+            }
+
+            // If no correct answer was selected for the question, increase the wrong count
+            if (!isset($selectedAnswers[$question['id']]) || !$question['answers']->where('id', $selectedAnswers[$question['id']])->first()->is_correct) {
+                $wrongCount++;
+            }
+        }
+        
+        $url = "/category/exam/".$request->category_id;
+        return view('student.mocktest_result')->with([
+            'questions'     => $questions,
+            'correctCount'  => $correctCount,
+            'wrongCount'    => $wrongCount,
+            'success'       => true, 
+            'total_q'       => $total_questions,
+            'url'           => $url
+        ]);
     }
 }

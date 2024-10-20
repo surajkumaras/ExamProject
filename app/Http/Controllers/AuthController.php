@@ -195,10 +195,8 @@ class AuthController extends Controller
         ->orderBy('date', 'DESC')
         ->get();
     
-    // $totalQna = $exams->sum('get_qna_exam_count');
-    
-        // return $exams;
-        return view('student.dashboard',['exams'=>$exams]);
+        return view('student.dashboardnew',['exams'=>$exams]);
+        // return view('student.dashboard',['exams'=>$exams]);
     }
 
     public function adminDashboard()
@@ -220,7 +218,8 @@ class AuthController extends Controller
 
     public function forgetPasswordLoad()
     {
-        return view('forget-password');
+        return view('forget-pass-new');
+        // return view('forget-password');
     }
 
     public function forgetPassword(Request $request)
@@ -273,7 +272,8 @@ class AuthController extends Controller
        if(isset($request->token) && count($resetData) >0)
        {
             $user = User::where('email', $resetData[0]['email'])->get();
-            return view('resetPassword',compact('user'));
+            return view('reset-pass-new',compact('user'));
+            // return view('resetPassword',compact('user'));
        }
        else 
        {

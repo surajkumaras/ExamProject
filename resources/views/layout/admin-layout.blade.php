@@ -66,12 +66,6 @@
             <a href="{{ route('admin.dashboard')}}"><span class="fa fa-home mr-3"></span> Homepage</a>
           </li>
           <li>
-              <a href="{{ route('settingDashboard')}}"><i class="fa fa-cog fa-spin" style="font-size:20px"></i>  Setting</a>
-          </li>
-          <li>
-            <a href="{{ route('config')}}"><i class="fa fa-gears mr-3"></i> Configuration</a>
-        </li>
-          <li>
             <a href="/admin/students"><span class="fa fa-group mr-3"></span> Students</a>
           </li>
           <li>
@@ -94,6 +88,15 @@
           </li>
           <li>
             <a href="{{route('examReview')}}"><span class="fa fa-file-text-o mr-3"></span> Exam Review New</a>
+          </li>
+          <li>
+              <a href="{{ route('settingDashboard')}}"><i class="fa fa-cog fa-spin" style="font-size:20px"></i>  Setting</a>
+          </li>
+          <li>
+            <a href="{{ route('config')}}"><i class="fa fa-gears mr-3"></i> Configuration</a>
+          </li>
+          <li>
+            <a href="{{ route('banner.index')}}"><span class="fa fa-group mr-3"></span> Banner</a>
           </li>
           {{-- <li>
             <a href="/question/show"><span class="fa fa-book mr-3"></span> Question Bank</a>

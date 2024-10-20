@@ -13,7 +13,7 @@
         color: #007bff;           /* Blue color for the title */
     }
 </style>
-    <h1>Topics</h1>
+    <h1 class="text-uppercase">Subjects</h1>
 
     <div class="container">
         <div class="row">
@@ -26,7 +26,7 @@
                             @if($category->question_count > 0)
                                 <div class="row">
                                     {{-- <a href="{{ route('downloadQuePdf', $category->id) }}" class="btn btn-success">Download PDF</a> &nbsp; --}}
-                                    <a href="#" id="downloadPdfBtn" class="btn btn-success" data-url="{{ route('downloadQuePdf', $category->id) }}">Download PDF</a>
+                                    <a href="#" id="downloadPdfBtn" class="btn btn-success downloadPdfBtn" data-url="{{ route('downloadQuePdf', $category->id) }}">Download PDF</a>
                                     <a href="{{ route('categoryQueBank', $category->id) }}" class="btn btn-primary">View</a>
                                 </div>
                             @endif
@@ -43,16 +43,18 @@
     </div>
     <script>
         $(document).ready(function() {
-            $('#downloadPdfBtn').click(function(e) 
+            $('.downloadPdfBtn').click(function(e) 
             {
                 e.preventDefault();
-        alert("ok")
                 // Show the loader
                 $('.loader-wrapper').show();
         
                 // Get the download URL from the data attribute
                 var url = $(this).data('url');
         
+                var categoryName = $(this).closest('.card-body').find('.card-title').text().trim(); // Or get from data if stored
+                var sanitizedCategoryName = categoryName.replace(/[^A-Za-z0-9\-]/g, '_');
+
                 // Perform an AJAX request
                 $.ajax({
                     url: url,
@@ -67,7 +69,7 @@
                         var blob = new Blob([data], { type: 'application/pdf' });
                         var link = document.createElement('a');
                         link.href = window.URL.createObjectURL(blob);
-                        link.download = "questions.pdf"; // Optional, set the download filename
+                        link.download = sanitizedCategoryName + "_questions.pdf"; // Optional, set the download filename
                         link.click();
         
                         // Hide the loader after the file is prepared for download
