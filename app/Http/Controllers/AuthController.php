@@ -194,7 +194,7 @@ class AuthController extends Controller
         ->withCount('getQnaExam')
         ->orderBy('date', 'DESC')
         ->get();
-
+// return $exams;
         $banners = Banner::all();
     
         return view('student.dashboardnew',['exams'=>$exams,'banners'=>$banners]);

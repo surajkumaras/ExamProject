@@ -10,7 +10,9 @@ class BannerController extends Controller
 {
     public function index()
     {
-        return view('admin.banner');
+        $banners = Banner::all();
+// return $banners;
+        return view('admin.banner',compact('banners'));
     }
 
     public function store(Request $request)

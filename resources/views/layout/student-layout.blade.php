@@ -100,7 +100,7 @@
 	        </button>
         </div>
         <h1>
-          <a href="index.html" class="logo">
+          <a href="{{ route('admin.dashboard')}}" class="logo">
               @if ($company && $company->logo)
                   <img src="{{ asset('uploads/logo/' . $company->logo) }}" alt="{{ $company->name }}" style="height: 50px;">
               @endif

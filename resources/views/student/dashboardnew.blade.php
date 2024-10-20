@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Web Page</title>
+    <title>home Page</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -85,10 +85,10 @@
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
         </div>
-        <div class="carousel-inner">
+        {{-- <div class="carousel-inner">
             @if(!empty($banners))
                 @foreach ($banners as $banner)
-                    <div class="carousel-item active">
+                    <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
                         <img src="{{ asset('uploads/banner/' . $banner->image) }}" class="d-block w-100" alt="...">
                     </div>
                 @endforeach
@@ -103,7 +103,43 @@
                     <img src="https://via.placeholder.com/1200x500" class="d-block w-100" alt="...">
                 </div>
             @endif
+        </div> --}}
+        <div class="carousel-inner">
+            @if(!empty($banners))
+                @foreach ($banners as $banner)
+                    <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                        <img src="{{ asset('uploads/banner/' . $banner->image) }}" class="d-block w-100" alt="{{ $banner->title }}">
+                        <div class="carousel-caption ">
+                            <h5>{{ $banner->title }}</h5>
+                            <p>{{ $banner->subtitle }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <div class="carousel-item active">
+                    <img src="https://via.placeholder.com/1200x500" class="d-block w-100" alt="Placeholder">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Placeholder Title 1</h5>
+                        <p>Placeholder Description 1</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://via.placeholder.com/1200x500" class="d-block w-100" alt="Placeholder">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Placeholder Title 2</h5>
+                        <p>Placeholder Description 2</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="https://via.placeholder.com/1200x500" class="d-block w-100" alt="Placeholder">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Placeholder Title 3</h5>
+                        <p>Placeholder Description 3</p>
+                    </div>
+                </div>
+            @endif
         </div>
+        
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
@@ -156,6 +192,7 @@
                     @endphp
 
                     <span class="event-date">Exam Date: {{ $examDate->format('d M, Y') }}</span> - {{ $exam->exam_name }} 
+                    <span><b>Subject:</b> {{ $exam->subjects[0]->name}}</span>
                     
                     
                     @if($exam->date < \Carbon\Carbon::today()->toDateString())
