@@ -148,13 +148,14 @@
                     @endphp
 
                     <span class="event-date">Exam Date: {{ $examDate->format('d M, Y') }}</span> - {{ $exam->exam_name }} 
-                    <a href="{{ url('/exam/' . $exam->enterance_id) }}"><i class="badge badge-secondary"></i>Link</a>
+                    
                     
                     @if($exam->date < \Carbon\Carbon::today()->toDateString())
                         <span class="badge badge-danger">Expired</span>
                     @elseif ($exam->date > \Carbon\Carbon::today()->toDateString())
                         <span class="badge badge-warning">Coming Soon</span>
                     @else
+                        <a href="{{ url('/exam/' . $exam->enterance_id) }}"><i class="badge badge-secondary"></i>Link</a>
                         <span class="badge badge-success">Live</span>
                     @endif
 
