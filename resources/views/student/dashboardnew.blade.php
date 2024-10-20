@@ -183,7 +183,7 @@
 
         <!-- Calendar Section -->
         <div class="calendar">
-            <h4>Exam Notice</h4>
+            <h4>Exam Notice <i class="fa fa-calendar" style="font-size:24px"></i></h4>
             
             @foreach ($exams as $exam)
                 <div class="event">
@@ -191,7 +191,7 @@
                         $examDate = \Carbon\Carbon::parse($exam->date); // Convert string to Carbon instance
                     @endphp
 
-                    <span class="event-date">Exam Date: {{ $examDate->format('d M, Y') }}</span> - {{ $exam->exam_name }} 
+                    <span class="event-date"><i class="fa fa-calendar-o"></i> Exam Date: {{ $examDate->format('d M, Y') }}</span> - {{ $exam->exam_name }} 
                     <span><b>Subject:</b> {{ $exam->subjects[0]->name}}</span>
                     
                     
